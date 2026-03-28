@@ -6,51 +6,40 @@ index.html
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#2d6a1f">
 <title>Pitahaya Pro</title>
-<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --green: #2d6a1f; --green2: #4a9934; --green-pale: #e8f5e3;
-  --yellow: #f5c518; --yellow-dk: #c49a0a;
-  --red: #c0392b; --red-pale: #fdecea;
-  --blue-pale: #e8f0fe; --blue: #185fa5;
-  --bg: #f4f1eb; --card: #fff; --text: #1a1a1a;
-  --mid: #555; --light: #999; --border: #e0dbd0;
-  --r: 14px; --shadow: 0 2px 12px rgba(0,0,0,0.07);
+:root{
+  --green:#2d6a1f;--green2:#4a9934;--green-pale:#e8f5e3;
+  --yellow:#f5c518;--yellow-dk:#c49a0a;
+  --red:#c0392b;--red-pale:#fdecea;
+  --blue-pale:#e8f0fe;--blue:#185fa5;
+  --orange:#e67e22;--orange-pale:#fef0e7;
+  --purple:#7d3c98;--purple-pale:#f5eef8;
+  --bg:#f4f1eb;--card:#fff;--text:#1a1a1a;
+  --mid:#555;--light:#999;--border:#e0dbd0;
+  --r:14px;--shadow:0 2px 12px rgba(0,0,0,0.07);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px;overflow-x:hidden}
-/* HEADER */
 header{background:var(--green);padding:14px 18px 12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.2)}
 .hrow{display:flex;align-items:center;justify-content:space-between}
 .htitle{font-family:'Bebas Neue',sans-serif;font-size:24px;color:#fff;letter-spacing:1px;line-height:1}
 .hsub{font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
 .hdate{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.65)}
-/* NAV */
 nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.07);padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;border:none;background:none;padding:9px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'DM Sans',sans-serif;font-size:10px;color:var(--light);transition:color .18s}
+nav button{flex:1;border:none;background:none;padding:8px 2px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Sans',sans-serif;font-size:9px;color:var(--light);transition:color .18s}
 nav button.active{color:var(--green)}
-nav button svg{width:22px;height:22px;stroke-width:1.8}
-/* PAGES */
+nav button svg{width:20px;height:20px;stroke-width:1.8}
 .page{display:none}.page.active{display:block}
-/* SECTION TITLE */
 .stitle{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--green);padding:16px 18px 10px;letter-spacing:.5px}
-/* HERO */
 .hero{background:linear-gradient(135deg,var(--green),var(--green2));padding:18px 18px 20px;color:#fff}
 .hero h2{font-family:'Bebas Neue',sans-serif;font-size:18px;opacity:.8;margin-bottom:12px;letter-spacing:.5px}
 .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.scard{background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 13px;backdrop-filter:blur(4px)}
+.scard{background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 13px}
 .snum{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1}
 .slbl{font-size:10px;opacity:.7;margin-top:2px}
-/* LOTES PILLS */
-.lscroll{display:flex;gap:8px;padding:0 18px 4px;overflow-x:auto;scrollbar-width:none}
-.lscroll::-webkit-scrollbar{display:none}
-.lpill{flex-shrink:0;background:var(--card);border:2px solid var(--border);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;white-space:nowrap}
-.lpill.sel{background:var(--green);border-color:var(--green);color:#fff}
-/* ACTIVITY CARDS */
 .alist{padding:0 18px}
 .acard{background:var(--card);border-radius:var(--r);padding:13px 15px;margin-bottom:9px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:flex-start}
 .aico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
@@ -62,30 +51,49 @@ nav button svg{width:22px;height:22px;stroke-width:1.8}
 .bb{background:var(--blue-pale);color:var(--blue)}
 .by{background:#fef9e7;color:var(--yellow-dk)}
 .br{background:var(--red-pale);color:var(--red)}
-/* CRONOGRAMA */
-.cron-lote{background:var(--card);border-radius:var(--r);margin:0 18px 12px;box-shadow:var(--shadow);overflow:hidden}
-.cron-head{padding:13px 15px;display:flex;justify-content:space-between;align-items:center}
-.cron-name{font-weight:600;font-size:14px}
-.cron-dia{font-family:'DM Mono',monospace;font-size:12px;color:var(--mid)}
-.cron-apps{border-top:1px solid var(--border)}
-.cron-app{padding:10px 15px;display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--border)}
-.cron-app:last-child{border-bottom:none}
-.cron-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.dot-done{background:#ccc}
-.dot-hoy{background:var(--green)}
+.bo{background:var(--orange-pale);color:var(--orange)}
+.bp{background:var(--purple-pale);color:var(--purple)}
+.lote-tabs{display:flex;gap:8px;padding:14px 18px 4px;overflow-x:auto;scrollbar-width:none}
+.lote-tabs::-webkit-scrollbar{display:none}
+.ltab{flex-shrink:0;background:var(--card);border:2px solid var(--border);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;white-space:nowrap}
+.ltab.active{background:var(--green);border-color:var(--green);color:#fff}
+.lote-panel{display:none;padding:0 18px 18px}
+.lote-panel.active{display:block}
+.ciclo-card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px}
+.ciclo-head{padding:14px 16px;background:linear-gradient(135deg,var(--green),var(--green2));color:#fff}
+.ciclo-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.5px}
+.ciclo-sub{font-size:11px;opacity:.75;margin-top:2px}
+.ciclo-estado{display:inline-block;background:rgba(255,255,255,0.25);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;margin-top:8px}
+.progreso-wrap{padding:14px 16px;border-bottom:1px solid var(--border)}
+.progreso-label{display:flex;justify-content:space-between;font-size:11px;color:var(--mid);margin-bottom:6px}
+.progreso-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.progreso-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green2));border-radius:4px;transition:width .5s}
+.progreso-dias{display:flex;justify-content:space-between;font-size:10px;color:var(--light);margin-top:4px}
+.apps-lista{padding:12px 16px}
+.app-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border)}
+.app-row:last-child{border-bottom:none}
+.app-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.dot-hecho{background:var(--green)}
+.dot-hoy{background:var(--red);box-shadow:0 0 0 3px var(--red-pale)}
 .dot-prox{background:var(--yellow)}
 .dot-fut{background:var(--border)}
-.cron-app-info{flex:1}
-.cron-app-name{font-size:12px;font-weight:600}
-.cron-app-fecha{font-size:11px;color:var(--light);margin-top:1px}
-.cron-app-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
-/* FORM */
+.app-info{flex:1}
+.app-nombre{font-size:12px;font-weight:600}
+.app-fecha{font-size:11px;color:var(--light);margin-top:1px}
+.app-prod{font-size:10px;color:var(--mid);margin-top:2px;line-height:1.4}
+.app-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.fechas-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px;border-top:1px solid var(--border)}
+.fecha-item{text-align:center}
+.fecha-val{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--green)}
+.fecha-lbl{font-size:10px;color:var(--light);margin-top:2px}
+.ciclo-ant{background:var(--card);border-radius:var(--r);padding:13px 15px;margin-bottom:9px;box-shadow:var(--shadow);opacity:.7}
+.btn-nuevo-ciclo{width:100%;padding:13px;background:none;border:2px dashed var(--green);border-radius:11px;color:var(--green);font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:4px}
 .fhead{background:var(--green);padding:18px 18px 16px;color:#fff}
 .fhead h2{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:.5px}
 .fhead p{font-size:11px;opacity:.65;margin-top:3px}
 .ftabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
 .ftabs::-webkit-scrollbar{display:none}
-.ftab{flex-shrink:0;padding:11px 16px;font-size:12px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--light);border-bottom:3px solid transparent;transition:all .18s;font-family:'DM Sans',sans-serif}
+.ftab{flex-shrink:0;padding:10px 12px;font-size:11px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--light);border-bottom:3px solid transparent;transition:all .18s;font-family:'DM Sans',sans-serif}
 .ftab.active{color:var(--green);border-bottom-color:var(--green)}
 .fbody{padding:18px}
 .field{margin-bottom:15px}
@@ -94,15 +102,13 @@ nav button svg{width:22px;height:22px;stroke-width:1.8}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--green);background:#fff}
 .field textarea{resize:vertical;min-height:75px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.btn-p{width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:.3px;transition:background .18s}
+.btn-p{width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background .18s}
 .btn-p:active{background:#1e4a15}
 .btn-p:disabled{background:#aaa;cursor:not-allowed}
-/* APP PREVIEW en form */
 .app-preview{background:var(--green-pale);border-radius:10px;padding:13px 15px;margin-bottom:15px;border-left:3px solid var(--green)}
 .app-preview h4{font-size:13px;font-weight:600;color:var(--green);margin-bottom:6px}
 .app-preview p{font-size:12px;color:var(--mid);line-height:1.5}
-.app-preview .incomp{background:var(--red-pale);border-radius:7px;padding:8px 10px;margin-top:8px;font-size:11px;color:var(--red);font-weight:500}
-/* HISTORIAL */
+.incomp-warn{background:var(--red-pale);border-radius:7px;padding:8px 10px;margin-top:8px;font-size:11px;color:var(--red);font-weight:500}
 .hfil{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:12px 18px 4px}
 .hfil::-webkit-scrollbar{display:none}
 .chip{flex-shrink:0;padding:6px 13px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;background:var(--card);cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
@@ -115,243 +121,150 @@ nav button svg{width:22px;height:22px;stroke-width:1.8}
 .hdetail{font-size:12px;color:var(--mid);margin-top:7px;line-height:1.5}
 .hactions{display:flex;align-items:center;gap:6px}
 .del-btn{background:none;border:none;cursor:pointer;color:var(--light);padding:3px;font-size:15px}
-.del-btn:active{color:var(--red)}
-/* COSECHA */
 .cos-sum{background:var(--card);margin:0 18px 14px;border-radius:var(--r);padding:15px;box-shadow:var(--shadow);border-left:4px solid var(--yellow)}
 .cos-sum h3{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--yellow-dk);margin-bottom:9px}
 .cgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;text-align:center}
 .cnum{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text)}
 .clbl{font-size:10px;color:var(--light)}
-/* FOTO */
-.foto-btn{width:100%;padding:12px;border:2px dashed var(--border);border-radius:10px;background:var(--bg);cursor:pointer;font-size:14px;color:var(--mid);font-family:'DM Sans',sans-serif;text-align:center;transition:border-color .18s}
-.foto-btn:hover{border-color:var(--green)}
+.foto-btn{width:100%;padding:12px;border:2px dashed var(--border);border-radius:10px;background:var(--bg);cursor:pointer;font-size:14px;color:var(--mid);font-family:'DM Sans',sans-serif;text-align:center}
 .foto-preview{width:100%;height:160px;object-fit:cover;border-radius:10px;margin-top:8px;display:none}
-/* TOAST */
+.photo-thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;cursor:pointer}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-img{max-width:100%;max-height:80vh;border-radius:12px}
+.modal-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.2);border:none;color:#fff;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer}
 .toast{position:fixed;top:75px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);z-index:999;opacity:0;transition:opacity .3s;white-space:nowrap}
 .toast.show{opacity:1}
-/* LOADING */
 .loading{display:flex;align-items:center;justify-content:center;padding:40px 20px;flex-direction:column;gap:10px;color:var(--light)}
 .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{text-align:center;padding:36px 20px;color:var(--light)}
 .empty-ico{font-size:38px;margin-bottom:8px}
 .empty-txt{font-size:13px}
-/* PHOTO ICON */
-.photo-thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;cursor:pointer}
-/* MODAL foto */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
-.modal-img{max-width:100%;max-height:80vh;border-radius:12px}
-.modal-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.2);border:none;color:#fff;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer}
 </style>
 </head>
 <body>
-
 <header>
   <div class="hrow">
-    <div>
-      <div class="htitle">🌵 Pitahaya Pro</div>
-      <div class="hsub">Finca María Cristina</div>
-    </div>
+    <div><div class="htitle">🌵 Pitahaya Pro</div><div class="hsub">Finca María Cristina</div></div>
     <div class="hdate" id="headerDate"></div>
   </div>
 </header>
-
 <main>
-  <!-- DASHBOARD -->
-  <div class="page active" id="page-dash">
-    <div class="hero">
-      <h2>Resumen General</h2>
-      <div class="sgrid">
-        <div class="scard"><div class="snum">4,300</div><div class="slbl">postes totales</div></div>
-        <div class="scard"><div class="snum">1,030</div><div class="slbl">en producción</div></div>
-        <div class="scard"><div class="snum" id="d-registros">—</div><div class="slbl">registros</div></div>
-        <div class="scard"><div class="snum" id="d-cosecha">— kg</div><div class="slbl">cosechados</div></div>
-      </div>
-    </div>
-    <div class="stitle">Lotes</div>
-    <div class="lscroll" id="lotesPills"></div>
-    <div class="stitle">Actividad Reciente</div>
-    <div class="alist" id="recentList"><div class="loading"><div class="spinner"></div></div></div>
-  </div>
-
-  <!-- CRONOGRAMA -->
-  <div class="page" id="page-cron">
-    <div class="fhead">
-      <h2>Cronograma de Aplicaciones</h2>
-      <p>Basado en el programa de fertilización</p>
-    </div>
-    <div id="cronContent" style="padding-top:14px"><div class="loading"><div class="spinner"></div></div></div>
-  </div>
-
-  <!-- REGISTRAR -->
-  <div class="page" id="page-form">
-    <div class="fhead"><h2>Nuevo Registro</h2><p>Selecciona el tipo de actividad</p></div>
-    <div class="ftabs">
-      <button class="ftab active" onclick="switchTab('fertiriego',this)">💧 Drench</button>
-      <button class="ftab" onclick="switchTab('foliar',this)">🌿 Foliar</button>
-      <button class="ftab" onclick="switchTab('labor',this)">🔧 Labor</button>
-      <button class="ftab" onclick="switchTab('cosecha',this)">🍎 Cosecha</button>
-    </div>
-
-    <!-- DRENCH -->
-    <div class="fbody" id="tab-fertiriego">
-      <div class="field"><label>Fecha</label><input type="date" id="f-fecha"></div>
-      <div class="field"><label>Lote</label>
-        <select id="f-lote" onchange="sugerirApp()">
-          <option value="">Seleccionar lote...</option>
-          <option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option>
-          <option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes (nuevo)</option>
-          <option>Todos los lotes</option>
-        </select>
-      </div>
-      <div id="app-sugerida"></div>
-      <div class="field"><label>Aplicación del programa</label>
-        <select id="f-app">
-          <option value="">Seleccionar...</option>
-          <option value="APP1">APP 1 — Arranque (Día 0)</option>
-          <option value="APP2">APP 2 — Botoneo P/K/Mg (Día 25)</option>
-          <option value="APP3">APP 3 — Botoneo Ca (Día 30)</option>
-          <option value="APP5">APP 5 — Llenado K (Día 50-55)</option>
-          <option value="APP6">APP 6 — Llenado Ca (Día 55-60)</option>
-          <option value="APP7a">APP 7a — Engorde Ultrasol KP (Día 65-70)</option>
-          <option value="APP7b">APP 7b — Engorde Azutec (Día 70-77)</option>
-          <option value="otro">Otra aplicación</option>
-        </select>
-      </div>
-      <div class="field"><label>Productos aplicados</label>
-        <textarea id="f-productos" placeholder="Ej: MKP 400g, Sulfato Mg 340g, Humax 170g..."></textarea>
-      </div>
-      <div class="frow">
-        <div class="field"><label>Volumen agua (L)</label><input type="number" id="f-vol" placeholder="200"></div>
-        <div class="field"><label>Tandas preparadas</label><input type="number" id="f-tandas" placeholder="3"></div>
-      </div>
-      <div class="field"><label>Foto (opcional)</label>
-        <input type="file" id="f-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'f-foto-prev')">
-        <button class="foto-btn" onclick="document.getElementById('f-foto').click()">📷 Tomar / seleccionar foto</button>
-        <img id="f-foto-prev" class="foto-preview">
-      </div>
-      <div class="field"><label>Observaciones</label><textarea id="f-obs" placeholder="Notas adicionales..."></textarea></div>
-      <button class="btn-p" id="btn-save-f" onclick="guardar('fertiriego')">✅ Guardar Registro</button>
-    </div>
-
-    <!-- FOLIAR -->
-    <div class="fbody" id="tab-foliar" style="display:none">
-      <div class="field"><label>Fecha</label><input type="date" id="fo-fecha"></div>
-      <div class="field"><label>Lote</label>
-        <select id="fo-lote">
-          <option value="">Seleccionar...</option>
-          <option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option>
-          <option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes (nuevo)</option>
-          <option>Todos los lotes</option>
-        </select>
-      </div>
-      <div class="field"><label>Aplicación del programa</label>
-        <select id="fo-app">
-          <option value="">Seleccionar...</option>
-          <option value="APP4">APP 4 — Pre-floración Ca/Zn/B (Día 40-45)</option>
-          <option value="APP4rep">APP 4 Repetición (7-10 días después)</option>
-          <option value="otro">Foliar fuera del programa</option>
-        </select>
-      </div>
-      <div class="field"><label>Producto foliar</label><input type="text" id="fo-prod" placeholder="Ej: YaraVita Caltrac, Fertibiol..."></div>
-      <div class="frow">
-        <div class="field"><label>Dosis (mL o g/L)</label><input type="text" id="fo-dosis" placeholder="2 mL/L"></div>
-        <div class="field"><label>Volumen tanque (L)</label><input type="number" id="fo-vol" placeholder="200"></div>
-      </div>
-      <div class="field"><label>Hora de aplicación</label><input type="time" id="fo-hora" placeholder="06:00"></div>
-      <div class="field"><label>Foto (opcional)</label>
-        <input type="file" id="fo-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'fo-foto-prev')">
-        <button class="foto-btn" onclick="document.getElementById('fo-foto').click()">📷 Tomar / seleccionar foto</button>
-        <img id="fo-foto-prev" class="foto-preview">
-      </div>
-      <div class="field"><label>Observaciones</label><textarea id="fo-obs" placeholder="Clima, incidencias, antes de las 8am..."></textarea></div>
-      <button class="btn-p" onclick="guardar('foliar')">✅ Guardar Registro</button>
-    </div>
-
-    <!-- LABOR -->
-    <div class="fbody" id="tab-labor" style="display:none">
-      <div class="field"><label>Fecha</label><input type="date" id="l-fecha"></div>
-      <div class="field"><label>Lote</label>
-        <select id="l-lote">
-          <option value="">Seleccionar...</option>
-          <option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option>
-          <option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes (nuevo)</option>
-          <option>Todos los lotes</option>
-        </select>
-      </div>
-      <div class="field"><label>Tipo de labor</label>
-        <select id="l-tipo">
-          <option value="">Seleccionar...</option>
-          <option>Poda de formación</option><option>Poda sanitaria</option>
-          <option>Deshierba / limpieza</option><option>Tutorado / amarre</option>
-          <option>Control fitosanitario</option><option>Encendido de luces (inducción)</option>
-          <option>Apagado de luces</option><option>Revisión sistema de riego</option>
-          <option>Instalación de infraestructura</option><option>Otra</option>
-        </select>
-      </div>
-      <div class="frow">
-        <div class="field"><label>Jornales</label><input type="number" id="l-jorn" placeholder="2"></div>
-        <div class="field"><label>Costo ($)</label><input type="number" id="l-costo" placeholder="0.00" step="0.01"></div>
-      </div>
-      <div class="field"><label>Foto (opcional)</label>
-        <input type="file" id="l-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'l-foto-prev')">
-        <button class="foto-btn" onclick="document.getElementById('l-foto').click()">📷 Tomar / seleccionar foto</button>
-        <img id="l-foto-prev" class="foto-preview">
-      </div>
-      <div class="field"><label>Observaciones</label><textarea id="l-obs" placeholder="Detalles de la labor..."></textarea></div>
-      <button class="btn-p" onclick="guardar('labor')">✅ Guardar Registro</button>
-    </div>
-
-    <!-- COSECHA -->
-    <div class="fbody" id="tab-cosecha" style="display:none">
-      <div class="field"><label>Fecha</label><input type="date" id="c-fecha"></div>
-      <div class="field"><label>Lote</label>
-        <select id="c-lote">
-          <option value="">Seleccionar...</option>
-          <option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option>
-          <option>Lote 3 — 430 postes</option><option>Todos los lotes productivos</option>
-        </select>
-      </div>
-      <div class="frow">
-        <div class="field"><label>Cantidad (kg)</label><input type="number" id="c-kg" placeholder="0" step="0.5"></div>
-        <div class="field"><label>Precio/kg ($)</label><input type="number" id="c-precio" placeholder="0.00" step="0.01"></div>
-      </div>
-      <div class="field"><label>Calibre / calidad</label>
-        <select id="c-cal">
-          <option value="">Seleccionar...</option>
-          <option>Primera (+500g)</option><option>Segunda (300-500g)</option>
-          <option>Tercera (-300g)</option><option>Mixto</option>
-        </select>
-      </div>
-      <div class="field"><label>Destino</label><input type="text" id="c-dest" placeholder="Ej: Mercado Manta, exportación..."></div>
-      <div class="field"><label>Foto (opcional)</label>
-        <input type="file" id="c-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'c-foto-prev')">
-        <button class="foto-btn" onclick="document.getElementById('c-foto').click()">📷 Tomar / seleccionar foto</button>
-        <img id="c-foto-prev" class="foto-preview">
-      </div>
-      <div class="field"><label>Observaciones</label><textarea id="c-obs" placeholder="Estado de la fruta..."></textarea></div>
-      <button class="btn-p" onclick="guardar('cosecha')">✅ Guardar Registro</button>
+<div class="page active" id="page-dash">
+  <div class="hero">
+    <h2>Resumen General</h2>
+    <div class="sgrid">
+      <div class="scard"><div class="snum">4,300</div><div class="slbl">postes totales</div></div>
+      <div class="scard"><div class="snum">1,030</div><div class="slbl">en producción</div></div>
+      <div class="scard"><div class="snum" id="d-registros">—</div><div class="slbl">registros</div></div>
+      <div class="scard"><div class="snum" id="d-cosecha">— kg</div><div class="slbl">cosechados</div></div>
     </div>
   </div>
+  <div class="stitle">Actividad Reciente</div>
+  <div class="alist" id="recentList"><div class="loading"><div class="spinner"></div></div></div>
+</div>
 
-  <!-- HISTORIAL -->
-  <div class="page" id="page-hist">
-    <div class="fhead" style="background:var(--green)"><h2>Historial</h2><p>Todos los registros de la finca</p></div>
-    <div class="hfil">
-      <button class="chip active" onclick="filtrar('todos',this)">Todos</button>
-      <button class="chip" onclick="filtrar('fertiriego',this)">💧 Drench</button>
-      <button class="chip" onclick="filtrar('foliar',this)">🌿 Foliar</button>
-      <button class="chip" onclick="filtrar('labor',this)">🔧 Labor</button>
-      <button class="chip" onclick="filtrar('cosecha',this)">🍎 Cosecha</button>
-    </div>
-    <div class="hlist" id="histList"><div class="loading"><div class="spinner"></div></div></div>
-  </div>
+<div class="page" id="page-lotes">
+  <div class="fhead"><h2>Resumen por Lote</h2><p>Ciclos activos y estado fenológico</p></div>
+  <div class="lote-tabs" id="loteTabs"></div>
+  <div id="lotePanels"></div>
+</div>
 
-  <!-- COSECHA STATS -->
-  <div class="page" id="page-cos">
-    <div class="fhead" style="background:var(--yellow-dk)"><h2>📊 Resumen Cosecha</h2><p>Totales por lote</p></div>
-    <div id="cosStats" style="padding:18px"><div class="loading"><div class="spinner"></div></div></div>
+<div class="page" id="page-form">
+  <div class="fhead"><h2>Nuevo Registro</h2><p>Selecciona el tipo de actividad</p></div>
+  <div class="ftabs">
+    <button class="ftab active" onclick="switchTab('drench',this)">💧 Drench</button>
+    <button class="ftab" onclick="switchTab('foliar',this)">🌿 Foliar</button>
+    <button class="ftab" onclick="switchTab('edafico',this)">🪱 Edáfico</button>
+    <button class="ftab" onclick="switchTab('fitosan',this)">🐛 Fitosan.</button>
+    <button class="ftab" onclick="switchTab('labor',this)">🔧 Labor</button>
+    <button class="ftab" onclick="switchTab('cosecha',this)">🍎 Cosecha</button>
   </div>
+  <div class="fbody" id="tab-drench">
+    <div class="field"><label>Fecha</label><input type="date" id="f-fecha"></div>
+    <div class="field"><label>Lote</label><select id="f-lote" onchange="sugerirApp()"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
+    <div id="app-sugerida"></div>
+    <div class="field"><label>Aplicación del programa</label><select id="f-app"><option value="">Seleccionar...</option><option value="APP2">APP 2 — Botoneo P/K/Mg (Día 25)</option><option value="APP3">APP 3 — Botoneo Ca (Día 30)</option><option value="APP5">APP 5 — Llenado K (Día 50-55)</option><option value="APP6">APP 6 — Llenado Ca (Día 55-60)</option><option value="APP7">APP 7 — Engorde Ultrasol KP (Día 65-70)</option><option value="otro">Otra</option></select></div>
+    <div class="field"><label>Productos aplicados</label><textarea id="f-productos" placeholder="Ej: MKP 400g, Sulfato Mg 340g, Humax 170g..."></textarea></div>
+    <div class="frow"><div class="field"><label>Volumen (L)</label><input type="number" id="f-vol" placeholder="200"></div><div class="field"><label>Tandas</label><input type="number" id="f-tandas" placeholder="3"></div></div>
+    <div class="field"><label>Foto</label><input type="file" id="f-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'f-fp')"><button class="foto-btn" onclick="document.getElementById('f-foto').click()">📷 Foto</button><img id="f-fp" class="foto-preview"></div>
+    <div class="field"><label>Observaciones</label><textarea id="f-obs" placeholder="Notas..."></textarea></div>
+    <button class="btn-p" onclick="guardar('drench')">✅ Guardar Registro</button>
+  </div>
+  <div class="fbody" id="tab-foliar" style="display:none">
+    <div class="field"><label>Fecha</label><input type="date" id="fo-fecha"></div>
+    <div class="field"><label>Lote</label><select id="fo-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
+    <div class="field"><label>Aplicación</label><select id="fo-app"><option value="">Seleccionar...</option><option value="APP4">APP 4 — Pre-floración Ca/Zn/B (Día 40-45)</option><option value="APP4rep">APP 4 Repetición (7-10 días)</option><option value="otro">Foliar adicional</option></select></div>
+    <div class="field"><label>Producto</label><input type="text" id="fo-prod" placeholder="Ej: YaraVita Caltrac..."></div>
+    <div class="frow"><div class="field"><label>Dosis (mL/L)</label><input type="text" id="fo-dosis" placeholder="2 mL/L"></div><div class="field"><label>Volumen (L)</label><input type="number" id="fo-vol" placeholder="200"></div></div>
+    <div class="field"><label>Hora aplicación</label><input type="time" id="fo-hora"></div>
+    <div class="field"><label>Foto</label><input type="file" id="fo-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'fo-fp')"><button class="foto-btn" onclick="document.getElementById('fo-foto').click()">📷 Foto</button><img id="fo-fp" class="foto-preview"></div>
+    <div class="field"><label>Observaciones</label><textarea id="fo-obs" placeholder="Clima, hora..."></textarea></div>
+    <button class="btn-p" onclick="guardar('foliar')">✅ Guardar Registro</button>
+  </div>
+  <div class="fbody" id="tab-edafico" style="display:none">
+    <div class="field"><label>Fecha</label><input type="date" id="ed-fecha"></div>
+    <div class="field"><label>Lote</label><select id="ed-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
+    <div class="field"><label>Tipo de aplicación</label><select id="ed-tipo"><option value="">Seleccionar...</option><option>APP 1 — Arranque (Alpha + Bioabor)</option><option>Granular incorporado al suelo</option><option>Materia orgánica / compost</option><option>Corrector de pH</option><option>Cal agrícola / dolomita</option><option>Otro corrector edáfico</option></select></div>
+    <div class="field"><label>Producto(s)</label><textarea id="ed-productos" placeholder="Ej: Alpha Acelerador 30g/poste + Bioabor 100g/poste"></textarea></div>
+    <div class="frow"><div class="field"><label>Dosis/poste</label><input type="text" id="ed-dosis" placeholder="30g"></div><div class="field"><label>Total aplicado</label><input type="text" id="ed-total" placeholder="9 kg"></div></div>
+    <div class="field"><label>Modo de incorporación</label><select id="ed-modo"><option value="">Seleccionar...</option><option>Hueco 5-8cm a 15-20cm del tallo</option><option>Incorporado superficial</option><option>Banda al pie del poste</option><option>Drench correctivo</option><option>Otro</option></select></div>
+    <div class="field"><label>Foto</label><input type="file" id="ed-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'ed-fp')"><button class="foto-btn" onclick="document.getElementById('ed-foto').click()">📷 Foto</button><img id="ed-fp" class="foto-preview"></div>
+    <div class="field"><label>Observaciones</label><textarea id="ed-obs" placeholder="Condición del suelo..."></textarea></div>
+    <button class="btn-p" onclick="guardar('edafico')">✅ Guardar Registro</button>
+  </div>
+  <div class="fbody" id="tab-fitosan" style="display:none">
+    <div class="field"><label>Fecha</label><input type="date" id="ft-fecha"></div>
+    <div class="field"><label>Lote</label><select id="ft-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
+    <div class="field"><label>Tipo de problema</label><select id="ft-tipo"><option value="">Seleccionar...</option><option>Insecto — masticador</option><option>Insecto — chupador</option><option>Ácaro</option><option>Hongo / enfermedad</option><option>Bacteria</option><option>Preventivo</option></select></div>
+    <div class="field"><label>Plaga o enfermedad</label><input type="text" id="ft-plaga" placeholder="Ej: trips, cochinilla, antracnosis..."></div>
+    <div class="field"><label>Producto comercial</label><input type="text" id="ft-producto" placeholder="Ej: Engeo, Mancozeb, Sulfocal..."></div>
+    <div class="frow"><div class="field"><label>Dosis</label><input type="text" id="ft-dosis" placeholder="1cc/L"></div><div class="field"><label>Volumen (L)</label><input type="number" id="ft-vol" placeholder="20"></div></div>
+    <div class="field"><label>Modo de aplicación</label><select id="ft-modo"><option value="">Seleccionar...</option><option>Foliar — bomba mochila</option><option>Drench al suelo</option><option>Trampa / cebo</option><option>Aplicación localizada</option></select></div>
+    <div class="field"><label>Período de carencia (días)</label><input type="number" id="ft-carencia" placeholder="7"></div>
+    <div class="field"><label>Foto del problema</label><input type="file" id="ft-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'ft-fp')"><button class="foto-btn" onclick="document.getElementById('ft-foto').click()">📷 Foto problema / aplicación</button><img id="ft-fp" class="foto-preview"></div>
+    <div class="field"><label>Observaciones</label><textarea id="ft-obs" placeholder="Severidad, postes afectados..."></textarea></div>
+    <button class="btn-p" onclick="guardar('fitosan')">✅ Guardar Registro</button>
+  </div>
+  <div class="fbody" id="tab-labor" style="display:none">
+    <div class="field"><label>Fecha</label><input type="date" id="l-fecha"></div>
+    <div class="field"><label>Lote</label><select id="l-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
+    <div class="field"><label>Tipo de labor</label><select id="l-tipo"><option value="">Seleccionar...</option><option>Poda de formación</option><option>Poda sanitaria</option><option>Deshierba / limpieza</option><option>Tutorado / amarre</option><option>Encendido de luces (inducción)</option><option>Apagado de luces</option><option>Revisión sistema de riego</option><option>Instalación de infraestructura</option><option>Otra</option></select></div>
+    <div class="frow"><div class="field"><label>Jornales</label><input type="number" id="l-jorn" placeholder="2"></div><div class="field"><label>Costo ($)</label><input type="number" id="l-costo" placeholder="0.00" step="0.01"></div></div>
+    <div class="field"><label>Foto</label><input type="file" id="l-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'l-fp')"><button class="foto-btn" onclick="document.getElementById('l-foto').click()">📷 Foto</button><img id="l-fp" class="foto-preview"></div>
+    <div class="field"><label>Observaciones</label><textarea id="l-obs" placeholder="Detalles..."></textarea></div>
+    <button class="btn-p" onclick="guardar('labor')">✅ Guardar Registro</button>
+  </div>
+  <div class="fbody" id="tab-cosecha" style="display:none">
+    <div class="field"><label>Fecha</label><input type="date" id="c-fecha"></div>
+    <div class="field"><label>Lote</label><select id="c-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Todos los lotes productivos</option></select></div>
+    <div class="frow"><div class="field"><label>Cantidad (kg)</label><input type="number" id="c-kg" placeholder="0" step="0.5"></div><div class="field"><label>Precio/kg ($)</label><input type="number" id="c-precio" placeholder="0.00" step="0.01"></div></div>
+    <div class="field"><label>Calibre / calidad</label><select id="c-cal"><option value="">Seleccionar...</option><option>Primera (+500g)</option><option>Segunda (300-500g)</option><option>Tercera (-300g)</option><option>Mixto</option></select></div>
+    <div class="field"><label>Destino</label><input type="text" id="c-dest" placeholder="Mercado Manta..."></div>
+    <div class="field"><label>Foto</label><input type="file" id="c-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'c-fp')"><button class="foto-btn" onclick="document.getElementById('c-foto').click()">📷 Foto</button><img id="c-fp" class="foto-preview"></div>
+    <div class="field"><label>Observaciones</label><textarea id="c-obs" placeholder="Estado de la fruta..."></textarea></div>
+    <button class="btn-p" onclick="guardar('cosecha')">✅ Guardar Registro</button>
+  </div>
+</div>
+
+<div class="page" id="page-hist">
+  <div class="fhead"><h2>Historial</h2><p>Todos los registros</p></div>
+  <div class="hfil">
+    <button class="chip active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="chip" onclick="filtrar('drench',this)">💧</button>
+    <button class="chip" onclick="filtrar('foliar',this)">🌿</button>
+    <button class="chip" onclick="filtrar('edafico',this)">🪱</button>
+    <button class="chip" onclick="filtrar('fitosan',this)">🐛</button>
+    <button class="chip" onclick="filtrar('labor',this)">🔧</button>
+    <button class="chip" onclick="filtrar('cosecha',this)">🍎</button>
+  </div>
+  <div class="hlist" id="histList"><div class="loading"><div class="spinner"></div></div></div>
+</div>
+
+<div class="page" id="page-cos">
+  <div class="fhead" style="background:var(--yellow-dk)"><h2>📊 Cosecha</h2><p>Totales acumulados</p></div>
+  <div id="cosStats" style="padding:18px"><div class="loading"><div class="spinner"></div></div></div>
+</div>
 </main>
 
 <nav>
@@ -359,9 +272,9 @@ nav button svg{width:22px;height:22px;stroke-width:1.8}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     <span>Inicio</span>
   </button>
-  <button onclick="showPage('cron',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    <span>Cronograma</span>
+  <button onclick="showPage('lotes',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Lotes</span>
   </button>
   <button onclick="showPage('form',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
@@ -376,515 +289,297 @@ nav button svg{width:22px;height:22px;stroke-width:1.8}
     <span>Cosecha</span>
   </button>
 </nav>
-
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDKs -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAD6EKgG10V-nRC8b8B43Z82Z_PlWpaWyQ",
-  authDomain: "pitahaya-finca.firebaseapp.com",
-  projectId: "pitahaya-finca",
-  storageBucket: "pitahaya-finca.firebasestorage.app",
-  messagingSenderId: "997510240139",
-  appId: "1:997510240139:web:3695318a3dd03c4046418e"
-};
+const firebaseConfig={apiKey:"AIzaSyAD6EKgG10V-nRC8b8B43Z82Z_PlWpaWyQ",authDomain:"pitahaya-finca.firebaseapp.com",projectId:"pitahaya-finca",storageBucket:"pitahaya-finca.firebasestorage.app",messagingSenderId:"997510240139",appId:"1:997510240139:web:3695318a3dd03c4046418e"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const storage=getStorage(app);
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
-
-// LOTES CONFIG
-const LOTES = [
-  {id:'lote1', nombre:'Lote 1', postes:300, tipo:'productivo'},
-  {id:'lote2', nombre:'Lote 2', postes:300, tipo:'productivo'},
-  {id:'lote3', nombre:'Lote 3', postes:430, tipo:'productivo'},
-  {id:'lote4', nombre:'Lote 4', postes:3270, tipo:'nuevo'},
+const LOTES=[{id:'lote1',nombre:'Lote 1',postes:300,tipo:'productivo'},{id:'lote2',nombre:'Lote 2',postes:300,tipo:'productivo'},{id:'lote3',nombre:'Lote 3',postes:430,tipo:'productivo'},{id:'lote4',nombre:'Lote 4',postes:3270,tipo:'nuevo'}];
+const PROGRAMA=[
+  {id:'APP1',dia:0,nombre:'APP 1 — Arranque',modo:'Suelo granular',productos:'Alpha Acelerador 30g/poste + Bioabor 100g/poste',nota:'Al prender luces. Hueco 5-8cm a 15-20cm del tallo'},
+  {id:'APP2',dia:25,nombre:'APP 2 — Botoneo P/K/Mg',modo:'Drench 2L/poste',productos:'Ác. fosfórico 50cc + MKP 400g + Sulf. Mg 340g + Humax 170g',nota:'5d antes apagar luces. Ácido primero'},
+  {id:'APP3',dia:30,nombre:'APP 3 — Botoneo Ca',modo:'Drench 2L/poste',productos:'Calcinit Bio 340g — SOLO',nota:'Al apagar luces. NUNCA mezclar'},
+  {id:'APP4',dia:42,nombre:'APP 4 — Pre-floración foliar',modo:'Foliar 0.3L/poste',productos:'YaraVita Caltrac 400mL/tanque 200L',nota:'⚠️ ANTES 8am. Botón grande cerrado'},
+  {id:'APP4r',dia:50,nombre:'APP 4 Repetición foliar',modo:'Foliar 0.3L/poste',productos:'YaraVita Caltrac 400mL/tanque 200L',nota:'⚠️ ANTES 8am. 7-10d después'},
+  {id:'APP5',dia:53,nombre:'APP 5 — Llenado K',modo:'Drench 2L/poste',productos:'Azutec 600g — SOLO',nota:'Fruto cuajado creciendo'},
+  {id:'APP6',dia:58,nombre:'APP 6 — Llenado Ca',modo:'Drench 2L/poste',productos:'Calcinit Bio 230g — SOLO',nota:'5d después APP5. NUNCA mezclar'},
+  {id:'APP7',dia:67,nombre:'APP 7 — Engorde final',modo:'Drench 2L/poste',productos:'Ultrasol KP 400g — SOLO',nota:'Fruto en tamaño final'},
 ];
+const CICLO_TOTAL=85;
+window._registros=[];window._filtroActivo='todos';window._fotoFiles={};
 
-// PROGRAMA FERTILIZACIÓN
-const PROGRAMA = [
-  {id:'APP1', dia:0, nombre:'APP 1 — Arranque', modo:'Suelo granular', productos:'Alpha Acelerador 30g/poste + Bioabor 100g/poste', nota:'Aplicar al momento de prender las luces'},
-  {id:'APP2', dia:25, nombre:'APP 2 — Botoneo P/K/Mg', modo:'Drench 2L/poste', productos:'Ácido fosfórico 50cc + MKP 400g + Sulfato Mg 340g + Humax 170g (tanque 200L)', nota:'5 días antes de apagar luces. Orden: ácido primero'},
-  {id:'APP3', dia:30, nombre:'APP 3 — Botoneo Ca', modo:'Drench 2L/poste', productos:'Calcinit Bio 340g (tanque 200L) — SOLO', nota:'Al apagar luces. NUNCA mezclar con otros'},
-  {id:'APP4', dia:42, nombre:'APP 4 — Pre-floración foliar', modo:'Foliar 0.3L/poste', productos:'YaraVita Caltrac 400mL (tanque 200L)', nota:'⚠️ ANTES de las 8am. Botón grande cerrado'},
-  {id:'APP4r', dia:50, nombre:'APP 4 Repetición foliar', modo:'Foliar 0.3L/poste', productos:'YaraVita Caltrac 400mL (tanque 200L)', nota:'⚠️ ANTES de las 8am. 7-10 días después de APP4'},
-  {id:'APP5', dia:53, nombre:'APP 5 — Llenado K', modo:'Drench 2L/poste', productos:'Azutec 600g (tanque 200L) — SOLO', nota:'Fruto cuajado creciendo'},
-  {id:'APP6', dia:58, nombre:'APP 6 — Llenado Ca', modo:'Drench 2L/poste', productos:'Calcinit Bio 230g (tanque 200L) — SOLO', nota:'5 días después de APP5. NUNCA mezclar'},
-  {id:'APP7a', dia:67, nombre:'APP 7a — Engorde Ultrasol', modo:'Drench 2L/poste', productos:'Ultrasol KP 400g (tanque 200L) — SOLO', nota:'Fruto en tamaño final'},
-  {id:'APP7b', dia:73, nombre:'APP 7b — Engorde Azutec', modo:'Drench 2L/poste', productos:'Azutec 600g (tanque 200L) — SOLO', nota:'5-7 días después de APP7a'},
-];
-
-// INCOMPATIBILIDADES
-const INCOMP = {
-  'APP3': 'APP 2', 'APP5': 'APP 6', 'APP6': 'APP 5', 'APP7a': 'APP 7b mezclado',
-};
-
-// STATE
-window._registros = [];
-window._filtroActivo = 'todos';
-window._fotoFiles = {};
-
-// INIT
-window.addEventListener('DOMContentLoaded', async () => {
-  const today = new Date().toISOString().split('T')[0];
-  document.querySelectorAll('input[type="date"]').forEach(el => el.value = today);
-  document.getElementById('headerDate').textContent = new Date().toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'});
-  renderLotesPills();
+window.addEventListener('DOMContentLoaded',async()=>{
+  const today=new Date().toISOString().split('T')[0];
+  document.querySelectorAll('input[type="date"]').forEach(el=>el.value=today);
+  document.getElementById('headerDate').textContent=new Date().toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'});
   await cargarRegistros();
-  renderDash();
-  renderCronograma();
+  renderDash();renderLotes();
 });
 
-// LOTES PILLS
-function renderLotesPills() {
-  const c = document.getElementById('lotesPills');
-  c.innerHTML = LOTES.map(l => `<div class="lpill ${l.tipo==='productivo'?'sel':''}">${l.nombre} <small style="opacity:.7;font-size:10px">${l.postes} postes</small></div>`).join('');
+async function cargarRegistros(){
+  try{const q=query(collection(db,'registros'),orderBy('timestamp','desc'));const snap=await getDocs(q);window._registros=snap.docs.map(d=>({id:d.id,...d.data()}));}
+  catch(e){window._registros=[];}
 }
 
-// CARGAR REGISTROS
-async function cargarRegistros() {
-  try {
-    const q = query(collection(db,'registros'), orderBy('timestamp','desc'));
-    const snap = await getDocs(q);
-    window._registros = snap.docs.map(d => ({id: d.id, ...d.data()}));
-  } catch(e) {
-    console.error(e);
-    window._registros = [];
+function renderDash(){
+  document.getElementById('d-registros').textContent=window._registros.length;
+  const kg=window._registros.filter(r=>r.tipo==='cosecha').reduce((s,r)=>s+(r.kg||0),0);
+  document.getElementById('d-cosecha').textContent=kg.toFixed(1)+' kg';
+  const c=document.getElementById('recentList');
+  const recent=window._registros.slice(0,6);
+  if(!recent.length){c.innerHTML=`<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Sin registros aún.</div></div>`;return;}
+  c.innerHTML=recent.map(r=>actCardHTML(r)).join('');
+}
+
+function actCardHTML(r){
+  const c=tipoConf(r.tipo);
+  return `<div class="acard"><div class="aico" style="background:${c.bg}">${c.ico}</div><div class="abody"><div class="atitle">${c.label}</div><div class="ameta">${fmtFecha(r.fecha)} · ${r.lote||'—'}</div>${r.detalle?`<div class="ameta" style="margin-top:2px">${r.detalle}</div>`:''}</div>${r.fotoURL?`<img src="${r.fotoURL}" class="photo-thumb" onclick="verFoto('${r.fotoURL}')">`:''}
+  </div>`;
+}
+
+function renderLotes(){
+  const tabsEl=document.getElementById('loteTabs');
+  const panelsEl=document.getElementById('lotePanels');
+  tabsEl.innerHTML=LOTES.map((l,i)=>`<button class="ltab${i===0?' active':''}" onclick="selectLote('${l.id}',this)">${l.nombre}</button>`).join('');
+  panelsEl.innerHTML=LOTES.map((l,i)=>`<div class="lote-panel${i===0?' active':''}" id="panel-${l.id}">${buildLotePanel(l)}</div>`).join('');
+}
+
+function buildLotePanel(lote){
+  const regs=window._registros;
+  const encendidos=regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  if(lote.tipo==='nuevo'){
+    return `<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">${lote.nombre}</div><div class="ciclo-sub">${lote.postes} postes — 3 meses de edad</div><div class="ciclo-estado">🌱 Etapa vegetativa</div></div><div style="padding:14px 16px;font-size:13px;color:var(--mid)">Plantas jóvenes en desarrollo vegetativo.</div></div></div>`;
   }
-}
+  if(!encendidos.length){
+    return `<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">${lote.nombre}</div><div class="ciclo-sub">${lote.postes} postes productivos</div><div class="ciclo-estado">⏳ Sin ciclo activo</div></div><div style="padding:16px"><p style="font-size:13px;color:var(--mid);margin-bottom:12px">Registra el encendido de luces para activar el cronograma automático.</p><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-p">+ Registrar encendido de luces</button></div></div></div>`;
+  }
+  const ultimoEnc=encendidos[encendidos.length-1];
+  const diaInicio=new Date(ultimoEnc.fecha);
+  const hoy=new Date();
+  const diaActual=Math.floor((hoy-diaInicio)/(1000*60*60*24));
+  const progreso=Math.min(100,Math.round((diaActual/CICLO_TOTAL)*100));
+  const appActual=PROGRAMA.filter(a=>a.dia<=diaActual).slice(-1)[0];
+  const appProx=PROGRAMA.find(a=>a.dia>diaActual);
+  let estadoText=appActual?appActual.nombre:'Inicio del ciclo';
+  if(appProx) estadoText+=` → ${appProx.nombre} en ${appProx.dia-diaActual}d`;
+  const apagados=regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Apagado')&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio);
+  const apagadoFecha=apagados.length?apagados[apagados.length-1].fecha:null;
+  const cosechas=regs.filter(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio);
+  const totalKgCiclo=cosechas.reduce((s,r)=>s+(r.kg||0),0);
+  const totalValCiclo=cosechas.reduce((s,r)=>s+((r.kg||0)*(r.precio||0)),0);
 
-// DASHBOARD
-function renderDash() {
-  const regs = window._registros;
-  document.getElementById('d-registros').textContent = regs.length;
-  const kg = regs.filter(r=>r.tipo==='cosecha').reduce((s,r)=>s+(r.kg||0),0);
-  document.getElementById('d-cosecha').textContent = kg.toFixed(1)+' kg';
-  const container = document.getElementById('recentList');
-  const recent = regs.slice(0,6);
-  if(!recent.length){container.innerHTML=`<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Sin registros aún.<br>Agrega uno desde Registrar.</div></div>`;return;}
-  container.innerHTML = recent.map(r => actCardHTML(r)).join('');
-}
-
-function actCardHTML(r) {
-  const c = tipoConf(r.tipo);
-  return `<div class="acard">
-    <div class="aico" style="background:${c.bg}">${c.ico}</div>
-    <div class="abody">
-      <div class="atitle">${c.label}</div>
-      <div class="ameta">${fmtFecha(r.fecha)} · ${r.lote||'—'}</div>
-      ${r.detalle?`<div class="ameta" style="margin-top:3px">${r.detalle}</div>`:''}
+  let html=`<div style="padding:14px 0"><div class="ciclo-card">
+    <div class="ciclo-head"><div class="ciclo-title">${lote.nombre} — Ciclo Activo</div><div class="ciclo-sub">${lote.postes} postes · Iniciado ${fmtFecha(ultimoEnc.fecha)}</div><div class="ciclo-estado">📅 Día ${diaActual} de ~${CICLO_TOTAL}</div></div>
+    <div class="progreso-wrap">
+      <div class="progreso-label"><span>${estadoText}</span><span style="font-weight:600;color:var(--green)">${progreso}%</span></div>
+      <div class="progreso-bar"><div class="progreso-fill" style="width:${progreso}%"></div></div>
+      <div class="progreso-dias"><span>Día 0</span><span>Día ${CICLO_TOTAL}</span></div>
     </div>
-    ${r.fotoURL?`<img src="${r.fotoURL}" class="photo-thumb" onclick="verFoto('${r.fotoURL}')">`:''}
+    <div class="fechas-row">
+      <div class="fecha-item"><div class="fecha-val">${fmtFecha(ultimoEnc.fecha)}</div><div class="fecha-lbl">💡 Luces encendidas</div></div>
+      <div class="fecha-item"><div class="fecha-val">${apagadoFecha?fmtFecha(apagadoFecha):'~'+fmtFechaOffset(ultimoEnc.fecha,30)}</div><div class="fecha-lbl">🌙 Luces apagadas</div></div>
+      ${totalKgCiclo>0?`<div class="fecha-item"><div class="fecha-val">${totalKgCiclo.toFixed(1)} kg</div><div class="fecha-lbl">🍎 Cosechado</div></div><div class="fecha-item"><div class="fecha-val">$${totalValCiclo.toFixed(0)}</div><div class="fecha-lbl">💰 Ingresos</div></div>`:''}
+    </div>
+    <div class="apps-lista">
+      <div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Aplicaciones del ciclo</div>
+      ${PROGRAMA.map(ap=>{
+        const fad=new Date(diaInicio);fad.setDate(fad.getDate()+ap.dia);
+        const dd=Math.floor((fad-hoy)/(1000*60*60*24));
+        let dc,bt,bc;
+        if(dd<-2){dc='dot-hecho';bt='✓ Hecho';bc='bg';}
+        else if(dd>=-2&&dd<=2){dc='dot-hoy';bt='HOY';bc='br';}
+        else if(dd>2&&dd<=7){dc='dot-prox';bt='Esta semana';bc='by';}
+        else{dc='dot-fut';bt=dd>0?`En ${dd}d`:'';bc='';}
+        return `<div class="app-row"><div class="app-dot ${dc}"></div><div class="app-info"><div class="app-nombre">${ap.nombre}</div><div class="app-fecha">${ap.modo} · ${fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})}</div><div class="app-prod">${ap.productos}</div>${ap.nota?`<div style="font-size:10px;color:var(--light);font-style:italic">${ap.nota}</div>`:''}</div>${bt?`<span class="app-badge badge ${bc}">${bt}</span>`:''}</div>`;
+      }).join('')}
+    </div>
+    <div style="padding:0 16px 14px"><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-nuevo-ciclo">+ Iniciar nuevo ciclo</button></div>
   </div>`;
-}
 
-// CRONOGRAMA
-function renderCronograma() {
-  const container = document.getElementById('cronContent');
-  const lotesConLuces = LOTES.filter(l => l.tipo==='productivo');
-  
-  // Buscar fechas de encendido de luces registradas
-  const laborLuces = window._registros.filter(r => r.tipo==='labor' && r.tipoLabor && r.tipoLabor.includes('Encendido'));
-  
-  let html = '';
-  
-  lotesConLuces.forEach(lote => {
-    const lucesReg = laborLuces.find(r => r.lote && r.lote.includes(lote.nombre));
-    
-    html += `<div class="cron-lote">
-      <div class="cron-head">
-        <div>
-          <div class="cron-name">🌱 ${lote.nombre}</div>
-          <div class="cron-dia">${lote.postes} postes productivos</div>
-        </div>`;
-    
-    if(lucesReg) {
-      const diaInicio = new Date(lucesReg.fecha);
-      const hoy = new Date();
-      const diaActual = Math.floor((hoy - diaInicio) / (1000*60*60*24));
-      html += `<div style="text-align:right"><div style="font-family:'DM Mono',monospace;font-size:13px;font-weight:600;color:var(--green)">Día ${diaActual}</div><div style="font-size:10px;color:var(--light)">del ciclo</div></div>`;
-    } else {
-      html += `<button onclick="irARegistrarLuces('${lote.nombre}')" style="font-size:11px;padding:6px 12px;border:1.5px solid var(--green);border-radius:20px;background:none;color:var(--green);cursor:pointer;font-weight:600">+ Registrar encendido</button>`;
-    }
-    
-    html += `</div><div class="cron-apps">`;
-    
-    PROGRAMA.forEach(app => {
-      let estado = 'fut', badgeClass = '', badgeText = '';
-      let fechaApp = '—';
-      
-      if(lucesReg) {
-        const diaInicio = new Date(lucesReg.fecha);
-        const fechaAppDate = new Date(diaInicio);
-        fechaAppDate.setDate(fechaAppDate.getDate() + app.dia);
-        const hoy = new Date();
-        const diasDiff = Math.floor((fechaAppDate - hoy) / (1000*60*60*24));
-        fechaApp = fechaAppDate.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-        
-        if(diasDiff < -2) { estado='done'; badgeText='Realizado'; badgeClass='bg'; }
-        else if(diasDiff >= -2 && diasDiff <= 2) { estado='hoy'; badgeText='HOY'; badgeClass='br'; }
-        else if(diasDiff > 2 && diasDiff <= 7) { estado='prox'; badgeText='Esta semana'; badgeClass='by'; }
-        else { estado='fut'; badgeText=`En ${diasDiff} días`; badgeClass=''; }
-      }
-      
-      html += `<div class="cron-app">
-        <div class="cron-dot dot-${estado}"></div>
-        <div class="cron-app-info">
-          <div class="cron-app-name">${app.nombre}</div>
-          <div class="cron-app-fecha">${app.modo} · ${lucesReg ? fechaApp : `Día ${app.dia}`}</div>
-          <div style="font-size:10px;color:var(--mid);margin-top:2px">${app.productos}</div>
-          ${app.nota?`<div style="font-size:10px;color:var(--light);margin-top:1px;font-style:italic">${app.nota}</div>`:''}
-        </div>
-        ${badgeText?`<span class="cron-app-badge badge ${badgeClass}">${badgeText}</span>`:''}
-      </div>`;
+  if(encendidos.length>1){
+    html+=`<div class="stitle" style="padding-left:0">Ciclos anteriores</div>`;
+    encendidos.slice(0,-1).reverse().forEach((enc,idx)=>{
+      const numCiclo=encendidos.length-1-idx;
+      const fechaFin=encendidos[numCiclo]?encendidos[numCiclo].fecha:'—';
+      const cos=regs.filter(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=new Date(enc.fecha)&&(fechaFin==='—'||new Date(r.fecha)<new Date(fechaFin)));
+      const kg=cos.reduce((s,r)=>s+(r.kg||0),0);
+      html+=`<div class="ciclo-ant"><div style="font-weight:600;font-size:13px">Ciclo ${numCiclo} — ${fmtFecha(enc.fecha)}</div><div style="font-size:11px;color:var(--light);margin-top:4px">${kg>0?`🍎 ${kg.toFixed(1)} kg cosechados`:'Sin registro de cosecha'}</div></div>`;
     });
-    
-    html += `</div></div>`;
-  });
-  
-  // Lote 4 sin cronograma de fertilización avanzado
-  html += `<div class="cron-lote">
-    <div class="cron-head">
-      <div><div class="cron-name">🌱 Lote 4</div><div class="cron-dia">3,270 postes nuevos (3 meses)</div></div>
-      <span class="badge by">Vegetativo</span>
-    </div>
-    <div style="padding:12px 15px;font-size:12px;color:var(--mid)">Plantas en etapa vegetativa. Programa de fertilización básico hasta inducción.</div>
-  </div>`;
-  
-  html += `<div style="padding:18px;font-size:11px;color:var(--light);text-align:center">
-    Para activar el cronograma automático, registra el encendido de luces de cada lote en <strong>Registrar → Labor → Encendido de luces</strong>
-  </div>`;
-  
-  container.innerHTML = html;
+  }
+  html+=`</div>`;
+  return html;
 }
 
-window.irARegistrarLuces = function(nombreLote) {
-  showPage('form', document.querySelectorAll('nav button')[2]);
-  switchTab('labor', document.querySelectorAll('.ftab')[2]);
-  document.getElementById('l-lote').value = LOTES.find(l=>l.nombre===nombreLote)?.nombre+' — '+LOTES.find(l=>l.nombre===nombreLote)?.postes+' postes' || '';
-  document.getElementById('l-tipo').value = 'Encendido de luces (inducción)';
-  showToast('📅 Completa la fecha de encendido de luces');
+window.selectLote=function(id,btn){
+  document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.lote-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
 };
 
-// SUGERIR APP
-window.sugerirApp = function() {
-  const loteVal = document.getElementById('f-lote').value;
-  const container = document.getElementById('app-sugerida');
-  if(!loteVal) { container.innerHTML=''; return; }
-  
-  const loteNombre = loteVal.split('—')[0].trim();
-  const laborLuces = window._registros.find(r => r.tipo==='labor' && r.tipoLabor && r.tipoLabor.includes('Encendido') && r.lote && r.lote.includes(loteNombre));
-  
-  if(!laborLuces) { container.innerHTML=''; return; }
-  
-  const diaInicio = new Date(laborLuces.fecha);
-  const hoy = new Date();
-  const diaActual = Math.floor((hoy - diaInicio) / (1000*60*60*24));
-  
-  const prox = PROGRAMA.filter(a => a.dia >= diaActual - 3).slice(0,2);
-  if(!prox.length) { container.innerHTML=''; return; }
-  
-  container.innerHTML = `<div class="app-preview">
-    <h4>📅 Sugerencia — ${loteNombre} está en Día ${diaActual}</h4>
-    ${prox.map(a => `<p><strong>${a.nombre}</strong> — ${a.productos}</p>`).join('')}
-    ${prox[0] && INCOMP[prox[0].id] ? `<div class="incomp">⚠️ Esta app NO se mezcla con: ${INCOMP[prox[0].id]}</div>`:''}
-  </div>`;
+window.irARegistrarLuces=function(nombreLote){
+  showPage('form',document.querySelectorAll('nav button')[2]);
+  switchTab('labor',document.querySelectorAll('.ftab')[4]);
+  setTimeout(()=>{
+    const sel=document.getElementById('l-lote');
+    for(let i=0;i<sel.options.length;i++){if(sel.options[i].text.includes(nombreLote)){sel.selectedIndex=i;break;}}
+    document.getElementById('l-tipo').value='Encendido de luces (inducción)';
+  },100);
+  showToast('📅 Completa la fecha de encendido');
 };
 
-// SWITCH TAB
-window.switchTab = function(tab, btn) {
+window.sugerirApp=function(){
+  const lv=document.getElementById('f-lote').value;
+  const c=document.getElementById('app-sugerida');
+  if(!lv){c.innerHTML='';return;}
+  const ln=lv.split('—')[0].trim();
+  const lr=window._registros.find(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(ln));
+  if(!lr){c.innerHTML='';return;}
+  const da=Math.floor((new Date()-new Date(lr.fecha))/(1000*60*60*24));
+  const prox=PROGRAMA.filter(a=>a.dia>=da-3).slice(0,2);
+  if(!prox.length){c.innerHTML='';return;}
+  const INC={'APP3':'APP 2','APP5':'APP 6','APP6':'APP 5'};
+  c.innerHTML=`<div class="app-preview"><h4>📅 ${ln} — Día ${da} del ciclo</h4>${prox.map(a=>`<p><strong>${a.nombre}</strong><br>${a.productos}</p>`).join('')}${prox[0]&&INC[prox[0].id]?`<div class="incomp-warn">⚠️ NO mezclar con: ${INC[prox[0].id]}</div>`:''}</div>`;
+};
+
+window.switchTab=function(tab,btn){
   document.querySelectorAll('.fbody').forEach(t=>t.style.display='none');
   document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+tab).style.display='block';
   if(btn) btn.classList.add('active');
-  const today = new Date().toISOString().split('T')[0];
-  const dateInput = document.getElementById('tab-'+tab).querySelector('input[type="date"]');
-  if(dateInput && !dateInput.value) dateInput.value = today;
+  const today=new Date().toISOString().split('T')[0];
+  const di=document.getElementById('tab-'+tab).querySelector('input[type="date"]');
+  if(di&&!di.value) di.value=today;
 };
 
-// FOTO PREVIEW
-window.previewFoto = function(input, previewId) {
-  const file = input.files[0];
-  if(!file) return;
-  window._fotoFiles[previewId] = file;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = document.getElementById(previewId);
-    img.src = e.target.result;
-    img.style.display = 'block';
-  };
+window.previewFoto=function(input,prevId){
+  const file=input.files[0];if(!file)return;
+  window._fotoFiles[prevId]=file;
+  const reader=new FileReader();
+  reader.onload=e=>{const img=document.getElementById(prevId);img.src=e.target.result;img.style.display='block';};
   reader.readAsDataURL(file);
 };
 
-// SUBIR FOTO
-async function subirFoto(file) {
-  if(!file) return null;
-  try {
-    const nombre = `fotos/${Date.now()}_${file.name}`;
-    const storageRef = ref(storage, nombre);
-    // Comprimir si es muy grande
-    const blob = await comprimirImagen(file);
-    await uploadBytes(storageRef, blob);
-    return await getDownloadURL(storageRef);
-  } catch(e) {
-    console.error('Error foto:', e);
-    return null;
-  }
+async function subirFoto(file){
+  if(!file)return null;
+  try{const sr=ref(storage,`fotos/${Date.now()}_${file.name}`);const blob=await comprimirImagen(file);await uploadBytes(sr,blob);return await getDownloadURL(sr);}
+  catch(e){return null;}
 }
 
-async function comprimirImagen(file) {
-  return new Promise(resolve => {
-    const canvas = document.createElement('canvas');
-    const img = new Image();
-    img.onload = () => {
-      const MAX = 1200;
-      let w = img.width, h = img.height;
-      if(w > MAX) { h = Math.round(h*MAX/w); w = MAX; }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.75);
-    };
-    img.src = URL.createObjectURL(file);
+async function comprimirImagen(file){
+  return new Promise(resolve=>{
+    const canvas=document.createElement('canvas');const img=new Image();
+    img.onload=()=>{const MAX=1200;let w=img.width,h=img.height;if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);canvas.toBlob(blob=>resolve(blob),'image/jpeg',0.75);};
+    img.src=URL.createObjectURL(file);
   });
 }
 
-// GUARDAR REGISTRO
-window.guardar = async function(tipo) {
-  const btn = document.querySelector(`#tab-${tipo} .btn-p`);
-  if(btn) { btn.disabled=true; btn.textContent='Guardando...'; }
-  
-  let reg = { tipo, timestamp: serverTimestamp() };
-  let fotoFile = null;
-
-  if(tipo==='fertiriego') {
-    reg.fecha = document.getElementById('f-fecha').value;
-    reg.lote = document.getElementById('f-lote').value;
-    reg.appPrograma = document.getElementById('f-app').value;
-    reg.productos = document.getElementById('f-productos').value;
-    reg.volumen = document.getElementById('f-vol').value;
-    reg.tandas = document.getElementById('f-tandas').value;
-    reg.obs = document.getElementById('f-obs').value;
-    reg.detalle = reg.appPrograma || reg.productos?.substring(0,40);
-    fotoFile = window._fotoFiles['f-foto-prev'];
-    if(!reg.fecha||!reg.lote||!reg.productos){showToast('⚠️ Completa fecha, lote y productos',true);resetBtn(btn,'✅ Guardar Registro');return;}
-  }
-  else if(tipo==='foliar') {
-    reg.fecha = document.getElementById('fo-fecha').value;
-    reg.lote = document.getElementById('fo-lote').value;
-    reg.appPrograma = document.getElementById('fo-app').value;
-    reg.producto = document.getElementById('fo-prod').value;
-    reg.dosis = document.getElementById('fo-dosis').value;
-    reg.volumen = document.getElementById('fo-vol').value;
-    reg.hora = document.getElementById('fo-hora').value;
-    reg.obs = document.getElementById('fo-obs').value;
-    reg.detalle = reg.producto + (reg.dosis?' · '+reg.dosis:'');
-    fotoFile = window._fotoFiles['fo-foto-prev'];
-    if(!reg.fecha||!reg.lote||!reg.producto){showToast('⚠️ Completa fecha, lote y producto',true);resetBtn(btn,'✅ Guardar Registro');return;}
-    if(reg.hora && parseInt(reg.hora.split(':')[0])>=8) {
-      showToast('⚠️ APP 4 debe aplicarse ANTES de las 8am',true);
-    }
-  }
-  else if(tipo==='labor') {
-    reg.fecha = document.getElementById('l-fecha').value;
-    reg.lote = document.getElementById('l-lote').value;
-    reg.tipoLabor = document.getElementById('l-tipo').value;
-    reg.jornales = document.getElementById('l-jorn').value;
-    reg.costo = document.getElementById('l-costo').value;
-    reg.obs = document.getElementById('l-obs').value;
-    reg.detalle = reg.tipoLabor;
-    fotoFile = window._fotoFiles['l-foto-prev'];
-    if(!reg.fecha||!reg.lote||!reg.tipoLabor){showToast('⚠️ Completa fecha, lote y tipo de labor',true);resetBtn(btn,'✅ Guardar Registro');return;}
-  }
-  else if(tipo==='cosecha') {
-    reg.fecha = document.getElementById('c-fecha').value;
-    reg.lote = document.getElementById('c-lote').value;
-    reg.kg = parseFloat(document.getElementById('c-kg').value)||0;
-    reg.precio = parseFloat(document.getElementById('c-precio').value)||0;
-    reg.calidad = document.getElementById('c-cal').value;
-    reg.destino = document.getElementById('c-dest').value;
-    reg.obs = document.getElementById('c-obs').value;
-    reg.detalle = reg.kg+' kg'+(reg.precio?' · $'+(reg.kg*reg.precio).toFixed(2):'');
-    fotoFile = window._fotoFiles['c-foto-prev'];
-    if(!reg.fecha||!reg.lote||!reg.kg){showToast('⚠️ Completa fecha, lote y kg',true);resetBtn(btn,'✅ Guardar Registro');return;}
-  }
-
-  // Subir foto si hay
-  if(fotoFile) {
-    showToast('📷 Subiendo foto...');
-    reg.fotoURL = await subirFoto(fotoFile);
-  }
-
-  try {
-    await addDoc(collection(db,'registros'), reg);
-    await cargarRegistros();
-    renderDash();
-    renderCronograma();
-    limpiarForm(tipo);
-    showToast('✅ Registro guardado');
-    // ir a historial
-    setTimeout(()=>showPage('hist', document.querySelectorAll('nav button')[3]),800);
-  } catch(e) {
-    console.error(e);
-    showToast('❌ Error al guardar. Revisa conexión',true);
-  }
-  resetBtn(btn,'✅ Guardar Registro');
+window.guardar=async function(tipo){
+  const btn=document.querySelector(`#tab-${tipo} .btn-p`);
+  if(btn){btn.disabled=true;btn.textContent='Guardando...';}
+  const tm={drench:{f:'f-fecha',l:'f-lote',fp:'f-fp'},foliar:{f:'fo-fecha',l:'fo-lote',fp:'fo-fp'},edafico:{f:'ed-fecha',l:'ed-lote',fp:'ed-fp'},fitosan:{f:'ft-fecha',l:'ft-lote',fp:'ft-fp'},labor:{f:'l-fecha',l:'l-lote',fp:'l-fp'},cosecha:{f:'c-fecha',l:'c-lote',fp:'c-fp'}};
+  const t=tm[tipo];
+  let reg={tipo,timestamp:serverTimestamp()};
+  reg.fecha=document.getElementById(t.f).value;
+  reg.lote=document.getElementById(t.l).value;
+  const fotoFile=window._fotoFiles[t.fp];
+  if(!reg.fecha||!reg.lote){showToast('⚠️ Completa fecha y lote',true);resetBtn(btn);return;}
+  if(tipo==='drench'){reg.appPrograma=document.getElementById('f-app').value;reg.productos=document.getElementById('f-productos').value;reg.volumen=document.getElementById('f-vol').value;reg.tandas=document.getElementById('f-tandas').value;reg.obs=document.getElementById('f-obs').value;reg.detalle=reg.appPrograma||reg.productos?.substring(0,40);if(!reg.productos){showToast('⚠️ Completa los productos',true);resetBtn(btn);return;}}
+  else if(tipo==='foliar'){reg.appPrograma=document.getElementById('fo-app').value;reg.producto=document.getElementById('fo-prod').value;reg.dosis=document.getElementById('fo-dosis').value;reg.volumen=document.getElementById('fo-vol').value;reg.hora=document.getElementById('fo-hora').value;reg.obs=document.getElementById('fo-obs').value;reg.detalle=reg.producto+(reg.dosis?' · '+reg.dosis:'');if(!reg.producto){showToast('⚠️ Completa el producto',true);resetBtn(btn);return;}if(reg.hora&&parseInt(reg.hora.split(':')[0])>=8)showToast('⚠️ APP4 debe ser ANTES de las 8am',true);}
+  else if(tipo==='edafico'){reg.tipoAplicacion=document.getElementById('ed-tipo').value;reg.productos=document.getElementById('ed-productos').value;reg.dosis=document.getElementById('ed-dosis').value;reg.total=document.getElementById('ed-total').value;reg.modo=document.getElementById('ed-modo').value;reg.obs=document.getElementById('ed-obs').value;reg.detalle=reg.tipoAplicacion||reg.productos?.substring(0,40);if(!reg.productos){showToast('⚠️ Completa los productos',true);resetBtn(btn);return;}}
+  else if(tipo==='fitosan'){reg.tipoProblema=document.getElementById('ft-tipo').value;reg.plaga=document.getElementById('ft-plaga').value;reg.producto=document.getElementById('ft-producto').value;reg.dosis=document.getElementById('ft-dosis').value;reg.volumen=document.getElementById('ft-vol').value;reg.modo=document.getElementById('ft-modo').value;reg.carencia=document.getElementById('ft-carencia').value;reg.obs=document.getElementById('ft-obs').value;reg.detalle=(reg.plaga||reg.tipoProblema||'')+(reg.producto?' · '+reg.producto:'');if(!reg.producto){showToast('⚠️ Completa el producto',true);resetBtn(btn);return;}}
+  else if(tipo==='labor'){reg.tipoLabor=document.getElementById('l-tipo').value;reg.jornales=document.getElementById('l-jorn').value;reg.costo=document.getElementById('l-costo').value;reg.obs=document.getElementById('l-obs').value;reg.detalle=reg.tipoLabor;if(!reg.tipoLabor){showToast('⚠️ Selecciona el tipo',true);resetBtn(btn);return;}}
+  else if(tipo==='cosecha'){reg.kg=parseFloat(document.getElementById('c-kg').value)||0;reg.precio=parseFloat(document.getElementById('c-precio').value)||0;reg.calidad=document.getElementById('c-cal').value;reg.destino=document.getElementById('c-dest').value;reg.obs=document.getElementById('c-obs').value;reg.detalle=reg.kg+' kg'+(reg.precio?' · $'+(reg.kg*reg.precio).toFixed(2):'');if(!reg.kg){showToast('⚠️ Completa los kg',true);resetBtn(btn);return;}}
+  if(fotoFile){showToast('📷 Subiendo foto...');reg.fotoURL=await subirFoto(fotoFile);}
+  try{await addDoc(collection(db,'registros'),reg);await cargarRegistros();renderDash();renderLotes();limpiarForm(tipo);showToast('✅ Registro guardado');setTimeout(()=>showPage('hist',document.querySelectorAll('nav button')[3]),800);}
+  catch(e){showToast('❌ Error al guardar',true);}
+  resetBtn(btn);
 };
 
-function resetBtn(btn, txt) {
-  if(btn) { btn.disabled=false; btn.textContent=txt; }
+function resetBtn(btn){if(btn){btn.disabled=false;btn.textContent='✅ Guardar Registro';}}
+
+function limpiarForm(tipo){
+  const today=new Date().toISOString().split('T')[0];
+  const map={drench:['f-lote','f-app','f-productos','f-vol','f-tandas','f-obs'],foliar:['fo-lote','fo-app','fo-prod','fo-dosis','fo-vol','fo-hora','fo-obs'],edafico:['ed-lote','ed-tipo','ed-productos','ed-dosis','ed-total','ed-modo','ed-obs'],fitosan:['ft-lote','ft-tipo','ft-plaga','ft-producto','ft-dosis','ft-vol','ft-modo','ft-carencia','ft-obs'],labor:['l-lote','l-tipo','l-jorn','l-costo','l-obs'],cosecha:['c-lote','c-kg','c-precio','c-cal','c-dest','c-obs']};
+  (map[tipo]||[]).forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const di=document.getElementById(`tab-${tipo}`).querySelector('input[type="date"]');if(di)di.value=today;
+  const fm={drench:'f-fp',foliar:'fo-fp',edafico:'ed-fp',fitosan:'ft-fp',labor:'l-fp',cosecha:'c-fp'};
+  const pid=fm[tipo];if(pid){const img=document.getElementById(pid);if(img){img.style.display='none';img.src='';}delete window._fotoFiles[pid];}
+  if(tipo==='drench')document.getElementById('app-sugerida').innerHTML='';
 }
 
-function limpiarForm(tipo) {
-  const today = new Date().toISOString().split('T')[0];
-  const ids = {
-    fertiriego: ['f-lote','f-app','f-productos','f-vol','f-tandas','f-obs'],
-    foliar: ['fo-lote','fo-app','fo-prod','fo-dosis','fo-vol','fo-hora','fo-obs'],
-    labor: ['l-lote','l-tipo','l-jorn','l-costo','l-obs'],
-    cosecha: ['c-lote','c-kg','c-precio','c-cal','c-dest','c-obs'],
-  };
-  (ids[tipo]||[]).forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
-  document.getElementById(`tab-${tipo}`).querySelector('input[type="date"]').value = today;
-  // clear fotos
-  const fotoMap = {fertiriego:'f-foto-prev',foliar:'fo-foto-prev',labor:'l-foto-prev',cosecha:'c-foto-prev'};
-  const prevId = fotoMap[tipo];
-  if(prevId) { const img=document.getElementById(prevId); if(img){img.style.display='none';img.src='';} delete window._fotoFiles[prevId]; }
-  if(tipo==='fertiriego') document.getElementById('app-sugerida').innerHTML='';
+window.filtrar=function(f,btn){window._filtroActivo=f;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));if(btn)btn.classList.add('active');renderHistorial();};
+
+function renderHistorial(){
+  const lista=window._filtroActivo==='todos'?window._registros:window._registros.filter(r=>r.tipo===window._filtroActivo);
+  const c=document.getElementById('histList');
+  if(!lista.length){c.innerHTML=`<div class="empty"><div class="empty-ico">📂</div><div class="empty-txt">No hay registros.</div></div>`;return;}
+  c.innerHTML=lista.map(r=>histCardHTML(r)).join('');
 }
 
-// HISTORIAL
-window.filtrar = function(f, btn) {
-  window._filtroActivo = f;
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  renderHistorial();
+function histCardHTML(r){
+  const conf=tipoConf(r.tipo);let det='';
+  if(r.tipo==='drench')det=(r.appPrograma?r.appPrograma+'<br>':'')+(r.productos||'')+(r.volumen?' · '+r.volumen+'L':'')+(r.tandas?' · '+r.tandas+' tandas':'');
+  else if(r.tipo==='foliar')det=(r.producto||'')+(r.dosis?' · '+r.dosis:'')+(r.hora?'<br>Hora: '+r.hora:'');
+  else if(r.tipo==='edafico')det=(r.tipoAplicacion?r.tipoAplicacion+'<br>':'')+(r.productos||'')+(r.dosis?' · '+r.dosis+'/poste':'');
+  else if(r.tipo==='fitosan')det=(r.plaga?r.plaga+' · ':'')+(r.producto||'')+(r.dosis?' · '+r.dosis:'')+(r.carencia?'<br>Carencia: '+r.carencia+'d':'');
+  else if(r.tipo==='labor')det=(r.tipoLabor||'')+(r.jornales?' · '+r.jornales+' jornales':'')+(r.costo?' · $'+r.costo:'');
+  else if(r.tipo==='cosecha')det=`${r.kg||0} kg`+(r.calidad?' · '+r.calidad:'')+(r.precio?' · $'+((r.kg||0)*(r.precio||0)).toFixed(2):'')+( r.destino?'<br>'+r.destino:'');
+  if(r.obs)det+='<br><span style="color:var(--light)">📝 '+r.obs+'</span>';
+  return `<div class="hcard"><div class="htop"><div><div class="htitle2">${conf.ico} ${conf.label}</div><div class="hdate2">${fmtFecha(r.fecha)}</div></div><div class="hactions"><span class="badge ${conf.badge}">${r.lote?r.lote.split('—')[0].trim():'—'}</span>${r.fotoURL?`<img src="${r.fotoURL}" class="photo-thumb" onclick="verFoto('${r.fotoURL}')">`:''}
+  <button class="del-btn" onclick="eliminar('${r.id}')">🗑</button></div></div>${det?`<div class="hdetail">${det}</div>`:''}</div>`;
+}
+
+window.eliminar=async function(id){
+  if(!confirm('¿Eliminar?'))return;
+  try{await deleteDoc(doc(db,'registros',id));await cargarRegistros();renderHistorial();renderDash();renderLotes();renderCosecha();showToast('🗑 Eliminado');}
+  catch(e){showToast('❌ Error',true);}
 };
 
-function renderHistorial() {
-  const lista = window._filtroActivo==='todos' ? window._registros : window._registros.filter(r=>r.tipo===window._filtroActivo);
-  const c = document.getElementById('histList');
-  if(!lista.length){c.innerHTML=`<div class="empty"><div class="empty-ico">📂</div><div class="empty-txt">No hay registros de este tipo.</div></div>`;return;}
-  c.innerHTML = lista.map(r => histCardHTML(r)).join('');
-}
-
-function histCardHTML(r) {
-  const conf = tipoConf(r.tipo);
-  let det = '';
-  if(r.tipo==='fertiriego') det = (r.appPrograma?`APP: ${r.appPrograma}<br>`:'')+(r.productos?`Productos: ${r.productos}<br>`:'')+(r.volumen?`${r.volumen}L`:'')+(r.tandas?` · ${r.tandas} tandas`:'');
-  else if(r.tipo==='foliar') det = (r.producto||'')+(r.dosis?' · '+r.dosis:'')+(r.hora?`<br>Hora: ${r.hora}`:'');
-  else if(r.tipo==='labor') det = (r.tipoLabor||'')+(r.jornales?' · '+r.jornales+' jornales':'')+(r.costo?' · $'+r.costo:'');
-  else if(r.tipo==='cosecha') det = `${r.kg||0} kg`+(r.calidad?' · '+r.calidad:'')+(r.precio?' · $'+((r.kg||0)*(r.precio||0)).toFixed(2):'')+( r.destino?`<br>Destino: ${r.destino}`:'');
-  if(r.obs) det += `<br><span style="color:var(--light)">📝 ${r.obs}</span>`;
-
-  return `<div class="hcard">
-    <div class="htop">
-      <div>
-        <div class="htitle2">${conf.ico} ${conf.label}</div>
-        <div class="hdate2">${fmtFecha(r.fecha)}</div>
-      </div>
-      <div class="hactions">
-        <span class="badge ${conf.badge}">${r.lote?r.lote.split('—')[0].trim():'—'}</span>
-        ${r.fotoURL?`<img src="${r.fotoURL}" class="photo-thumb" onclick="verFoto('${r.fotoURL}')">`:''}
-        <button class="del-btn" onclick="eliminar('${r.id}')">🗑</button>
-      </div>
-    </div>
-    ${det?`<div class="hdetail">${det}</div>`:''}
-  </div>`;
-}
-
-// ELIMINAR
-window.eliminar = async function(id) {
-  if(!confirm('¿Eliminar este registro?')) return;
-  try {
-    await deleteDoc(doc(db,'registros',id));
-    await cargarRegistros();
-    renderHistorial();
-    renderDash();
-    renderCronograma();
-    renderCosecha();
-    showToast('🗑 Eliminado');
-  } catch(e) { showToast('❌ Error al eliminar',true); }
+window.verFoto=function(url){
+  const o=document.createElement('div');o.className='modal-overlay';
+  o.innerHTML=`<button class="modal-close" onclick="this.parentElement.remove()">✕</button><img src="${url}" class="modal-img">`;
+  o.onclick=e=>{if(e.target===o)o.remove();};document.body.appendChild(o);
 };
 
-// VER FOTO
-window.verFoto = function(url) {
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `<button class="modal-close" onclick="this.parentElement.remove()">✕</button><img src="${url}" class="modal-img">`;
-  overlay.onclick = e => { if(e.target===overlay) overlay.remove(); };
-  document.body.appendChild(overlay);
-};
-
-// COSECHA STATS
-function renderCosecha() {
-  const cosechas = window._registros.filter(r=>r.tipo==='cosecha');
-  const c = document.getElementById('cosStats');
-  if(!cosechas.length){c.innerHTML=`<div class="empty"><div class="empty-ico">🍎</div><div class="empty-txt">No hay registros de cosecha aún.</div></div>`;return;}
-  const totalKg = cosechas.reduce((s,r)=>s+(r.kg||0),0);
-  const totalVal = cosechas.reduce((s,r)=>s+((r.kg||0)*(r.precio||0)),0);
-  const porLote = {};
-  cosechas.forEach(r=>{
-    const k=r.lote||'Sin lote';
-    if(!porLote[k]) porLote[k]={kg:0,val:0,n:0};
-    porLote[k].kg+=r.kg||0; porLote[k].val+=(r.kg||0)*(r.precio||0); porLote[k].n++;
-  });
-  let html = `<div class="cos-sum"><h3>Totales Acumulados</h3><div class="cgrid">
-    <div><div class="cnum">${totalKg.toFixed(1)}</div><div class="clbl">kg total</div></div>
-    <div><div class="cnum">$${totalVal.toFixed(0)}</div><div class="clbl">ingresos</div></div>
-    <div><div class="cnum">${cosechas.length}</div><div class="clbl">cosechas</div></div>
-  </div></div>
-  <div class="stitle" style="padding-top:4px">Por Lote</div>`;
-  Object.entries(porLote).forEach(([lote,d])=>{
-    html+=`<div class="hcard" style="margin:0 18px 9px"><div class="htitle2">🌱 ${lote}</div>
-    <div class="hdetail" style="margin-top:6px"><strong>${d.kg.toFixed(1)} kg</strong> en ${d.n} cosecha(s)${d.val>0?' · <strong style="color:var(--green)">$'+d.val.toFixed(2)+'</strong>':''}</div></div>`;
-  });
-  c.innerHTML = html;
+function renderCosecha(){
+  const cosechas=window._registros.filter(r=>r.tipo==='cosecha');
+  const c=document.getElementById('cosStats');
+  if(!cosechas.length){c.innerHTML=`<div class="empty"><div class="empty-ico">🍎</div><div class="empty-txt">Sin cosechas aún.</div></div>`;return;}
+  const totalKg=cosechas.reduce((s,r)=>s+(r.kg||0),0);
+  const totalVal=cosechas.reduce((s,r)=>s+((r.kg||0)*(r.precio||0)),0);
+  const porLote={};
+  cosechas.forEach(r=>{const k=r.lote||'Sin lote';if(!porLote[k])porLote[k]={kg:0,val:0,n:0};porLote[k].kg+=r.kg||0;porLote[k].val+=(r.kg||0)*(r.precio||0);porLote[k].n++;});
+  let html=`<div class="cos-sum"><h3>Totales Acumulados</h3><div class="cgrid"><div><div class="cnum">${totalKg.toFixed(1)}</div><div class="clbl">kg total</div></div><div><div class="cnum">$${totalVal.toFixed(0)}</div><div class="clbl">ingresos</div></div><div><div class="cnum">${cosechas.length}</div><div class="clbl">cosechas</div></div></div></div><div class="stitle">Por Lote</div>`;
+  Object.entries(porLote).forEach(([lote,d])=>{html+=`<div class="hcard" style="margin:0 18px 9px"><div class="htitle2">🌱 ${lote}</div><div class="hdetail" style="margin-top:6px"><strong>${d.kg.toFixed(1)} kg</strong> en ${d.n} cosecha(s)${d.val>0?' · <strong style="color:var(--green)">$'+d.val.toFixed(2)+'</strong>':''}</div></div>`;});
+  c.innerHTML=html;
 }
 
-// HELPERS
-function tipoConf(tipo) {
-  const m = {
-    fertiriego:{ico:'💧',label:'Drench / Fertirriego',badge:'bb',bg:var_blue_pale()},
-    foliar:{ico:'🌿',label:'Foliar',badge:'bg',bg:'var(--green-pale)'},
-    labor:{ico:'🔧',label:'Labor Cultural',badge:'by',bg:'#fef9e7'},
-    cosecha:{ico:'🍎',label:'Cosecha',badge:'br',bg:'var(--red-pale)'},
-  };
-  return m[tipo]||{ico:'📋',label:tipo,badge:'bg',bg:'#eee'};
-}
-function var_blue_pale(){ return 'var(--blue-pale)'; }
+function tipoConf(tipo){const m={drench:{ico:'💧',label:'Drench',badge:'bb',bg:'var(--blue-pale)'},foliar:{ico:'🌿',label:'Foliar',badge:'bg',bg:'var(--green-pale)'},edafico:{ico:'🪱',label:'Edáfico',badge:'bo',bg:'var(--orange-pale)'},fitosan:{ico:'🐛',label:'Fitosanitario',badge:'bp',bg:'var(--purple-pale)'},labor:{ico:'🔧',label:'Labor',badge:'by',bg:'#fef9e7'},cosecha:{ico:'🍎',label:'Cosecha',badge:'br',bg:'var(--red-pale)'}};return m[tipo]||{ico:'📋',label:tipo,badge:'bg',bg:'#eee'};}
 
-function fmtFecha(f) {
-  if(!f) return '—';
-  const [y,m,d] = f.split('-');
-  const ms = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-  return `${d} ${ms[parseInt(m)-1]} ${y}`;
-}
+function fmtFecha(f){if(!f)return '—';const[y,m,d]=f.split('-');const ms=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];return `${d} ${ms[parseInt(m)-1]} ${y}`;}
 
-// PAGE NAV
-window.showPage = function(id, btn) {
+function fmtFechaOffset(fecha,dias){const d=new Date(fecha);d.setDate(d.getDate()+dias);return d.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});}
+
+window.showPage=function(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  if(btn) btn.classList.add('active');
-  if(id==='hist') renderHistorial();
-  if(id==='cos') renderCosecha();
-  if(id==='cron') renderCronograma();
-  if(id==='dash') renderDash();
+  if(btn)btn.classList.add('active');
+  if(id==='hist')renderHistorial();
+  if(id==='cos')renderCosecha();
+  if(id==='lotes')renderLotes();
+  if(id==='dash')renderDash();
 };
 
-// TOAST
-window.showToast = function(msg, isErr=false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = isErr?'var(--red)':'var(--green)';
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-};
-
+window.showToast=function(msg,isErr=false){const t=document.getElementById('toast');t.textContent=msg;t.style.background=isErr?'var(--red)':'var(--green)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);};
 </script>
 </body>
 </html>
