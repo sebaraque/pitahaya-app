@@ -152,7 +152,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 <header>
   <div class="hrow">
     <div><div class="htitle">🌵 Pitahaya Pro</div><div class="hsub">Finca María Cristina</div></div>
-    <div class="hdate" id="headerDate"></div>
+    <div style="text-align:right"><div class="hdate" id="headerDate"></div><div id="sync-status" style="font-size:10px;margin-top:3px;font-weight:600;color:rgba(255,255,255,0.85)">☁️ En la nube</div></div>
   </div>
 </header>
 <main>
@@ -190,7 +190,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
     <div class="field"><label>Fecha</label><input type="date" id="f-fecha"></div>
     <div class="field"><label>Lote</label><select id="f-lote" onchange="sugerirApp()"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
     <div id="app-sugerida"></div>
-    <div class="field"><label>Aplicación del programa</label><select id="f-app"><option value="">Seleccionar...</option><option value="APP2">APP 2 — Botoneo P/K/Mg (Día 25)</option><option value="APP3">APP 3 — Botoneo Ca (Día 30)</option><option value="APP5">APP 5 — Llenado K (Día 50-55)</option><option value="APP6">APP 6 — Llenado Ca (Día 55-60)</option><option value="APP7">APP 7 — Engorde Ultrasol KP (Día 65-70)</option><option value="otro">Otra</option></select></div>
+    <div class="field"><label>Aplicación del programa</label><select id="f-app" onchange="autocompletarProductos('f-app','f-productos')"><option value="">Seleccionar...</option><option value="APP2">APP 2 — Botoneo P/K/Mg (Día 25)</option><option value="APP3">APP 3 — Botoneo Ca (Día 30)</option><option value="APP5">APP 5 — Llenado K (Día 50-55)</option><option value="APP6">APP 6 — Llenado Ca (Día 55-60)</option><option value="APP7">APP 7 — Engorde Ultrasol KP (Día 65-70)</option><option value="otro">Otra</option></select></div>
     <div class="field"><label>Productos aplicados</label><textarea id="f-productos" placeholder="Ej: MKP 400g, Sulfato Mg 340g, Humax 170g..."></textarea></div>
     <div class="frow"><div class="field"><label>Volumen (L)</label><input type="number" id="f-vol" placeholder="200"></div><div class="field"><label>Tandas</label><input type="number" id="f-tandas" placeholder="3"></div></div>
     <div class="field"><label>Foto</label><input type="file" id="f-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'f-fp')"><button class="foto-btn" onclick="document.getElementById('f-foto').click()">📷 Foto</button><img id="f-fp" class="foto-preview"></div>
@@ -200,7 +200,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
   <div class="fbody" id="tab-foliar" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="fo-fecha"></div>
     <div class="field"><label>Lote</label><select id="fo-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
-    <div class="field"><label>Aplicación</label><select id="fo-app"><option value="">Seleccionar...</option><option value="APP4">APP 4 — Pre-floración Ca/Zn/B (Día 40-45)</option><option value="APP4rep">APP 4 Repetición (7-10 días)</option><option value="otro">Foliar adicional</option></select></div>
+    <div class="field"><label>Aplicación</label><select id="fo-app" onchange="autocompletarProductos('fo-app','fo-prod')"><option value="">Seleccionar...</option><option value="APP4">APP 4 — Pre-floración Ca/Zn/B (Día 40-45)</option><option value="APP4rep">APP 4 Repetición (7-10 días)</option><option value="otro">Foliar adicional</option></select></div>
     <div class="field"><label>Producto</label><input type="text" id="fo-prod" placeholder="Ej: YaraVita Caltrac..."></div>
     <div class="frow"><div class="field"><label>Dosis (mL/L)</label><input type="text" id="fo-dosis" placeholder="2 mL/L"></div><div class="field"><label>Volumen (L)</label><input type="number" id="fo-vol" placeholder="200"></div></div>
     <div class="field"><label>Hora aplicación</label><input type="time" id="fo-hora"></div>
@@ -211,7 +211,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
   <div class="fbody" id="tab-edafico" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="ed-fecha"></div>
     <div class="field"><label>Lote</label><select id="ed-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
-    <div class="field"><label>Tipo de aplicación</label><select id="ed-tipo"><option value="">Seleccionar...</option><option>APP 1 — Arranque (Alpha + Bioabor)</option><option>Granular incorporado al suelo</option><option>Materia orgánica / compost</option><option>Corrector de pH</option><option>Cal agrícola / dolomita</option><option>Otro corrector edáfico</option></select></div>
+    <div class="field"><label>Tipo de aplicación</label><select id="ed-tipo" onchange="autocompletarProductos('ed-tipo','ed-productos')"><option value="">Seleccionar...</option><option>APP 1 — Arranque (Alpha + Bioabor)</option><option>Granular incorporado al suelo</option><option>Materia orgánica / compost</option><option>Corrector de pH</option><option>Cal agrícola / dolomita</option><option>Otro corrector edáfico</option></select></div>
     <div class="field"><label>Producto(s)</label><textarea id="ed-productos" placeholder="Ej: Alpha Acelerador 30g/poste + Bioabor 100g/poste"></textarea></div>
     <div class="frow"><div class="field"><label>Dosis/poste</label><input type="text" id="ed-dosis" placeholder="30g"></div><div class="field"><label>Total aplicado</label><input type="text" id="ed-total" placeholder="9 kg"></div></div>
     <div class="field"><label>Modo de incorporación</label><select id="ed-modo"><option value="">Seleccionar...</option><option>Hueco 5-8cm a 15-20cm del tallo</option><option>Incorporado superficial</option><option>Banda al pie del poste</option><option>Drench correctivo</option><option>Otro</option></select></div>
@@ -440,6 +440,46 @@ window.irARegistrarLuces=function(nombreLote){
   },100);
   showToast('📅 Completa la fecha de encendido');
 };
+
+// ---- PRODUCTOS AUTOCOMPLETE ----
+const PRODUCTOS_MAP = {
+  'APP2': 'Ácido fosfórico 50cc (PRIMERO) + MKP 400g + Sulfato Mg 340g + Humax 170g — Tanque 200L, 3 tandas',
+  'APP3': 'Calcinit Bio 340g — Tanque 200L, 3 tandas — SOLO, nunca mezclar',
+  'APP5': 'Azutec 600g — Tanque 200L, 3 tandas — SOLO',
+  'APP6': 'Calcinit Bio 230g — Tanque 200L, 3 tandas — SOLO, nunca mezclar',
+  'APP7': 'Ultrasol KP 400g — Tanque 200L, 3 tandas — SOLO',
+  'APP4': 'YaraVita Caltrac 400mL — Tanque 200L (cubre 666 postes) — ANTES de las 8am',
+  'APP4rep': 'YaraVita Caltrac 400mL — Tanque 200L — ANTES de las 8am (repetición)',
+  'APP 1 — Arranque (Alpha + Bioabor)': 'Alpha Acelerador 30g/poste (15g cada lado) + Bioabor 100g/poste — Para 300 postes: 9kg Alpha + 30kg Bioabor — Hueco 5-8cm a 15-20cm del tallo',
+};
+
+window.autocompletarProductos = function(selectId, targetId) {
+  const val = document.getElementById(selectId).value;
+  const target = document.getElementById(targetId);
+  if(PRODUCTOS_MAP[val]) {
+    target.value = PRODUCTOS_MAP[val];
+    target.style.borderColor = 'var(--green)';
+    target.style.background = '#fff';
+  }
+};
+
+// ---- SYNC STATUS ----
+function updateSyncStatus() {
+  const el = document.getElementById('sync-status');
+  if(!el) return;
+  const q = getQueue ? getQueue() : [];
+  if(!navigator.onLine) {
+    el.textContent = '📱 Guardando en celular';
+    el.style.color = '#ffd700';
+  } else if(q.length > 0) {
+    el.textContent = `⏳ Sincronizando ${q.length} registro(s)`;
+    el.style.color = '#ffd700';
+  } else {
+    el.textContent = '☁️ En la nube';
+    el.style.color = 'rgba(255,255,255,0.85)';
+  }
+}
+setInterval(updateSyncStatus, 3000);
 
 window.sugerirApp=function(){
   const lv=document.getElementById('f-lote').value;
