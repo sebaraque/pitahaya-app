@@ -166,6 +166,9 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
       <div class="scard"><div class="snum" id="d-cosecha">— kg</div><div class="slbl">cosechados</div></div>
     </div>
   </div>
+  <div id="dash-alertas"></div>
+  <div id="dash-lotes-estado"></div>
+  <div id="dash-cosechas-proximas"></div>
   <div class="stitle">Actividad Reciente</div>
   <div class="alist" id="recentList"><div class="loading"><div class="spinner"></div></div></div>
 </div>
@@ -331,7 +334,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const firebaseConfig={apiKey:"AIzaSyAD6EKgG10V-nRC8b8B43Z82Z_PlWpaWyQ",authDomain:"pitahaya-finca.firebaseapp.com",projectId:"pitahaya-finca",storageBucket:"pitahaya-finca.firebasestorage.app",messagingSenderId:"997510240139",appId:"1:997510240139:web:3695318a3dd03c4046418e"};
@@ -371,8 +374,9 @@ function renderDash(){
   document.getElementById('d-cosecha').textContent=kg.toFixed(1)+' kg';
   const c=document.getElementById('recentList');
   const recent=window._registros.slice(0,6);
-  if(!recent.length){c.innerHTML=`<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Sin registros aún.</div></div>`;return;}
-  c.innerHTML=recent.map(r=>actCardHTML(r)).join('');
+  if(!recent.length){c.innerHTML=`<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Sin registros aún.</div></div>`;}
+  else{c.innerHTML=recent.map(r=>actCardHTML(r)).join('');}
+  renderDashExtra();
 }
 
 function actCardHTML(r){
@@ -707,6 +711,7 @@ function histCardHTML(r){
   else if(r.tipo==='flores')det=`${r.numFlores||0} flores`+(r.cosechaTentativa1?`<br>📅 Cosecha tentativa: ${fmtFecha(r.cosechaTentativa1)} — ${fmtFecha(r.cosechaTentativa2)}`:'');
   if(r.obs)det+='<br><span style="color:var(--light)">📝 '+r.obs+'</span>';
   return `<div class="hcard"><div class="htop"><div><div class="htitle2">${conf.ico} ${conf.label}</div><div class="hdate2">${fmtFecha(r.fecha)}</div></div><div class="hactions"><span class="badge ${conf.badge}">${r.lote?r.lote.split('—')[0].trim():'—'}</span>${r.fotoURL?`<img src="${r.fotoURL}" class="photo-thumb" onclick="verFoto('${r.fotoURL}')">`:''}
+  <button class="del-btn" onclick="editarRegistro('${r.id}')" style="color:var(--blue)">✏️</button>
   <button class="del-btn" onclick="eliminar('${r.id}')">🗑</button></div></div>${det?`<div class="hdetail">${det}</div>`:''}</div>`;
 }
 
@@ -750,6 +755,201 @@ window.showPage=function(id,btn){
   if(id==='cos')renderCosecha();
   if(id==='lotes')renderLotes();
   if(id==='dash')renderDash();
+};
+
+// ---- DASHBOARD EXTRA ----
+function renderDashExtra() {
+  const regs = window._registros;
+  const hoy = new Date();
+  
+  // ALERTAS
+  let alertas = [];
+  LOTES.filter(l=>l.tipo==='productivo').forEach(lote=>{
+    const enc = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
+    if(!enc) return;
+    const diaInicio = new Date(enc.fecha);
+    PROGRAMA.forEach(ap=>{
+      const fad = new Date(diaInicio); fad.setDate(fad.getDate()+ap.dia);
+      const dd = Math.floor((fad-hoy)/(1000*60*60*24));
+      const registrada = regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&r.appPrograma&&r.appPrograma.includes(ap.id)&&new Date(r.fecha)>=diaInicio);
+      if(!registrada && dd >= -1 && dd <= 3) {
+        alertas.push({lote:lote.nombre, app:ap.nombre, dd, urgente: dd<=0});
+      }
+    });
+    // Alerta cosecha próxima
+    regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio).forEach(fl=>{
+      const ft1 = new Date(fl.cosechaTentativa1||fl.fecha);
+      const dd = Math.floor((ft1-hoy)/(1000*60*60*24));
+      const cosechada = regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1);
+      if(!cosechada && dd >= -3 && dd <= 3) {
+        alertas.push({lote:lote.nombre, app:`🍎 Cosecha de ${fl.numFlores} flores`, dd, urgente: dd<=0, esCosecha:true});
+      }
+    });
+  });
+
+  const alertasEl = document.getElementById('dash-alertas');
+  if(alertas.length) {
+    alertasEl.innerHTML = `<div style="margin:0 18px 12px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--red);padding:14px 0 8px;letter-spacing:.5px">⚠️ Alertas del Día</div>
+      ${alertas.map(a=>`<div style="background:${a.urgente?'var(--red-pale)':'#fef9e7'};border-radius:10px;padding:10px 14px;margin-bottom:7px;border-left:3px solid ${a.urgente?'var(--red)':'var(--yellow)'}">
+        <div style="font-size:12px;font-weight:600;color:${a.urgente?'var(--red)':'var(--yellow-dk)'}">${a.lote}</div>
+        <div style="font-size:13px;font-weight:600;margin-top:2px">${a.app}</div>
+        <div style="font-size:11px;color:var(--mid);margin-top:2px">${a.dd<0?`Hace ${Math.abs(a.dd)} día(s) — sin registrar`:a.dd===0?'HOY':`En ${a.dd} día(s)`}</div>
+      </div>`).join('')}
+    </div>`;
+  } else {
+    alertasEl.innerHTML = '';
+  }
+
+  // ESTADO DE LOTES
+  const lotesEl = document.getElementById('dash-lotes-estado');
+  let lotesHtml = `<div style="margin:0 18px 12px">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--green);padding:4px 0 8px;letter-spacing:.5px">🌱 Estado de Lotes</div>`;
+  LOTES.forEach(lote=>{
+    if(lote.tipo==='nuevo'){
+      lotesHtml+=`<div style="background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:7px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600">${lote.nombre}</span><span class="badge by">Vegetativo</span></div>`;
+      return;
+    }
+    const enc = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
+    if(!enc){
+      lotesHtml+=`<div style="background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:7px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600">${lote.nombre}</span><span class="badge by">Sin ciclo</span></div>`;
+      return;
+    }
+    const diaInicio = new Date(enc.fecha);
+    const diaActual = Math.floor((hoy-diaInicio)/(1000*60*60*24));
+    const appProx = PROGRAMA.find(a=>{
+      const fad=new Date(diaInicio);fad.setDate(fad.getDate()+a.dia);
+      const dd=Math.floor((fad-hoy)/(1000*60*60*24));
+      const reg=regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&r.appPrograma&&r.appPrograma.includes(a.id)&&new Date(r.fecha)>=diaInicio);
+      return !reg && dd>=-3;
+    });
+    const ddProx = appProx ? Math.floor((new Date(diaInicio.getTime()+(appProx.dia*86400000))-hoy)/86400000) : null;
+    let appLabel = appProx ? (ddProx<=0?`${appProx.id} HOY ⚠️`:ddProx<=3?`${appProx.id} en ${ddProx}d ⚡`:`${appProx.id} en ${ddProx}d`) : 'Ciclo completo ✅';
+    let appColor = ddProx<=0?'var(--red)':ddProx<=3?'var(--yellow-dk)':'var(--mid)';
+    lotesHtml+=`<div style="background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:7px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:13px;font-weight:600">${lote.nombre}</div><div style="font-size:11px;color:var(--light)">Día ${diaActual} del ciclo</div></div>
+      <div style="font-size:11px;font-weight:600;color:${appColor};text-align:right">${appLabel}</div>
+    </div>`;
+  });
+  lotesHtml += `</div>`;
+  lotesEl.innerHTML = lotesHtml;
+
+  // PRÓXIMAS COSECHAS
+  const cosEl = document.getElementById('dash-cosechas-proximas');
+  let cosItems = [];
+  LOTES.filter(l=>l.tipo==='productivo').forEach(lote=>{
+    const enc = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
+    if(!enc) return;
+    const diaInicio = new Date(enc.fecha);
+    regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio).forEach((fl,idx)=>{
+      const ft1=new Date(fl.cosechaTentativa1||fl.fecha);
+      const ft2=new Date(fl.cosechaTentativa2||fl.fecha);
+      const dd=Math.floor((ft1-hoy)/86400000);
+      const cosechada=regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1&&new Date(r.fecha)<=new Date(ft2.getTime()+5*86400000));
+      if(!cosechada) cosItems.push({lote:lote.nombre, flores:fl.numFlores, ft1, ft2, dd, idx});
+    });
+  });
+  cosItems.sort((a,b)=>a.dd-b.dd);
+  if(cosItems.length){
+    cosEl.innerHTML=`<div style="margin:0 18px 12px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--yellow-dk);padding:4px 0 8px;letter-spacing:.5px">🍎 Próximas Cosechas</div>
+      ${cosItems.map(c=>`<div style="background:var(--card);border-radius:10px;padding:11px 14px;margin-bottom:7px;box-shadow:var(--shadow);border-left:3px solid ${c.dd<=0?'var(--red)':c.dd<=5?'var(--yellow)':'var(--border)'}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div><div style="font-size:12px;font-weight:600;color:var(--mid)">${c.lote} · Ola ${c.idx+1}</div>
+          <div style="font-size:14px;font-weight:700;color:#e91e8c;margin-top:2px">🌸 ${c.flores} flores</div></div>
+          <div style="text-align:right"><div style="font-size:12px;font-weight:700;color:${c.dd<=0?'var(--red)':c.dd<=5?'var(--yellow-dk)':'var(--green)'}">${c.dd<0?'⚡ En cosecha':c.dd===0?'⚡ HOY':'En '+c.dd+'d'}</div>
+          <div style="font-size:10px;color:var(--light);margin-top:2px">${c.ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})} — ${c.ft2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})}</div></div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+  } else {
+    cosEl.innerHTML='';
+  }
+}
+
+// ---- EDITAR REGISTRO ----
+window.editarRegistro = function(id) {
+  const r = window._registros.find(x=>x.id===id);
+  if(!r) return;
+
+  // Crear modal de edición
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.style.alignItems = 'flex-start';
+  overlay.style.overflowY = 'auto';
+  overlay.style.padding = '20px';
+
+  let camposExtra = '';
+  if(r.tipo==='cosecha') {
+    camposExtra = `
+      <div class="field"><label>Kg cosechados</label><input type="number" id="edit-kg" value="${r.kg||''}" step="0.5"></div>
+      <div class="field"><label>Precio/kg ($)</label><input type="number" id="edit-precio" value="${r.precio||''}" step="0.01"></div>
+      <div class="field"><label>Calidad</label><select id="edit-cal">
+        <option value="">Seleccionar...</option>
+        <option ${r.calidad==='Primera (+500g)'?'selected':''}>Primera (+500g)</option>
+        <option ${r.calidad==='Segunda (300-500g)'?'selected':''}>Segunda (300-500g)</option>
+        <option ${r.calidad==='Tercera (-300g)'?'selected':''}>Tercera (-300g)</option>
+        <option ${r.calidad==='Mixto'?'selected':''}>Mixto</option>
+      </select></div>
+      <div class="field"><label>Destino</label><input type="text" id="edit-dest" value="${r.destino||''}"></div>`;
+  } else if(r.tipo==='drench') {
+    camposExtra = `<div class="field"><label>Productos</label><textarea id="edit-productos">${r.productos||''}</textarea></div>
+      <div class="field"><label>Volumen (L)</label><input type="number" id="edit-vol" value="${r.volumen||''}"></div>`;
+  } else if(r.tipo==='flores') {
+    camposExtra = `<div class="field"><label>Número de flores</label><input type="number" id="edit-flores" value="${r.numFlores||''}"></div>`;
+  }
+
+  overlay.innerHTML = `
+    <div style="background:var(--card);border-radius:var(--r);width:100%;max-width:500px;margin:auto;overflow:hidden">
+      <div style="background:var(--green);padding:16px 18px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.5px">Editar Registro</div>
+        <button onclick="this.closest('.modal-overlay').remove()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer">✕</button>
+      </div>
+      <div style="padding:18px">
+        <div class="field"><label>Fecha</label><input type="date" id="edit-fecha" value="${r.fecha||''}"></div>
+        <div class="field"><label>Lote</label><input type="text" id="edit-lote" value="${r.lote||''}"></div>
+        ${camposExtra}
+        <div class="field"><label>Observaciones</label><textarea id="edit-obs">${r.obs||''}</textarea></div>
+        <button class="btn-p" onclick="guardarEdicion('${id}','${r.tipo}')">✅ Guardar Cambios</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+};
+
+window.guardarEdicion = async function(id, tipo) {
+  const updates = {
+    fecha: document.getElementById('edit-fecha')?.value,
+    lote: document.getElementById('edit-lote')?.value,
+    obs: document.getElementById('edit-obs')?.value,
+  };
+  if(tipo==='cosecha') {
+    updates.kg = parseFloat(document.getElementById('edit-kg')?.value)||0;
+    updates.precio = parseFloat(document.getElementById('edit-precio')?.value)||0;
+    updates.calidad = document.getElementById('edit-cal')?.value;
+    updates.destino = document.getElementById('edit-dest')?.value;
+    updates.detalle = updates.kg+' kg'+(updates.precio?' · $'+(updates.kg*updates.precio).toFixed(2):'');
+  } else if(tipo==='drench') {
+    updates.productos = document.getElementById('edit-productos')?.value;
+    updates.volumen = document.getElementById('edit-vol')?.value;
+    updates.detalle = updates.productos?.substring(0,40);
+  } else if(tipo==='flores') {
+    updates.numFlores = parseInt(document.getElementById('edit-flores')?.value)||0;
+    const fd=new Date(updates.fecha);
+    const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);
+    const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);
+    updates.cosechaTentativa1=ft1.toISOString().split('T')[0];
+    updates.cosechaTentativa2=ft2.toISOString().split('T')[0];
+    updates.detalle=updates.numFlores+' flores';
+  }
+  try {
+    await updateDoc(doc(db,'registros',id), updates);
+    document.querySelector('.modal-overlay')?.remove();
+    await cargarRegistros();
+    renderDash(); renderHistorial(); renderLotes();
+    showToast('✅ Registro actualizado');
+  } catch(e) {
+    showToast('❌ Error al actualizar',true);
+  }
 };
 
 window.showToast=function(msg,isErr=false){const t=document.getElementById('toast');t.textContent=msg;t.style.background=isErr?'var(--red)':'var(--green)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);};
