@@ -185,6 +185,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
     <button class="ftab" onclick="switchTab('fitosan',this)">🐛 Fitosan.</button>
     <button class="ftab" onclick="switchTab('labor',this)">🔧 Labor</button>
     <button class="ftab" onclick="switchTab('cosecha',this)">🍎 Cosecha</button>
+    <button class="ftab" onclick="switchTab('flores',this)">🌸 Flores</button>
   </div>
   <div class="fbody" id="tab-drench">
     <div class="field"><label>Fecha</label><input type="date" id="f-fecha"></div>
@@ -251,6 +252,36 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
     <div class="field"><label>Observaciones</label><textarea id="c-obs" placeholder="Estado de la fruta..."></textarea></div>
     <button class="btn-p" onclick="guardar('cosecha')">✅ Guardar Registro</button>
   </div>
+
+  <!-- FLORES -->
+  <div class="fbody" id="tab-flores" style="display:none">
+    <div class="field"><label>Fecha de floración</label><input type="date" id="fl-fecha" onchange="calcularCosechaTentativa()"></div>
+    <div class="field"><label>Lote</label>
+      <select id="fl-lote">
+        <option value="">Seleccionar...</option>
+        <option>Lote 1 — 300 postes</option>
+        <option>Lote 2 — 300 postes</option>
+        <option>Lote 3 — 430 postes</option>
+      </select>
+    </div>
+    <div class="field"><label>Número de flores</label>
+      <input type="number" id="fl-num" placeholder="Ej: 500" oninput="calcularCosechaTentativa()">
+    </div>
+    <div id="fl-tentativa" style="display:none;background:var(--green-pale);border-radius:10px;padding:12px 14px;margin-bottom:15px;border-left:3px solid var(--green)">
+      <div style="font-size:12px;font-weight:600;color:var(--green)">📅 Cosecha tentativa</div>
+      <div id="fl-tentativa-fecha" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:600;margin-top:4px;color:var(--text)"></div>
+      <div style="font-size:11px;color:var(--mid);margin-top:2px">25-30 días después de la floración</div>
+    </div>
+    <div class="field"><label>Foto</label>
+      <input type="file" id="fl-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'fl-fp')">
+      <button class="foto-btn" onclick="document.getElementById('fl-foto').click()">📷 Foto de la floración</button>
+      <img id="fl-fp" class="foto-preview">
+    </div>
+    <div class="field"><label>Observaciones</label>
+      <textarea id="fl-obs" placeholder="Calidad de flores, distribución en el lote..."></textarea>
+    </div>
+    <button class="btn-p" onclick="guardar('flores')">✅ Guardar Registro</button>
+  </div>
 </div>
 
 <div class="page" id="page-hist">
@@ -262,6 +293,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
     <button class="chip" onclick="filtrar('edafico',this)">🪱</button>
     <button class="chip" onclick="filtrar('fitosan',this)">🐛</button>
     <button class="chip" onclick="filtrar('labor',this)">🔧</button>
+    <button class="chip" onclick="filtrar('flores',this)">🌸</button>
     <button class="chip" onclick="filtrar('cosecha',this)">🍎</button>
   </div>
   <div class="hlist" id="histList"><div class="loading"><div class="spinner"></div></div></div>
@@ -414,6 +446,59 @@ function buildLotePanel(lote){
         return `<div class="app-row"><div class="app-dot ${dc}"></div><div class="app-info"><div class="app-nombre">${ap.nombre}</div><div class="app-fecha">${ap.modo} · ${fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})}</div><div class="app-prod">${ap.productos}</div>${ap.nota?`<div style="font-size:10px;color:var(--light);font-style:italic">${ap.nota}</div>`:''}</div>${bt?`<span class="app-badge badge ${bc}">${bt}</span>`:''}</div>`;
       }).join('')}
     </div>
+
+    ${(()=>{
+      // FLORACIONES del ciclo activo
+      const floraciones = regs.filter(r=>
+        r.tipo==='flores' && r.lote && r.lote.includes(lote.nombre) &&
+        new Date(r.fecha) >= diaInicio
+      ).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+
+      if(!floraciones.length) return `<div style="padding:12px 16px 4px;font-size:12px;color:var(--light)">Sin floraciones registradas en este ciclo. <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="switchTab('flores',document.querySelectorAll('.ftab')[6]);showPage('form',document.querySelectorAll('nav button')[2])">+ Registrar floración</span></div>`;
+
+      let flHtml = `<div style="padding:13px 16px;border-top:1px solid var(--border)">
+        <div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🌸 Floraciones del ciclo</div>`;
+
+      floraciones.forEach((fl, idx) => {
+        const ft1 = new Date(fl.cosechaTentativa1||fl.fecha);
+        const ft2 = new Date(fl.cosechaTentativa2||fl.fecha);
+        const hoy2 = new Date();
+        const diasFruto = Math.floor((ft1 - hoy2)/(1000*60*60*24));
+
+        // Buscar cosecha vinculada a esta floración (cosecha dentro de la ventana)
+        const cosechaVinculada = regs.find(r=>
+          r.tipo==='cosecha' && r.lote && r.lote.includes(lote.nombre) &&
+          new Date(r.fecha) >= ft1 && new Date(r.fecha) <= new Date(ft2.getTime()+5*86400000)
+        );
+
+        let estadoFlor, colorFlor;
+        if(cosechaVinculada){ estadoFlor='✅ Cosechada'; colorFlor='var(--green)'; }
+        else if(diasFruto < 0){ estadoFlor='🍎 En cosecha'; colorFlor='var(--red)'; }
+        else if(diasFruto <= 5){ estadoFlor=`⚡ ${diasFruto}d para cosechar`; colorFlor='var(--yellow-dk)'; }
+        else{ estadoFlor=`${diasFruto}d para cosechar`; colorFlor='var(--mid)'; }
+
+        const kgPorFlor = cosechaVinculada ? ((cosechaVinculada.kg||0)/fl.numFlores).toFixed(3) : null;
+
+        flHtml += `<div style="background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:8px;border-left:3px solid #e91e8c">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div style="font-size:12px;font-weight:600">Ola ${idx+1} — ${fmtFecha(fl.fecha)}</div>
+              <div style="font-size:13px;font-weight:700;color:#e91e8c;margin-top:2px">${fl.numFlores} flores</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:11px;font-weight:600;color:${colorFlor}">${estadoFlor}</div>
+              <div style="font-size:10px;color:var(--light);margin-top:2px">${fmtFecha(fl.cosechaTentativa1)} — ${fmtFecha(fl.cosechaTentativa2)}</div>
+            </div>
+          </div>
+          ${cosechaVinculada ? `<div style="margin-top:6px;font-size:11px;color:var(--green)">🍎 ${cosechaVinculada.kg} kg cosechados · ${kgPorFlor} kg/flor</div>` : ''}
+          ${fl.obs ? `<div style="font-size:11px;color:var(--light);margin-top:4px">📝 ${fl.obs}</div>` : ''}
+        </div>`;
+      });
+
+      flHtml += `</div>`;
+      return flHtml;
+    })()}
+
     <div style="padding:0 16px 14px"><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-nuevo-ciclo">+ Iniciar nuevo ciclo</button></div>
   </div>`;
 
@@ -503,6 +588,20 @@ window.sugerirApp=function(){
   c.innerHTML=`<div class="app-preview"><h4>📅 ${ln} — Día ${da} del ciclo</h4>${prox.map(a=>`<p><strong>${a.nombre}</strong><br>${a.productos}</p>`).join('')}${prox[0]&&INC[prox[0].id]?`<div class="incomp-warn">⚠️ NO mezclar con: ${INC[prox[0].id]}</div>`:''}</div>`;
 };
 
+// ---- FLORES ----
+window.calcularCosechaTentativa = function() {
+  const fecha = document.getElementById('fl-fecha').value;
+  const num = document.getElementById('fl-num').value;
+  const div = document.getElementById('fl-tentativa');
+  const label = document.getElementById('fl-tentativa-fecha');
+  if(!fecha || !num) { div.style.display='none'; return; }
+  const d1 = new Date(fecha); d1.setDate(d1.getDate()+25);
+  const d2 = new Date(fecha); d2.setDate(d2.getDate()+30);
+  const opts = {day:'2-digit',month:'short'};
+  label.textContent = `${d1.toLocaleDateString('es-EC',opts)} — ${d2.toLocaleDateString('es-EC',opts)}`;
+  div.style.display = 'block';
+};
+
 window.switchTab=function(tab,btn){
   document.querySelectorAll('.fbody').forEach(t=>t.style.display='none');
   document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
@@ -538,7 +637,7 @@ async function comprimirImagen(file){
 window.guardar=async function(tipo){
   const btn=document.querySelector(`#tab-${tipo} .btn-p`);
   if(btn){btn.disabled=true;btn.textContent='Guardando...';}
-  const tm={drench:{f:'f-fecha',l:'f-lote',fp:'f-fp'},foliar:{f:'fo-fecha',l:'fo-lote',fp:'fo-fp'},edafico:{f:'ed-fecha',l:'ed-lote',fp:'ed-fp'},fitosan:{f:'ft-fecha',l:'ft-lote',fp:'ft-fp'},labor:{f:'l-fecha',l:'l-lote',fp:'l-fp'},cosecha:{f:'c-fecha',l:'c-lote',fp:'c-fp'}};
+  const tm={drench:{f:'f-fecha',l:'f-lote',fp:'f-fp'},foliar:{f:'fo-fecha',l:'fo-lote',fp:'fo-fp'},edafico:{f:'ed-fecha',l:'ed-lote',fp:'ed-fp'},fitosan:{f:'ft-fecha',l:'ft-lote',fp:'ft-fp'},labor:{f:'l-fecha',l:'l-lote',fp:'l-fp'},cosecha:{f:'c-fecha',l:'c-lote',fp:'c-fp'},flores:{f:'fl-fecha',l:'fl-lote',fp:'fl-fp'}};
   const t=tm[tipo];
   let reg={tipo,timestamp:serverTimestamp()};
   reg.fecha=document.getElementById(t.f).value;
@@ -551,6 +650,17 @@ window.guardar=async function(tipo){
   else if(tipo==='fitosan'){reg.tipoProblema=document.getElementById('ft-tipo').value;reg.plaga=document.getElementById('ft-plaga').value;reg.producto=document.getElementById('ft-producto').value;reg.dosis=document.getElementById('ft-dosis').value;reg.volumen=document.getElementById('ft-vol').value;reg.modo=document.getElementById('ft-modo').value;reg.carencia=document.getElementById('ft-carencia').value;reg.obs=document.getElementById('ft-obs').value;reg.detalle=(reg.plaga||reg.tipoProblema||'')+(reg.producto?' · '+reg.producto:'');if(!reg.producto){showToast('⚠️ Completa el producto',true);resetBtn(btn);return;}}
   else if(tipo==='labor'){reg.tipoLabor=document.getElementById('l-tipo').value;reg.jornales=document.getElementById('l-jorn').value;reg.costo=document.getElementById('l-costo').value;reg.obs=document.getElementById('l-obs').value;reg.detalle=reg.tipoLabor;if(!reg.tipoLabor){showToast('⚠️ Selecciona el tipo',true);resetBtn(btn);return;}}
   else if(tipo==='cosecha'){reg.kg=parseFloat(document.getElementById('c-kg').value)||0;reg.precio=parseFloat(document.getElementById('c-precio').value)||0;reg.calidad=document.getElementById('c-cal').value;reg.destino=document.getElementById('c-dest').value;reg.obs=document.getElementById('c-obs').value;reg.detalle=reg.kg+' kg'+(reg.precio?' · $'+(reg.kg*reg.precio).toFixed(2):'');if(!reg.kg){showToast('⚠️ Completa los kg',true);resetBtn(btn);return;}}
+  else if(tipo==='flores'){
+    reg.numFlores=parseInt(document.getElementById('fl-num').value)||0;
+    reg.obs=document.getElementById('fl-obs').value;
+    const fd=new Date(reg.fecha);
+    const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);
+    const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);
+    reg.cosechaTentativa1=ft1.toISOString().split('T')[0];
+    reg.cosechaTentativa2=ft2.toISOString().split('T')[0];
+    reg.detalle=reg.numFlores+' flores → cosecha ~'+ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+' a '+ft2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+    if(!reg.numFlores){showToast('⚠️ Ingresa el número de flores',true);resetBtn(btn);return;}
+  }
   if(fotoFile && navigator.onLine){showToast('📷 Subiendo foto...');reg.fotoURL=await subirFoto(fotoFile);}
   const resultado = await guardarConOffline(reg);
   await cargarRegistros();
@@ -568,12 +678,13 @@ function resetBtn(btn){if(btn){btn.disabled=false;btn.textContent='✅ Guardar R
 
 function limpiarForm(tipo){
   const today=new Date().toISOString().split('T')[0];
-  const map={drench:['f-lote','f-app','f-productos','f-vol','f-tandas','f-obs'],foliar:['fo-lote','fo-app','fo-prod','fo-dosis','fo-vol','fo-hora','fo-obs'],edafico:['ed-lote','ed-tipo','ed-productos','ed-dosis','ed-total','ed-modo','ed-obs'],fitosan:['ft-lote','ft-tipo','ft-plaga','ft-producto','ft-dosis','ft-vol','ft-modo','ft-carencia','ft-obs'],labor:['l-lote','l-tipo','l-jorn','l-costo','l-obs'],cosecha:['c-lote','c-kg','c-precio','c-cal','c-dest','c-obs']};
+  const map={drench:['f-lote','f-app','f-productos','f-vol','f-tandas','f-obs'],foliar:['fo-lote','fo-app','fo-prod','fo-dosis','fo-vol','fo-hora','fo-obs'],edafico:['ed-lote','ed-tipo','ed-productos','ed-dosis','ed-total','ed-modo','ed-obs'],fitosan:['ft-lote','ft-tipo','ft-plaga','ft-producto','ft-dosis','ft-vol','ft-modo','ft-carencia','ft-obs'],labor:['l-lote','l-tipo','l-jorn','l-costo','l-obs'],cosecha:['c-lote','c-kg','c-precio','c-cal','c-dest','c-obs'],flores:['fl-lote','fl-num','fl-obs']};
   (map[tipo]||[]).forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const di=document.getElementById(`tab-${tipo}`).querySelector('input[type="date"]');if(di)di.value=today;
-  const fm={drench:'f-fp',foliar:'fo-fp',edafico:'ed-fp',fitosan:'ft-fp',labor:'l-fp',cosecha:'c-fp'};
+  const fm={drench:'f-fp',foliar:'fo-fp',edafico:'ed-fp',fitosan:'ft-fp',labor:'l-fp',cosecha:'c-fp',flores:'fl-fp'};
   const pid=fm[tipo];if(pid){const img=document.getElementById(pid);if(img){img.style.display='none';img.src='';}delete window._fotoFiles[pid];}
   if(tipo==='drench')document.getElementById('app-sugerida').innerHTML='';
+  if(tipo==='flores'){const td=document.getElementById('fl-tentativa');if(td)td.style.display='none';}
 }
 
 window.filtrar=function(f,btn){window._filtroActivo=f;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));if(btn)btn.classList.add('active');renderHistorial();};
@@ -593,6 +704,7 @@ function histCardHTML(r){
   else if(r.tipo==='fitosan')det=(r.plaga?r.plaga+' · ':'')+(r.producto||'')+(r.dosis?' · '+r.dosis:'')+(r.carencia?'<br>Carencia: '+r.carencia+'d':'');
   else if(r.tipo==='labor')det=(r.tipoLabor||'')+(r.jornales?' · '+r.jornales+' jornales':'')+(r.costo?' · $'+r.costo:'');
   else if(r.tipo==='cosecha')det=`${r.kg||0} kg`+(r.calidad?' · '+r.calidad:'')+(r.precio?' · $'+((r.kg||0)*(r.precio||0)).toFixed(2):'')+( r.destino?'<br>'+r.destino:'');
+  else if(r.tipo==='flores')det=`${r.numFlores||0} flores`+(r.cosechaTentativa1?`<br>📅 Cosecha tentativa: ${fmtFecha(r.cosechaTentativa1)} — ${fmtFecha(r.cosechaTentativa2)}`:'');
   if(r.obs)det+='<br><span style="color:var(--light)">📝 '+r.obs+'</span>';
   return `<div class="hcard"><div class="htop"><div><div class="htitle2">${conf.ico} ${conf.label}</div><div class="hdate2">${fmtFecha(r.fecha)}</div></div><div class="hactions"><span class="badge ${conf.badge}">${r.lote?r.lote.split('—')[0].trim():'—'}</span>${r.fotoURL?`<img src="${r.fotoURL}" class="photo-thumb" onclick="verFoto('${r.fotoURL}')">`:''}
   <button class="del-btn" onclick="eliminar('${r.id}')">🗑</button></div></div>${det?`<div class="hdetail">${det}</div>`:''}</div>`;
@@ -623,7 +735,7 @@ function renderCosecha(){
   c.innerHTML=html;
 }
 
-function tipoConf(tipo){const m={drench:{ico:'💧',label:'Drench',badge:'bb',bg:'var(--blue-pale)'},foliar:{ico:'🌿',label:'Foliar',badge:'bg',bg:'var(--green-pale)'},edafico:{ico:'🪱',label:'Edáfico',badge:'bo',bg:'var(--orange-pale)'},fitosan:{ico:'🐛',label:'Fitosanitario',badge:'bp',bg:'var(--purple-pale)'},labor:{ico:'🔧',label:'Labor',badge:'by',bg:'#fef9e7'},cosecha:{ico:'🍎',label:'Cosecha',badge:'br',bg:'var(--red-pale)'}};return m[tipo]||{ico:'📋',label:tipo,badge:'bg',bg:'#eee'};}
+function tipoConf(tipo){const m={drench:{ico:'💧',label:'Drench',badge:'bb',bg:'var(--blue-pale)'},foliar:{ico:'🌿',label:'Foliar',badge:'bg',bg:'var(--green-pale)'},edafico:{ico:'🪱',label:'Edáfico',badge:'bo',bg:'var(--orange-pale)'},fitosan:{ico:'🐛',label:'Fitosanitario',badge:'bp',bg:'var(--purple-pale)'},labor:{ico:'🔧',label:'Labor',badge:'by',bg:'#fef9e7'},flores:{ico:'🌸',label:'Floración',badge:'bg',bg:'#fce4f3'},cosecha:{ico:'🍎',label:'Cosecha',badge:'br',bg:'var(--red-pale)'}};return m[tipo]||{ico:'📋',label:tipo,badge:'bg',bg:'#eee'};}
 
 function fmtFecha(f){if(!f)return '—';const[y,m,d]=f.split('-');const ms=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];return `${d} ${ms[parseInt(m)-1]} ${y}`;}
 
