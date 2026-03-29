@@ -398,11 +398,19 @@ function buildLotePanel(lote){
       ${PROGRAMA.map(ap=>{
         const fad=new Date(diaInicio);fad.setDate(fad.getDate()+ap.dia);
         const dd=Math.floor((fad-hoy)/(1000*60*60*24));
+        // Verificar si hay registro REAL de esta APP
+        const registrada = regs.find(r=>
+          (r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico') &&
+          r.lote && r.lote.includes(lote.nombre) &&
+          r.appPrograma && r.appPrograma.includes(ap.id) &&
+          new Date(r.fecha) >= diaInicio
+        );
         let dc,bt,bc;
-        if(dd<-2){dc='dot-hecho';bt='✓ Hecho';bc='bg';}
+        if(registrada){dc='dot-hecho';bt='✓ Registrada';bc='bg';}
         else if(dd>=-2&&dd<=2){dc='dot-hoy';bt='HOY';bc='br';}
         else if(dd>2&&dd<=7){dc='dot-prox';bt='Esta semana';bc='by';}
-        else{dc='dot-fut';bt=dd>0?`En ${dd}d`:'';bc='';}
+        else if(dd>0){dc='dot-fut';bt=`En ${dd}d`;bc='';}
+        else{dc='dot-fut';bt='⚠️ Sin registrar';bc='br';}
         return `<div class="app-row"><div class="app-dot ${dc}"></div><div class="app-info"><div class="app-nombre">${ap.nombre}</div><div class="app-fecha">${ap.modo} · ${fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})}</div><div class="app-prod">${ap.productos}</div>${ap.nota?`<div style="font-size:10px;color:var(--light);font-style:italic">${ap.nota}</div>`:''}</div>${bt?`<span class="app-badge badge ${bc}">${bt}</span>`:''}</div>`;
       }).join('')}
     </div>
