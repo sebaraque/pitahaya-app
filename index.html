@@ -8,7 +8,13 @@ index.html
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#2d6a1f">
 <title>Pitahaya Pro</title>
+<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
+</script>
 <style>
 :root{
   --green:#2d6a1f;--green2:#4a9934;--green-pale:#e8f5e3;
@@ -497,9 +503,16 @@ window.guardar=async function(tipo){
   else if(tipo==='fitosan'){reg.tipoProblema=document.getElementById('ft-tipo').value;reg.plaga=document.getElementById('ft-plaga').value;reg.producto=document.getElementById('ft-producto').value;reg.dosis=document.getElementById('ft-dosis').value;reg.volumen=document.getElementById('ft-vol').value;reg.modo=document.getElementById('ft-modo').value;reg.carencia=document.getElementById('ft-carencia').value;reg.obs=document.getElementById('ft-obs').value;reg.detalle=(reg.plaga||reg.tipoProblema||'')+(reg.producto?' · '+reg.producto:'');if(!reg.producto){showToast('⚠️ Completa el producto',true);resetBtn(btn);return;}}
   else if(tipo==='labor'){reg.tipoLabor=document.getElementById('l-tipo').value;reg.jornales=document.getElementById('l-jorn').value;reg.costo=document.getElementById('l-costo').value;reg.obs=document.getElementById('l-obs').value;reg.detalle=reg.tipoLabor;if(!reg.tipoLabor){showToast('⚠️ Selecciona el tipo',true);resetBtn(btn);return;}}
   else if(tipo==='cosecha'){reg.kg=parseFloat(document.getElementById('c-kg').value)||0;reg.precio=parseFloat(document.getElementById('c-precio').value)||0;reg.calidad=document.getElementById('c-cal').value;reg.destino=document.getElementById('c-dest').value;reg.obs=document.getElementById('c-obs').value;reg.detalle=reg.kg+' kg'+(reg.precio?' · $'+(reg.kg*reg.precio).toFixed(2):'');if(!reg.kg){showToast('⚠️ Completa los kg',true);resetBtn(btn);return;}}
-  if(fotoFile){showToast('📷 Subiendo foto...');reg.fotoURL=await subirFoto(fotoFile);}
-  try{await addDoc(collection(db,'registros'),reg);await cargarRegistros();renderDash();renderLotes();limpiarForm(tipo);showToast('✅ Registro guardado');setTimeout(()=>showPage('hist',document.querySelectorAll('nav button')[3]),800);}
-  catch(e){showToast('❌ Error al guardar',true);}
+  if(fotoFile && navigator.onLine){showToast('📷 Subiendo foto...');reg.fotoURL=await subirFoto(fotoFile);}
+  const resultado = await guardarConOffline(reg);
+  await cargarRegistros();
+  renderDash();renderLotes();limpiarForm(tipo);
+  if(resultado==='queued'){
+    showToast('💾 Sin señal — guardado localmente');
+  } else {
+    showToast('✅ Registro guardado');
+  }
+  setTimeout(()=>showPage('hist',document.querySelectorAll('nav button')[3]),800);
   resetBtn(btn);
 };
 
@@ -580,6 +593,89 @@ window.showPage=function(id,btn){
 };
 
 window.showToast=function(msg,isErr=false){const t=document.getElementById('toast');t.textContent=msg;t.style.background=isErr?'var(--red)':'var(--green)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);};
+
+// ---- OFFLINE QUEUE ----
+const QUEUE_KEY = 'pitahaya_offline_queue';
+
+function getQueue() {
+  try { return JSON.parse(localStorage.getItem(QUEUE_KEY)||'[]'); } catch(e){ return []; }
+}
+function saveQueue(q) {
+  localStorage.setItem(QUEUE_KEY, JSON.stringify(q));
+}
+
+async function guardarConOffline(reg) {
+  if(navigator.onLine) {
+    try {
+      await addDoc(collection(db,'registros'), {...reg, timestamp: serverTimestamp()});
+      return true;
+    } catch(e) {
+      // Si falla aunque hay internet, guardar en cola
+      const q = getQueue();
+      q.push({...reg, _ts: Date.now()});
+      saveQueue(q);
+      return 'queued';
+    }
+  } else {
+    // Sin internet — guardar en cola local
+    const q = getQueue();
+    q.push({...reg, _ts: Date.now()});
+    saveQueue(q);
+    return 'queued';
+  }
+}
+
+async function sincronizarCola() {
+  const q = getQueue();
+  if(!q.length) return;
+  const pendientes = [...q];
+  saveQueue([]);
+  let exitos = 0;
+  for(const reg of pendientes) {
+    try {
+      const {_ts, ...data} = reg;
+      await addDoc(collection(db,'registros'), {...data, timestamp: serverTimestamp()});
+      exitos++;
+    } catch(e) {
+      const remaining = getQueue();
+      remaining.push(reg);
+      saveQueue(remaining);
+    }
+  }
+  if(exitos > 0) {
+    await cargarRegistros();
+    renderDash(); renderLotes();
+    showToast(`✅ ${exitos} registro(s) sincronizados`);
+  }
+}
+
+// Mostrar indicador offline
+function updateOnlineStatus() {
+  const existing = document.getElementById('offline-bar');
+  if(!navigator.onLine) {
+    if(!existing) {
+      const bar = document.createElement('div');
+      bar.id = 'offline-bar';
+      bar.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#c0392b;color:#fff;text-align:center;font-size:12px;font-weight:600;padding:6px;z-index:200;font-family:DM Sans,sans-serif';
+      bar.textContent = '📵 Sin señal — los registros se guardan localmente';
+      document.body.appendChild(bar);
+      document.querySelector('header').style.top = '30px';
+    }
+  } else {
+    if(existing) {
+      existing.remove();
+      document.querySelector('header').style.top = '0';
+    }
+    sincronizarCola();
+  }
+}
+
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+updateOnlineStatus();
+
+// Mostrar pendientes en dashboard
+function getPendientesCount() { return getQueue().length; }
 </script>
 </body>
 </html>
