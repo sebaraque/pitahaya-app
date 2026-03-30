@@ -467,10 +467,40 @@ function buildLotePanel(lote){
       floraciones.forEach((fl, idx) => {
         const ft1 = new Date(fl.cosechaTentativa1||fl.fecha);
         const ft2 = new Date(fl.cosechaTentativa2||fl.fecha);
+        const fechaFlor = new Date(fl.fecha);
         const hoy2 = new Date();
         const diasFruto = Math.floor((ft1 - hoy2)/(1000*60*60*24));
 
-        // Buscar cosecha vinculada a esta floración (cosecha dentro de la ventana)
+        // Fechas fitosanitarias de esta oleada
+        const fito1 = new Date(fechaFlor); fito1.setDate(fito1.getDate()+4);
+        const fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
+        const fito3 = new Date(fechaFlor); fito3.setDate(fito3.getDate()+15);
+
+        // Buscar fitosanitarios registrados para esta oleada
+        const fitoRegs = regs.filter(r=>
+          r.tipo==='fitosan' && r.lote && r.lote.includes(lote.nombre) &&
+          new Date(r.fecha) >= fechaFlor &&
+          new Date(r.fecha) <= new Date(fechaFlor.getTime()+20*86400000)
+        ).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+
+        const fitoHecho1 = fitoRegs.find(r=>{ const d=new Date(r.fecha); return d>=new Date(fechaFlor.getTime()+2*86400000) && d<=new Date(fechaFlor.getTime()+7*86400000); });
+        const fitoHecho2 = fitoRegs.find(r=>{ const d=new Date(r.fecha); return d>=new Date(fito1.getTime()+1*86400000) && d<=new Date(fito1.getTime()+5*86400000); });
+        const fitoHecho3 = fitoRegs.find(r=>{ const d=new Date(r.fecha); return d>=new Date(fechaFlor.getTime()+12*86400000) && d<=new Date(fechaFlor.getTime()+18*86400000); });
+
+        const fitoEstado = (hecho, fecha) => {
+          if(hecho) return {txt:'✓ Hecha', color:'var(--green)', dot:'dot-hecho'};
+          const dd = Math.floor((fecha-hoy2)/86400000);
+          if(dd<-1) return {txt:'⚠️ Sin registrar', color:'var(--red)', dot:'dot-fut'};
+          if(dd<=1) return {txt:'HOY', color:'var(--red)', dot:'dot-hoy'};
+          if(dd<=3) return {txt:`En ${dd}d ⚡`, color:'var(--yellow-dk)', dot:'dot-prox'};
+          return {txt:`En ${dd}d`, color:'var(--mid)', dot:'dot-fut'};
+        };
+
+        const e1=fitoEstado(fitoHecho1,fito1);
+        const e2=fitoEstado(fitoHecho2,fito2);
+        const e3=fitoEstado(fitoHecho3,fito3);
+
+        // Cosecha vinculada
         const cosechaVinculada = regs.find(r=>
           r.tipo==='cosecha' && r.lote && r.lote.includes(lote.nombre) &&
           new Date(r.fecha) >= ft1 && new Date(r.fecha) <= new Date(ft2.getTime()+5*86400000)
@@ -495,8 +525,30 @@ function buildLotePanel(lote){
               <div style="font-size:10px;color:var(--light);margin-top:2px">${fmtFecha(fl.cosechaTentativa1)} — ${fmtFecha(fl.cosechaTentativa2)}</div>
             </div>
           </div>
-          ${cosechaVinculada ? `<div style="margin-top:6px;font-size:11px;color:var(--green)">🍎 ${cosechaVinculada.kg} kg cosechados · ${kgPorFlor} kg/flor</div>` : ''}
+          ${cosechaVinculada ? `<div style="margin-top:6px;font-size:11px;color:var(--green)">🍎 ${cosechaVinculada.kg} kg · ${kgPorFlor} kg/flor</div>` : ''}
           ${fl.obs ? `<div style="font-size:11px;color:var(--light);margin-top:4px">📝 ${fl.obs}</div>` : ''}
+
+          <!-- CRONOGRAMA FITOSANITARIO DE ESTA OLA -->
+          <div style="margin-top:10px;border-top:1px dashed var(--border);padding-top:8px">
+            <div style="font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">🐛 Fitosanitario de esta ola</div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="app-dot ${e1.dot}" style="flex-shrink:0"></div>
+                <div style="flex:1;font-size:11px"><strong>Aplic. 1</strong> — ${fito1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})} <span style="color:var(--light)">(día 4)</span></div>
+                <span style="font-size:10px;font-weight:600;color:${e1.color}">${e1.txt}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="app-dot ${e2.dot}" style="flex-shrink:0"></div>
+                <div style="flex:1;font-size:11px"><strong>Aplic. 2</strong> — ${fito2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})} <span style="color:var(--light)">(día 7)</span></div>
+                <span style="font-size:10px;font-weight:600;color:${e2.color}">${e2.txt}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="app-dot ${e3.dot}" style="flex-shrink:0"></div>
+                <div style="flex:1;font-size:11px"><strong>Aplic. 3</strong> — ${fito3.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})} <span style="color:var(--light)">(día 15)</span></div>
+                <span style="font-size:10px;font-weight:600;color:${e3.color}">${e3.txt}</span>
+              </div>
+            </div>
+          </div>
         </div>`;
       });
 
@@ -777,14 +829,27 @@ function renderDashExtra() {
         alertas.push({lote:lote.nombre, app:ap.nombre, dd, urgente: dd<=0});
       }
     });
-    // Alerta cosecha próxima
-    regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio).forEach(fl=>{
+    // Alerta cosecha próxima y fitosanitarios de flores
+    regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio).forEach((fl,fidx)=>{
       const ft1 = new Date(fl.cosechaTentativa1||fl.fecha);
+      const fechaFlor = new Date(fl.fecha);
       const dd = Math.floor((ft1-hoy)/(1000*60*60*24));
       const cosechada = regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1);
       if(!cosechada && dd >= -3 && dd <= 3) {
-        alertas.push({lote:lote.nombre, app:`🍎 Cosecha de ${fl.numFlores} flores`, dd, urgente: dd<=0, esCosecha:true});
+        alertas.push({lote:lote.nombre, app:`🍎 Cosecha Ola ${fidx+1} — ${fl.numFlores} flores`, dd, urgente: dd<=0});
       }
+      // Alertas fitosanitarias de esta ola
+      const fito1 = new Date(fechaFlor); fito1.setDate(fito1.getDate()+4);
+      const fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
+      const fito3 = new Date(fechaFlor); fito3.setDate(fito3.getDate()+15);
+      const fitoRegs = regs.filter(r=>r.tipo==='fitosan'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=fechaFlor&&new Date(r.fecha)<=new Date(fechaFlor.getTime()+20*86400000));
+      [[fito1,'Aplic. 1 flores'],[fito2,'Aplic. 2 flores'],[fito3,'Aplic. 3 flores']].forEach(([fecha,nombre],i)=>{
+        const ddF = Math.floor((fecha-hoy)/86400000);
+        const hecha = fitoRegs.find(r=>{ const d=new Date(r.fecha); return Math.abs(d-fecha)<4*86400000; });
+        if(!hecha && ddF>=-1 && ddF<=2) {
+          alertas.push({lote:lote.nombre, app:`🐛 ${nombre} Ola ${fidx+1}`, dd:ddF, urgente:ddF<=0});
+        }
+      });
     });
   });
 
