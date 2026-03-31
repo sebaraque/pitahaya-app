@@ -391,7 +391,14 @@ function renderLotes(){
   const panelsEl=document.getElementById('lotePanels');
   tabsEl.innerHTML=LOTES.map((l,i)=>`<button class="ltab${i===0?' active':''}" onclick="selectLote('${l.id}',this)">${l.nombre}</button>`).join('');
   panelsEl.innerHTML=LOTES.map((l,i)=>`<div class="lote-panel${i===0?' active':''}" id="panel-${l.id}">${buildLotePanel(l)}</div>`).join('');
-  setTimeout(renderFloraciones, 50);
+  setTimeout(()=>{
+    const placeholders = document.querySelectorAll('[id^="flo-placeholder-"]');
+    placeholders.forEach(p => {
+      const loteId = p.id.replace('flo-placeholder-','');
+      const lote = LOTES.find(l=>l.id===loteId);
+      if(lote) renderFloracionesParaLote(lote, p);
+    });
+  }, 100);
 }
 
 function buildLotePanel(lote){
@@ -452,9 +459,10 @@ function buildLotePanel(lote){
         return `<div class="app-row"><div class="app-dot ${dc}"></div><div class="app-info"><div class="app-nombre">${ap.nombre}</div><div class="app-fecha">${ap.modo} · ${fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})}</div><div class="app-prod">${ap.productos}</div>${ap.nota?`<div style="font-size:10px;color:var(--light);font-style:italic">${ap.nota}</div>`:''}</div>${bt?`<span class="app-badge badge ${bc}">${bt}</span>`:''}</div>`;
       }).join('')}
     </div>
-    <div id="flo-placeholder-${lote.id}"></div>
     <div style="padding:0 16px 14px"><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-nuevo-ciclo">+ Iniciar nuevo ciclo</button></div>
-  </div>`;
+  </div>
+  <div id="flo-placeholder-${lote.id}"></div>
+</div>`;
 
   if(encendidos.length>1){
     html+=`<div class="stitle" style="padding-left:0">Ciclos anteriores</div>`;
@@ -917,12 +925,17 @@ window.guardarEdicion = async function(id, tipo) {
 
 // ---- FLORACIONES ----
 function renderFloraciones() {
-  const regs = window._registros;
-  const hoy = new Date();
+  const placeholders = document.querySelectorAll('[id^="flo-placeholder-"]');
+  placeholders.forEach(p => {
+    const loteId = p.id.replace('flo-placeholder-','');
+    const lote = LOTES.find(l=>l.id===loteId);
+    if(lote) renderFloracionesParaLote(lote, p);
+  });
+}
 
-  LOTES.forEach(lote => {
-    const el = document.getElementById('flo-placeholder-'+lote.id);
-    if(!el) return;
+function renderFloracionesParaLote(lote, el) {
+    const regs = window._registros;
+    const hoy = new Date();
 
     const encendidos = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
     if(!encendidos.length){ el.innerHTML=''; return; }
@@ -1008,7 +1021,6 @@ function renderFloraciones() {
 
     html += '</div>';
     el.innerHTML = html;
-  });
 }
 
 window.toggleFito = async function(flId, campo, valor) {
