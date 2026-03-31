@@ -391,6 +391,7 @@ function renderLotes(){
   const panelsEl=document.getElementById('lotePanels');
   tabsEl.innerHTML=LOTES.map((l,i)=>`<button class="ltab${i===0?' active':''}" onclick="selectLote('${l.id}',this)">${l.nombre}</button>`).join('');
   panelsEl.innerHTML=LOTES.map((l,i)=>`<div class="lote-panel${i===0?' active':''}" id="panel-${l.id}">${buildLotePanel(l)}</div>`).join('');
+  setTimeout(renderFloraciones, 50);
 }
 
 function buildLotePanel(lote){
@@ -451,98 +452,7 @@ function buildLotePanel(lote){
         return `<div class="app-row"><div class="app-dot ${dc}"></div><div class="app-info"><div class="app-nombre">${ap.nombre}</div><div class="app-fecha">${ap.modo} · ${fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})}</div><div class="app-prod">${ap.productos}</div>${ap.nota?`<div style="font-size:10px;color:var(--light);font-style:italic">${ap.nota}</div>`:''}</div>${bt?`<span class="app-badge badge ${bc}">${bt}</span>`:''}</div>`;
       }).join('')}
     </div>
-
-    ${(()=>{
-      // FLORACIONES del ciclo activo
-      const floraciones = regs.filter(r=>
-        r.tipo==='flores' && r.lote && r.lote.includes(lote.nombre) &&
-        new Date(r.fecha) >= diaInicio
-      ).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
-
-      if(!floraciones.length) return `<div style="padding:12px 16px 4px;font-size:12px;color:var(--light)">Sin floraciones registradas en este ciclo. <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="switchTab('flores',document.querySelectorAll('.ftab')[6]);showPage('form',document.querySelectorAll('nav button')[2])">+ Registrar floración</span></div>`;
-
-      let flHtml = `<div style="padding:13px 16px;border-top:1px solid var(--border)">
-        <div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🌸 Floraciones del ciclo</div>`;
-
-      floraciones.forEach((fl, idx) => {
-        const ft1 = new Date(fl.cosechaTentativa1||fl.fecha);
-        const ft2 = new Date(fl.cosechaTentativa2||fl.fecha);
-        const fechaFlor = new Date(fl.fecha);
-        const hoy2 = new Date();
-        const diasFruto = Math.floor((ft1 - hoy2)/(1000*60*60*24));
-
-        // Fechas fitosanitarias
-        const fito1 = new Date(fechaFlor); fito1.setDate(fito1.getDate()+4);
-        const fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
-        const fito3 = new Date(fechaFlor); fito3.setDate(fito3.getDate()+15);
-
-        const f1hecho = fl.fito1_hecho || false;
-        const f2hecho = fl.fito2_hecho || false;
-        const f3hecho = fl.fito3_hecho || false;
-
-        // Cosecha vinculada
-        const cosechaVinculada = regs.find(r=>
-          r.tipo==='cosecha' && r.lote && r.lote.includes(lote.nombre) &&
-          new Date(r.fecha) >= ft1 && new Date(r.fecha) <= new Date(ft2.getTime()+5*86400000)
-        );
-
-        let estadoFlor, colorFlor;
-        if(cosechaVinculada){ estadoFlor='✅ Cosechada'; colorFlor='var(--green)'; }
-        else if(diasFruto < 0){ estadoFlor='🍎 En cosecha'; colorFlor='var(--red)'; }
-        else if(diasFruto <= 5){ estadoFlor=`⚡ ${diasFruto}d para cosechar`; colorFlor='var(--yellow-dk)'; }
-        else{ estadoFlor=`${diasFruto}d para cosechar`; colorFlor='var(--mid)'; }
-
-        const kgPorFlor = cosechaVinculada ? ((cosechaVinculada.kg||0)/fl.numFlores).toFixed(3) : null;
-
-        const ddF1 = Math.floor((fito1-hoy2)/86400000);
-        const ddF2 = Math.floor((fito2-hoy2)/86400000);
-        const ddF3 = Math.floor((fito3-hoy2)/86400000);
-
-        const flId = fl.id;
-
-        const filaFito = (hecho, num, dd, fecha) => {
-          const fs = fecha.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-          const diaLabel = ['día 4','día 7','día 15'][num-1];
-          const colorFecha = dd<0?'var(--light)':dd===0?'var(--red)':dd<=3?'var(--yellow-dk)':'var(--mid)';
-          const btnStyle = hecho
-            ? `background:var(--green);color:#fff;border:none;`
-            : `background:white;color:${dd<=0?'var(--red)':'#666'};border:1.5px solid ${dd<=0?'var(--red)':'var(--border)'};`;
-          const btnTxt = hecho ? '✅ Hecho' : '❌ Pendiente';
-          const campo = `fito${num}_hecho`;
-          const nuevoVal = !hecho;
-          return `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:4px 0">
-            <div style="font-size:11px;flex:1"><strong>Aplic. ${num}</strong> <span style="color:${colorFecha}">${fs}</span> <span style="color:var(--light);font-size:10px">(${diaLabel})</span></div>
-            <button data-flid="${flId}" data-campo="${campo}" data-val="${nuevoVal}" style="${btnStyle}border-radius:20px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:sans-serif;flex-shrink:0" onclick="toggleFito(this.dataset.flid,this.dataset.campo,this.dataset.val==='true')">${btnTxt}</button>
-          </div>`;
-        };
-
-        flHtml += `<div style="background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:8px;border-left:3px solid #e91e8c">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start">
-            <div>
-              <div style="font-size:12px;font-weight:600">Ola ${idx+1} — ${fmtFecha(fl.fecha)}</div>
-              <div style="font-size:13px;font-weight:700;color:#e91e8c;margin-top:2px">${fl.numFlores} flores</div>
-            </div>
-            <div style="text-align:right">
-              <div style="font-size:11px;font-weight:600;color:${colorFlor}">${estadoFlor}</div>
-              <div style="font-size:10px;color:var(--light);margin-top:2px">${fmtFecha(fl.cosechaTentativa1)} — ${fmtFecha(fl.cosechaTentativa2)}</div>
-            </div>
-          </div>
-          ${cosechaVinculada ? `<div style="margin-top:6px;font-size:11px;color:var(--green)">🍎 ${cosechaVinculada.kg} kg · ${kgPorFlor} kg/flor</div>` : ''}
-          ${fl.obs ? `<div style="font-size:11px;color:var(--light);margin-top:4px">📝 ${fl.obs}</div>` : ''}
-
-          <div style="margin-top:10px;border-top:1px dashed var(--border);padding-top:8px">
-            <div style="font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🐛 Fitosanitario</div>
-            ${filaFito(f1hecho,1,ddF1,fito1)}
-            ${filaFito(f2hecho,2,ddF2,fito2)}
-            ${filaFito(f3hecho,3,ddF3,fito3)}
-          </div>
-        </div>`;
-      });
-
-      flHtml += `</div>`;
-      return flHtml;
-    })()}
-
+    <div id="flo-placeholder-${lote.id}"></div>
     <div style="padding:0 16px 14px"><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-nuevo-ciclo">+ Iniciar nuevo ciclo</button></div>
   </div>`;
 
@@ -1005,7 +915,102 @@ window.guardarEdicion = async function(id, tipo) {
   }
 };
 
-// ---- TOGGLE FITOSANITARIO ----
+// ---- FLORACIONES ----
+function renderFloraciones() {
+  const regs = window._registros;
+  const hoy = new Date();
+
+  LOTES.forEach(lote => {
+    const el = document.getElementById('flo-placeholder-'+lote.id);
+    if(!el) return;
+
+    const encendidos = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+    if(!encendidos.length){ el.innerHTML=''; return; }
+
+    const ultimoEnc = encendidos[encendidos.length-1];
+    const diaInicio = new Date(ultimoEnc.fecha);
+
+    const floraciones = regs.filter(r=>
+      r.tipo==='flores' && r.lote && r.lote.includes(lote.nombre) &&
+      new Date(r.fecha) >= diaInicio
+    ).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+
+    if(!floraciones.length) {
+      el.innerHTML = `<div style="padding:12px 16px;border-top:1px solid var(--border);font-size:12px;color:var(--light)">Sin floraciones registradas. <span style="color:var(--green);font-weight:600;cursor:pointer" onclick="showPage('form',document.querySelectorAll('nav button')[2]);switchTab('flores',document.querySelectorAll('.ftab')[6])">+ Registrar floración</span></div>`;
+      return;
+    }
+
+    let html = `<div style="padding:13px 16px;border-top:1px solid var(--border)">
+      <div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🌸 Floraciones del ciclo</div>`;
+
+    floraciones.forEach((fl, idx) => {
+      const ft1 = new Date(fl.cosechaTentativa1||fl.fecha);
+      const ft2 = new Date(fl.cosechaTentativa2||fl.fecha);
+      const fechaFlor = new Date(fl.fecha);
+      const diasFruto = Math.floor((ft1-hoy)/86400000);
+
+      const fito1 = new Date(fechaFlor); fito1.setDate(fito1.getDate()+4);
+      const fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
+      const fito3 = new Date(fechaFlor); fito3.setDate(fito3.getDate()+15);
+
+      const f1 = fl.fito1_hecho||false;
+      const f2 = fl.fito2_hecho||false;
+      const f3 = fl.fito3_hecho||false;
+
+      const cosechaVinculada = regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1&&new Date(r.fecha)<=new Date(ft2.getTime()+5*86400000));
+
+      let estadoFlor, colorFlor;
+      if(cosechaVinculada){estadoFlor='✅ Cosechada';colorFlor='var(--green)';}
+      else if(diasFruto<0){estadoFlor='🍎 En cosecha';colorFlor='var(--red)';}
+      else if(diasFruto<=5){estadoFlor='⚡ '+diasFruto+'d para cosechar';colorFlor='var(--yellow-dk)';}
+      else{estadoFlor=diasFruto+'d para cosechar';colorFlor='var(--mid)';}
+
+      const kgPorFlor = cosechaVinculada?((cosechaVinculada.kg||0)/fl.numFlores).toFixed(3):null;
+
+      const filaFito = (hecho, num, fecha) => {
+        const dd = Math.floor((fecha-hoy)/86400000);
+        const fs = fecha.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+        const dias = ['día 4','día 7','día 15'][num-1];
+        const cFecha = dd<0?'#999':dd===0?'var(--red)':dd<=3?'var(--yellow-dk)':'var(--mid)';
+        const btnBg = hecho?'#2d6a1f':'white';
+        const btnColor = hecho?'#fff':(dd<=0?'var(--red)':'#555');
+        const btnBorder = hecho?'none':`1.5px solid ${dd<=0?'var(--red)':'#ddd'}`;
+        const btnTxt = hecho?'✅ Hecho':'❌ Pendiente';
+        const campo = 'fito'+num+'_hecho';
+        const nuevoVal = !hecho;
+        return `<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0ece4">
+          <div style="font-size:12px"><b>Aplic. ${num}</b> <span style="color:${cFecha}">${fs}</span> <span style="color:#aaa;font-size:10px">(${dias})</span></div>
+          <button style="background:${btnBg};color:${btnColor};border:${btnBorder};border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap" onclick="toggleFito('${fl.id}','${campo}',${nuevoVal})">${btnTxt}</button>
+        </div>`;
+      };
+
+      html += `<div style="background:white;border-radius:10px;padding:12px;margin-bottom:10px;border-left:3px solid #e91e8c;box-shadow:0 2px 8px rgba(0,0,0,0.06)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+          <div>
+            <div style="font-size:13px;font-weight:700">Ola ${idx+1} — ${fmtFecha(fl.fecha)}</div>
+            <div style="font-size:14px;font-weight:700;color:#e91e8c;margin-top:2px">🌸 ${fl.numFlores} flores</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:12px;font-weight:600;color:${colorFlor}">${estadoFlor}</div>
+            <div style="font-size:10px;color:#999;margin-top:2px">${fmtFecha(fl.cosechaTentativa1)} — ${fmtFecha(fl.cosechaTentativa2)}</div>
+          </div>
+        </div>
+        ${cosechaVinculada?`<div style="font-size:11px;color:var(--green);margin-bottom:6px">🍎 ${cosechaVinculada.kg} kg · ${kgPorFlor} kg/flor</div>`:''}
+        ${fl.obs?`<div style="font-size:11px;color:#999;margin-bottom:6px">📝 ${fl.obs}</div>`:''}
+        <div style="border-top:1px dashed #e0dbd0;padding-top:8px;margin-top:6px">
+          <div style="font-size:10px;font-weight:700;color:#7d3c98;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">🐛 Fitosanitario</div>
+          ${filaFito(f1,1,fito1)}
+          ${filaFito(f2,2,fito2)}
+          ${filaFito(f3,3,fito3)}
+        </div>
+      </div>`;
+    });
+
+    html += '</div>';
+    el.innerHTML = html;
+  });
+}
+
 window.toggleFito = async function(flId, campo, valor) {
   try {
     await updateDoc(doc(db,'registros',flId), {[campo]: valor});
