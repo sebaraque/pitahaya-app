@@ -476,10 +476,9 @@ function buildLotePanel(lote){
         const fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
         const fito3 = new Date(fechaFlor); fito3.setDate(fito3.getDate()+15);
 
-        // Estado hecho/no hecho guardado en el registro de flores
-        const f1hecho = fl[`fito1_hecho`] || false;
-        const f2hecho = fl[`fito2_hecho`] || false;
-        const f3hecho = fl[`fito3_hecho`] || false;
+        const f1hecho = fl.fito1_hecho || false;
+        const f2hecho = fl.fito2_hecho || false;
+        const f3hecho = fl.fito3_hecho || false;
 
         // Cosecha vinculada
         const cosechaVinculada = regs.find(r=>
@@ -499,17 +498,22 @@ function buildLotePanel(lote){
         const ddF2 = Math.floor((fito2-hoy2)/86400000);
         const ddF3 = Math.floor((fito3-hoy2)/86400000);
 
-        const fechaLabel = (dd, fecha) => {
-          const fs = fecha.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-          if(dd<0) return `<span style="color:var(--light)">${fs}</span>`;
-          if(dd===0) return `<span style="color:var(--red);font-weight:600">${fs} HOY</span>`;
-          if(dd<=3) return `<span style="color:var(--yellow-dk);font-weight:600">${fs} ⚡</span>`;
-          return `<span style="color:var(--mid)">${fs}</span>`;
-        };
+        const flId = fl.id;
 
-        const btnFito = (hecho, fitoNum, flId, dd) => {
-          if(hecho) return `<button onclick="toggleFito('${flId}','fito${fitoNum}_hecho',false)" style="background:var(--green);color:#fff;border:none;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">✅ Hecho</button>`;
-          return `<button onclick="toggleFito('${flId}','fito${fitoNum}_hecho',true)" style="background:var(--bg);color:${dd<=0?'var(--red)':'var(--mid)'};border:1.5px solid ${dd<=0?'var(--red)':'var(--border)'};border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">❌ No hecho</button>`;
+        const filaFito = (hecho, num, dd, fecha) => {
+          const fs = fecha.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+          const diaLabel = ['día 4','día 7','día 15'][num-1];
+          const colorFecha = dd<0?'var(--light)':dd===0?'var(--red)':dd<=3?'var(--yellow-dk)':'var(--mid)';
+          const btnStyle = hecho
+            ? `background:var(--green);color:#fff;border:none;`
+            : `background:white;color:${dd<=0?'var(--red)':'#666'};border:1.5px solid ${dd<=0?'var(--red)':'var(--border)'};`;
+          const btnTxt = hecho ? '✅ Hecho' : '❌ Pendiente';
+          const campo = `fito${num}_hecho`;
+          const nuevoVal = !hecho;
+          return `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:4px 0">
+            <div style="font-size:11px;flex:1"><strong>Aplic. ${num}</strong> <span style="color:${colorFecha}">${fs}</span> <span style="color:var(--light);font-size:10px">(${diaLabel})</span></div>
+            <button data-flid="${flId}" data-campo="${campo}" data-val="${nuevoVal}" style="${btnStyle}border-radius:20px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:sans-serif;flex-shrink:0" onclick="toggleFito(this.dataset.flid,this.dataset.campo,this.dataset.val==='true')">${btnTxt}</button>
+          </div>`;
         };
 
         flHtml += `<div style="background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:8px;border-left:3px solid #e91e8c">
@@ -528,20 +532,9 @@ function buildLotePanel(lote){
 
           <div style="margin-top:10px;border-top:1px dashed var(--border);padding-top:8px">
             <div style="font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🐛 Fitosanitario</div>
-            <div style="display:flex;flex-direction:column;gap:7px">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-                <div style="font-size:11px"><strong>Aplic. 1</strong> — ${fechaLabel(ddF1,fito1)} <span style="color:var(--light)">(día 4)</span></div>
-                ${btnFito(f1hecho,1,fl.id,ddF1)}
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-                <div style="font-size:11px"><strong>Aplic. 2</strong> — ${fechaLabel(ddF2,fito2)} <span style="color:var(--light)">(día 7)</span></div>
-                ${btnFito(f2hecho,2,fl.id,ddF2)}
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-                <div style="font-size:11px"><strong>Aplic. 3</strong> — ${fechaLabel(ddF3,fito3)} <span style="color:var(--light)">(día 15)</span></div>
-                ${btnFito(f3hecho,3,fl.id,ddF3)}
-              </div>
-            </div>
+            ${filaFito(f1hecho,1,ddF1,fito1)}
+            ${filaFito(f2hecho,2,ddF2,fito2)}
+            ${filaFito(f3hecho,3,ddF3,fito3)}
           </div>
         </div>`;
       });
