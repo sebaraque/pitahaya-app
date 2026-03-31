@@ -519,30 +519,34 @@ function buildFloraciones(lote, regs, diaInicio) {
     const btnGris = 'background:#fff;color:#555;border:1.5px solid #ddd;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer';
     const btnRojo = 'background:#fff;color:#c0392b;border:1.5px solid #c0392b;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer';
 
+    const flId = String(fl.id || '');
+    const ct1 = fl.cosechaTentativa1 || '';
+    const ct2 = fl.cosechaTentativa2 || '';
+
     html += '<div style="background:#fff;border-radius:10px;padding:12px;margin-bottom:10px;border-left:3px solid #e91e8c;box-shadow:0 2px 8px rgba(0,0,0,0.06)">';
     html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">';
     html += '<div><div style="font-size:13px;font-weight:700">Ola '+(idx+1)+' — '+fmtFecha(fl.fecha)+'</div>';
-    html += '<div style="font-size:14px;font-weight:700;color:#e91e8c;margin-top:2px">'+fl.numFlores+' flores</div></div>';
+    html += '<div style="font-size:14px;font-weight:700;color:#e91e8c;margin-top:2px">'+(fl.numFlores||0)+' flores</div></div>';
     html += '<div style="text-align:right"><div style="font-size:12px;font-weight:600;color:'+col+'">'+est+'</div>';
-    html += '<div style="font-size:10px;color:#999;margin-top:2px">'+fmtFecha(fl.cosechaTentativa1)+' — '+fmtFecha(fl.cosechaTentativa2)+'</div></div></div>';
+    html += '<div style="font-size:10px;color:#999;margin-top:2px">'+(ct1?fmtFecha(ct1):'—')+' — '+(ct2?fmtFecha(ct2):'—')+'</div></div></div>';
     if(cosV) html += '<div style="font-size:11px;color:#2d6a1f;margin-bottom:8px">'+cosV.kg+' kg cosechados</div>';
 
     html += '<div style="border-top:1px dashed #e0dbd0;padding-top:8px">';
-    html += '<div style="font-size:10px;font-weight:700;color:#7d3c98;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Fitosanitario</div>';
+    html += '<div style="font-size:10px;font-weight:700;color:#7d3c98;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🐛 Fitosanitario</div>';
 
     html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f4f1eb">';
     html += '<div style="font-size:12px"><b>Aplic. 1</b> '+fs1+' <span style="color:#aaa;font-size:10px">(día 4)</span></div>';
-    html += '<button style="'+(f1?btnVerde:(dd1<=0?btnRojo:btnGris))+'" onclick="toggleFito(\''+fl.id+'\',\'fito1_hecho\','+!f1+')">'+(f1?'✅ Hecho':'❌ Pendiente')+'</button>';
+    html += '<button style="'+(f1?btnVerde:(dd1<=0?btnRojo:btnGris))+'" onclick="toggleFito(\''+flId+'\',\'fito1_hecho\','+(f1?'false':'true')+')">'+(f1?'✅ Hecho':'❌ Pendiente')+'</button>';
     html += '</div>';
 
     html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f4f1eb">';
     html += '<div style="font-size:12px"><b>Aplic. 2</b> '+fs2+' <span style="color:#aaa;font-size:10px">(día 7)</span></div>';
-    html += '<button style="'+(f2?btnVerde:(dd2<=0?btnRojo:btnGris))+'" onclick="toggleFito(\''+fl.id+'\',\'fito2_hecho\','+!f2+')">'+(f2?'✅ Hecho':'❌ Pendiente')+'</button>';
+    html += '<button style="'+(f2?btnVerde:(dd2<=0?btnRojo:btnGris))+'" onclick="toggleFito(\''+flId+'\',\'fito2_hecho\','+(f2?'false':'true')+')">'+(f2?'✅ Hecho':'❌ Pendiente')+'</button>';
     html += '</div>';
 
     html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0">';
     html += '<div style="font-size:12px"><b>Aplic. 3</b> '+fs3+' <span style="color:#aaa;font-size:10px">(día 15)</span></div>';
-    html += '<button style="'+(f3?btnVerde:(dd3<=0?btnRojo:btnGris))+'" onclick="toggleFito(\''+fl.id+'\',\'fito3_hecho\','+!f3+')">'+(f3?'✅ Hecho':'❌ Pendiente')+'</button>';
+    html += '<button style="'+(f3?btnVerde:(dd3<=0?btnRojo:btnGris))+'" onclick="toggleFito(\''+flId+'\',\'fito3_hecho\','+(f3?'false':'true')+')">'+(f3?'✅ Hecho':'❌ Pendiente')+'</button>';
     html += '</div>';
 
     html += '</div></div>';
