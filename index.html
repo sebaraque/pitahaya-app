@@ -11,140 +11,149 @@ index.html
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script>
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(()=>{});
-}
-</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}</script>
 <style>
 :root{
-  --green:#2d6a1f;--green2:#4a9934;--green-pale:#e8f5e3;
-  --yellow:#f5c518;--yellow-dk:#c49a0a;
-  --red:#c0392b;--red-pale:#fdecea;
-  --blue-pale:#e8f0fe;--blue:#185fa5;
-  --orange:#e67e22;--orange-pale:#fef0e7;
-  --purple:#7d3c98;--purple-pale:#f5eef8;
-  --bg:#f4f1eb;--card:#fff;--text:#1a1a1a;
-  --mid:#555;--light:#999;--border:#e0dbd0;
-  --r:14px;--shadow:0 2px 12px rgba(0,0,0,0.07);
+  --g:#2d6a1f;--g2:#4a9934;--gp:#e8f5e3;
+  --y:#f5c518;--yd:#c49a0a;
+  --r:#c0392b;--rp:#fdecea;
+  --bp:#e8f0fe;--b:#185fa5;
+  --op:#fef0e7;--o:#e67e22;
+  --pp:#f5eef8;--p:#7d3c98;
+  --bg:#f4f1eb;--card:#fff;--tx:#1a1a1a;
+  --mid:#555;--lt:#999;--br:#e0dbd0;
+  --r14:14px;--sh:0 2px 12px rgba(0,0,0,0.07);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px;overflow-x:hidden}
-header{background:var(--green);padding:14px 18px 12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.2)}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;padding-bottom:80px;overflow-x:hidden}
+header{background:var(--g);padding:14px 18px 12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.2)}
 .hrow{display:flex;align-items:center;justify-content:space-between}
 .htitle{font-family:'Bebas Neue',sans-serif;font-size:24px;color:#fff;letter-spacing:1px;line-height:1}
 .hsub{font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-.hdate{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.65)}
-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.07);padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;border:none;background:none;padding:8px 2px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Sans',sans-serif;font-size:9px;color:var(--light);transition:color .18s}
-nav button.active{color:var(--green)}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--br);display:flex;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.07)}
+nav button{flex:1;border:none;background:none;padding:8px 2px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'DM Sans',sans-serif;font-size:9px;color:var(--lt);transition:color .18s}
+nav button.active{color:var(--g)}
 nav button svg{width:20px;height:20px;stroke-width:1.8}
 .page{display:none}.page.active{display:block}
-.stitle{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--green);padding:16px 18px 10px;letter-spacing:.5px}
-.hero{background:linear-gradient(135deg,var(--green),var(--green2));padding:18px 18px 20px;color:#fff}
+.stitle{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--g);padding:16px 18px 10px;letter-spacing:.5px}
+.hero{background:linear-gradient(135deg,var(--g),var(--g2));padding:18px 18px 20px;color:#fff}
 .hero h2{font-family:'Bebas Neue',sans-serif;font-size:18px;opacity:.8;margin-bottom:12px;letter-spacing:.5px}
 .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .scard{background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 13px}
 .snum{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1}
 .slbl{font-size:10px;opacity:.7;margin-top:2px}
 .alist{padding:0 18px}
-.acard{background:var(--card);border-radius:var(--r);padding:13px 15px;margin-bottom:9px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:flex-start}
+.acard{background:var(--card);border-radius:var(--r14);padding:13px 15px;margin-bottom:9px;box-shadow:var(--sh);display:flex;gap:12px;align-items:flex-start}
 .aico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
 .abody{flex:1;min-width:0}
 .atitle{font-weight:600;font-size:13px}
-.ameta{font-size:11px;color:var(--light);margin-top:2px}
+.ameta{font-size:11px;color:var(--lt);margin-top:2px}
 .badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap;display:inline-block;margin-top:3px}
-.bg{background:var(--green-pale);color:var(--green)}
-.bb{background:var(--blue-pale);color:var(--blue)}
-.by{background:#fef9e7;color:var(--yellow-dk)}
-.br{background:var(--red-pale);color:var(--red)}
-.bo{background:var(--orange-pale);color:var(--orange)}
-.bp{background:var(--purple-pale);color:var(--purple)}
+.bg{background:var(--gp);color:var(--g)}.bb{background:var(--bp);color:var(--b)}
+.by{background:#fef9e7;color:var(--yd)}.br2{background:var(--rp);color:var(--r)}
+.bo{background:var(--op);color:var(--o)}.bp2{background:var(--pp);color:var(--p)}
 .lote-tabs{display:flex;gap:8px;padding:14px 18px 4px;overflow-x:auto;scrollbar-width:none}
 .lote-tabs::-webkit-scrollbar{display:none}
-.ltab{flex-shrink:0;background:var(--card);border:2px solid var(--border);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;white-space:nowrap}
-.ltab.active{background:var(--green);border-color:var(--green);color:#fff}
+.ltab{flex-shrink:0;background:var(--card);border:2px solid var(--br);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;white-space:nowrap}
+.ltab.active{background:var(--g);border-color:var(--g);color:#fff}
 .lote-panel{display:none;padding:0 18px 18px}
 .lote-panel.active{display:block}
-.ciclo-card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px}
-.ciclo-head{padding:14px 16px;background:linear-gradient(135deg,var(--green),var(--green2));color:#fff}
+.ciclo-card{background:var(--card);border-radius:var(--r14);box-shadow:var(--sh);overflow:hidden;margin-bottom:12px}
+.ciclo-head{padding:14px 16px;background:linear-gradient(135deg,var(--g),var(--g2));color:#fff}
 .ciclo-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.5px}
 .ciclo-sub{font-size:11px;opacity:.75;margin-top:2px}
 .ciclo-estado{display:inline-block;background:rgba(255,255,255,0.25);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;margin-top:8px}
-.progreso-wrap{padding:14px 16px;border-bottom:1px solid var(--border)}
+.progreso-wrap{padding:14px 16px;border-bottom:1px solid var(--br)}
 .progreso-label{display:flex;justify-content:space-between;font-size:11px;color:var(--mid);margin-bottom:6px}
-.progreso-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
-.progreso-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green2));border-radius:4px;transition:width .5s}
-.progreso-dias{display:flex;justify-content:space-between;font-size:10px;color:var(--light);margin-top:4px}
+.progreso-bar{height:8px;background:var(--br);border-radius:4px;overflow:hidden}
+.progreso-fill{height:100%;background:linear-gradient(90deg,var(--g),var(--g2));border-radius:4px}
+.progreso-dias{display:flex;justify-content:space-between;font-size:10px;color:var(--lt);margin-top:4px}
 .apps-lista{padding:12px 16px}
-.app-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border)}
+.app-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--br)}
 .app-row:last-child{border-bottom:none}
 .app-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
-.dot-hecho{background:var(--green)}
-.dot-hoy{background:var(--red);box-shadow:0 0 0 3px var(--red-pale)}
-.dot-prox{background:var(--yellow)}
-.dot-fut{background:var(--border)}
+.dot-hecho{background:var(--g)}.dot-hoy{background:var(--r);box-shadow:0 0 0 3px var(--rp)}
+.dot-prox{background:var(--y)}.dot-fut{background:var(--br)}
 .app-info{flex:1}
 .app-nombre{font-size:12px;font-weight:600}
-.app-fecha{font-size:11px;color:var(--light);margin-top:1px}
+.app-fecha{font-size:11px;color:var(--lt);margin-top:1px}
 .app-prod{font-size:10px;color:var(--mid);margin-top:2px;line-height:1.4}
 .app-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0}
-.fechas-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px;border-top:1px solid var(--border)}
+.fechas-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px;border-top:1px solid var(--br)}
 .fecha-item{text-align:center}
-.fecha-val{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--green)}
-.fecha-lbl{font-size:10px;color:var(--light);margin-top:2px}
-.ciclo-ant{background:var(--card);border-radius:var(--r);padding:13px 15px;margin-bottom:9px;box-shadow:var(--shadow);opacity:.7}
-.btn-nuevo-ciclo{width:100%;padding:13px;background:none;border:2px dashed var(--green);border-radius:11px;color:var(--green);font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:4px}
-.fhead{background:var(--green);padding:18px 18px 16px;color:#fff}
+.fecha-val{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--g)}
+.fecha-lbl{font-size:10px;color:var(--lt);margin-top:2px}
+.ciclo-ant{background:var(--card);border-radius:var(--r14);padding:13px 15px;margin-bottom:9px;box-shadow:var(--sh);opacity:.7}
+.btn-nuevo-ciclo{width:100%;padding:13px;background:none;border:2px dashed var(--g);border-radius:11px;color:var(--g);font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:4px}
+/* FLORACIONES */
+.flor-card{background:#fff;border-radius:10px;padding:12px;margin-bottom:10px;border-left:3px solid #e91e8c;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.flor-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.flor-titulo{font-size:13px;font-weight:700}
+.flor-flores{font-size:14px;font-weight:700;color:#e91e8c;margin-top:2px}
+.flor-estado{font-size:12px;font-weight:600}
+.flor-fecha{font-size:10px;color:#999;margin-top:2px}
+.fito-section{border-top:1px dashed #e0dbd0;padding-top:8px;margin-top:8px}
+.fito-titulo{font-size:10px;font-weight:700;color:#7d3c98;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.fito-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f4f1eb}
+.fito-row:last-child{border-bottom:none}
+.fito-label{font-size:12px}
+.btn-hecho{background:#2d6a1f;color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-pendiente{background:#fff;color:#555;border:1.5px solid #ddd;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-pendiente-urgente{background:#fff;color:#c0392b;border:1.5px solid #c0392b;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+/* FORM */
+.fhead{background:var(--g);padding:18px 18px 16px;color:#fff}
 .fhead h2{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:.5px}
 .fhead p{font-size:11px;opacity:.65;margin-top:3px}
-.ftabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.ftabs{display:flex;background:var(--card);border-bottom:1px solid var(--br);overflow-x:auto;scrollbar-width:none}
 .ftabs::-webkit-scrollbar{display:none}
-.ftab{flex-shrink:0;padding:10px 12px;font-size:11px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--light);border-bottom:3px solid transparent;transition:all .18s;font-family:'DM Sans',sans-serif}
-.ftab.active{color:var(--green);border-bottom-color:var(--green)}
+.ftab{flex-shrink:0;padding:10px 12px;font-size:11px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--lt);border-bottom:3px solid transparent;transition:all .18s;font-family:'DM Sans',sans-serif}
+.ftab.active{color:var(--g);border-bottom-color:var(--g)}
 .fbody{padding:18px}
 .field{margin-bottom:15px}
 .field label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--mid);margin-bottom:5px}
-.field input,.field select,.field textarea{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);transition:border-color .18s;-webkit-appearance:none;appearance:none}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--green);background:#fff}
+.field input,.field select,.field textarea{width:100%;padding:11px 13px;border:1.5px solid var(--br);border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);transition:border-color .18s;-webkit-appearance:none;appearance:none}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--g);background:#fff}
 .field textarea{resize:vertical;min-height:75px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.btn-p{width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background .18s}
-.btn-p:active{background:#1e4a15}
+.btn-p{width:100%;padding:14px;background:var(--g);color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer}
 .btn-p:disabled{background:#aaa;cursor:not-allowed}
-.app-preview{background:var(--green-pale);border-radius:10px;padding:13px 15px;margin-bottom:15px;border-left:3px solid var(--green)}
-.app-preview h4{font-size:13px;font-weight:600;color:var(--green);margin-bottom:6px}
+.app-preview{background:var(--gp);border-radius:10px;padding:13px 15px;margin-bottom:15px;border-left:3px solid var(--g)}
+.app-preview h4{font-size:13px;font-weight:600;color:var(--g);margin-bottom:6px}
 .app-preview p{font-size:12px;color:var(--mid);line-height:1.5}
-.incomp-warn{background:var(--red-pale);border-radius:7px;padding:8px 10px;margin-top:8px;font-size:11px;color:var(--red);font-weight:500}
+.incomp-warn{background:var(--rp);border-radius:7px;padding:8px 10px;margin-top:8px;font-size:11px;color:var(--r);font-weight:500}
+.fl-tentativa{display:none;background:var(--gp);border-radius:10px;padding:12px 14px;margin-bottom:15px;border-left:3px solid var(--g)}
+/* HISTORIAL */
 .hfil{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:12px 18px 4px}
 .hfil::-webkit-scrollbar{display:none}
-.chip{flex-shrink:0;padding:6px 13px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;background:var(--card);cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
-.chip.active{background:var(--green);border-color:var(--green);color:#fff}
+.chip{flex-shrink:0;padding:6px 13px;border:1.5px solid var(--br);border-radius:20px;font-size:12px;font-weight:500;background:var(--card);cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
+.chip.active{background:var(--g);border-color:var(--g);color:#fff}
 .hlist{padding:0 18px}
-.hcard{background:var(--card);border-radius:var(--r);padding:13px 15px;margin-bottom:9px;box-shadow:var(--shadow)}
+.hcard{background:var(--card);border-radius:var(--r14);padding:13px 15px;margin-bottom:9px;box-shadow:var(--sh)}
 .htop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .htitle2{font-weight:600;font-size:13px}
-.hdate2{font-family:'DM Mono',monospace;font-size:10px;color:var(--light);margin-top:2px}
+.hdate2{font-family:'DM Mono',monospace;font-size:10px;color:var(--lt);margin-top:2px}
 .hdetail{font-size:12px;color:var(--mid);margin-top:7px;line-height:1.5}
 .hactions{display:flex;align-items:center;gap:6px}
-.del-btn{background:none;border:none;cursor:pointer;color:var(--light);padding:3px;font-size:15px}
-.cos-sum{background:var(--card);margin:0 18px 14px;border-radius:var(--r);padding:15px;box-shadow:var(--shadow);border-left:4px solid var(--yellow)}
-.cos-sum h3{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--yellow-dk);margin-bottom:9px}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--lt);padding:3px;font-size:15px}
+/* COSECHA */
+.cos-sum{background:var(--card);margin:0 18px 14px;border-radius:var(--r14);padding:15px;box-shadow:var(--sh);border-left:4px solid var(--y)}
+.cos-sum h3{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--yd);margin-bottom:9px}
 .cgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;text-align:center}
-.cnum{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text)}
-.clbl{font-size:10px;color:var(--light)}
-.foto-btn{width:100%;padding:12px;border:2px dashed var(--border);border-radius:10px;background:var(--bg);cursor:pointer;font-size:14px;color:var(--mid);font-family:'DM Sans',sans-serif;text-align:center}
+.cnum{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--tx)}
+.clbl{font-size:10px;color:var(--lt)}
+/* FOTO */
+.foto-btn{width:100%;padding:12px;border:2px dashed var(--br);border-radius:10px;background:var(--bg);cursor:pointer;font-size:14px;color:var(--mid);font-family:'DM Sans',sans-serif;text-align:center}
 .foto-preview{width:100%;height:160px;object-fit:cover;border-radius:10px;margin-top:8px;display:none}
 .photo-thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;cursor:pointer}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal-img{max-width:100%;max-height:80vh;border-radius:12px}
 .modal-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.2);border:none;color:#fff;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer}
-.toast{position:fixed;top:75px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);z-index:999;opacity:0;transition:opacity .3s;white-space:nowrap}
+.toast{position:fixed;top:75px;left:50%;transform:translateX(-50%);background:var(--g);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);z-index:999;opacity:0;transition:opacity .3s;white-space:nowrap}
 .toast.show{opacity:1}
-.loading{display:flex;align-items:center;justify-content:center;padding:40px 20px;flex-direction:column;gap:10px;color:var(--light)}
-.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
+.loading{display:flex;align-items:center;justify-content:center;padding:40px 20px;flex-direction:column;gap:10px;color:var(--lt)}
+.spinner{width:32px;height:32px;border:3px solid var(--br);border-top-color:var(--g);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.empty{text-align:center;padding:36px 20px;color:var(--light)}
+.empty{text-align:center;padding:36px 20px;color:var(--lt)}
 .empty-ico{font-size:38px;margin-bottom:8px}
 .empty-txt{font-size:13px}
 </style>
@@ -153,10 +162,15 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 <header>
   <div class="hrow">
     <div><div class="htitle">🌵 Pitahaya Pro</div><div class="hsub">Finca María Cristina</div></div>
-    <div style="text-align:right"><div class="hdate" id="headerDate"></div><div id="sync-status" style="font-size:10px;margin-top:3px;font-weight:600;color:rgba(255,255,255,0.85)">☁️ En la nube</div></div>
+    <div style="text-align:right">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.65)" id="headerDate"></div>
+      <div id="sync-status" style="font-size:10px;margin-top:3px;font-weight:600;color:rgba(255,255,255,0.85)">☁️ En la nube</div>
+    </div>
   </div>
 </header>
 <main>
+
+<!-- DASHBOARD -->
 <div class="page active" id="page-dash">
   <div class="hero">
     <h2>Resumen General</h2>
@@ -174,12 +188,14 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
   <div class="alist" id="recentList"><div class="loading"><div class="spinner"></div></div></div>
 </div>
 
+<!-- LOTES -->
 <div class="page" id="page-lotes">
-  <div class="fhead"><h2>Resumen por Lote</h2><p>Ciclos activos y estado fenológico</p></div>
+  <div class="fhead"><h2>Resumen por Lote</h2><p>Ciclos activos y floraciones</p></div>
   <div class="lote-tabs" id="loteTabs"></div>
   <div id="lotePanels"></div>
 </div>
 
+<!-- REGISTRAR -->
 <div class="page" id="page-form">
   <div class="fhead"><h2>Nuevo Registro</h2><p>Selecciona el tipo de actividad</p></div>
   <div class="ftabs">
@@ -191,103 +207,94 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
     <button class="ftab" onclick="switchTab('cosecha',this)">🍎 Cosecha</button>
     <button class="ftab" onclick="switchTab('flores',this)">🌸 Flores</button>
   </div>
+
   <div class="fbody" id="tab-drench">
     <div class="field"><label>Fecha</label><input type="date" id="f-fecha"></div>
     <div class="field"><label>Lote</label><select id="f-lote" onchange="sugerirApp()"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
     <div id="app-sugerida"></div>
-    <div class="field"><label>Aplicación del programa</label><select id="f-app" onchange="autocompletarProductos('f-app','f-productos')"><option value="">Seleccionar...</option><option value="APP2">APP 2 — Botoneo P/K/Mg (Día 25)</option><option value="APP3">APP 3 — Botoneo Ca (Día 30)</option><option value="APP5">APP 5 — Llenado K (Día 50-55)</option><option value="APP6">APP 6 — Llenado Ca (Día 55-60)</option><option value="APP7">APP 7 — Engorde Ultrasol KP (Día 65-70)</option><option value="otro">Otra</option></select></div>
-    <div class="field"><label>Productos aplicados</label><textarea id="f-productos" placeholder="Ej: MKP 400g, Sulfato Mg 340g, Humax 170g..."></textarea></div>
+    <div class="field"><label>Aplicación del programa</label><select id="f-app" onchange="autocompletar('f-app','f-productos')"><option value="">Seleccionar...</option><option value="APP2">APP 2 — Botoneo P/K/Mg (Día 25)</option><option value="APP3">APP 3 — Botoneo Ca (Día 30)</option><option value="APP5">APP 5 — Llenado K (Día 50-55)</option><option value="APP6">APP 6 — Llenado Ca (Día 55-60)</option><option value="APP7">APP 7 — Engorde Ultrasol KP (Día 65-70)</option><option value="otro">Otra</option></select></div>
+    <div class="field"><label>Productos aplicados</label><textarea id="f-productos" placeholder="Ej: MKP 400g, Sulfato Mg 340g..."></textarea></div>
     <div class="frow"><div class="field"><label>Volumen (L)</label><input type="number" id="f-vol" placeholder="200"></div><div class="field"><label>Tandas</label><input type="number" id="f-tandas" placeholder="3"></div></div>
     <div class="field"><label>Foto</label><input type="file" id="f-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'f-fp')"><button class="foto-btn" onclick="document.getElementById('f-foto').click()">📷 Foto</button><img id="f-fp" class="foto-preview"></div>
-    <div class="field"><label>Observaciones</label><textarea id="f-obs" placeholder="Notas..."></textarea></div>
-    <button class="btn-p" onclick="guardar('drench')">✅ Guardar Registro</button>
+    <div class="field"><label>Observaciones</label><textarea id="f-obs"></textarea></div>
+    <button class="btn-p" onclick="guardar('drench')">✅ Guardar</button>
   </div>
+
   <div class="fbody" id="tab-foliar" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="fo-fecha"></div>
     <div class="field"><label>Lote</label><select id="fo-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
-    <div class="field"><label>Aplicación</label><select id="fo-app" onchange="autocompletarProductos('fo-app','fo-prod')"><option value="">Seleccionar...</option><option value="APP4">APP 4 — Pre-floración Ca/Zn/B (Día 40-45)</option><option value="APP4rep">APP 4 Repetición (7-10 días)</option><option value="otro">Foliar adicional</option></select></div>
+    <div class="field"><label>Aplicación</label><select id="fo-app" onchange="autocompletar('fo-app','fo-prod')"><option value="">Seleccionar...</option><option value="APP4">APP 4 — Pre-floración Ca/Zn/B (Día 40-45)</option><option value="APP4rep">APP 4 Repetición</option><option value="otro">Foliar adicional</option></select></div>
     <div class="field"><label>Producto</label><input type="text" id="fo-prod" placeholder="Ej: YaraVita Caltrac..."></div>
     <div class="frow"><div class="field"><label>Dosis (mL/L)</label><input type="text" id="fo-dosis" placeholder="2 mL/L"></div><div class="field"><label>Volumen (L)</label><input type="number" id="fo-vol" placeholder="200"></div></div>
-    <div class="field"><label>Hora aplicación</label><input type="time" id="fo-hora"></div>
+    <div class="field"><label>Hora</label><input type="time" id="fo-hora"></div>
     <div class="field"><label>Foto</label><input type="file" id="fo-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'fo-fp')"><button class="foto-btn" onclick="document.getElementById('fo-foto').click()">📷 Foto</button><img id="fo-fp" class="foto-preview"></div>
-    <div class="field"><label>Observaciones</label><textarea id="fo-obs" placeholder="Clima, hora..."></textarea></div>
-    <button class="btn-p" onclick="guardar('foliar')">✅ Guardar Registro</button>
+    <div class="field"><label>Observaciones</label><textarea id="fo-obs"></textarea></div>
+    <button class="btn-p" onclick="guardar('foliar')">✅ Guardar</button>
   </div>
+
   <div class="fbody" id="tab-edafico" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="ed-fecha"></div>
     <div class="field"><label>Lote</label><select id="ed-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
-    <div class="field"><label>Tipo de aplicación</label><select id="ed-tipo" onchange="autocompletarProductos('ed-tipo','ed-productos')"><option value="">Seleccionar...</option><option>APP 1 — Arranque (Alpha + Bioabor)</option><option>Granular incorporado al suelo</option><option>Materia orgánica / compost</option><option>Corrector de pH</option><option>Cal agrícola / dolomita</option><option>Otro corrector edáfico</option></select></div>
-    <div class="field"><label>Producto(s)</label><textarea id="ed-productos" placeholder="Ej: Alpha Acelerador 30g/poste + Bioabor 100g/poste"></textarea></div>
-    <div class="frow"><div class="field"><label>Dosis/poste</label><input type="text" id="ed-dosis" placeholder="30g"></div><div class="field"><label>Total aplicado</label><input type="text" id="ed-total" placeholder="9 kg"></div></div>
-    <div class="field"><label>Modo de incorporación</label><select id="ed-modo"><option value="">Seleccionar...</option><option>Hueco 5-8cm a 15-20cm del tallo</option><option>Incorporado superficial</option><option>Banda al pie del poste</option><option>Drench correctivo</option><option>Otro</option></select></div>
+    <div class="field"><label>Tipo</label><select id="ed-tipo" onchange="autocompletar('ed-tipo','ed-productos')"><option value="">Seleccionar...</option><option value="APP 1 — Arranque (Alpha + Bioabor)">APP 1 — Arranque (Alpha + Bioabor)</option><option>Granular incorporado</option><option>Materia orgánica / compost</option><option>Corrector de pH</option><option>Cal agrícola / dolomita</option><option>Otro</option></select></div>
+    <div class="field"><label>Productos</label><textarea id="ed-productos" placeholder="Ej: Alpha Acelerador 30g/poste + Bioabor 100g/poste"></textarea></div>
+    <div class="frow"><div class="field"><label>Dosis/poste</label><input type="text" id="ed-dosis" placeholder="30g"></div><div class="field"><label>Total</label><input type="text" id="ed-total" placeholder="9 kg"></div></div>
+    <div class="field"><label>Modo</label><select id="ed-modo"><option value="">Seleccionar...</option><option>Hueco 5-8cm a 15-20cm del tallo</option><option>Incorporado superficial</option><option>Banda al pie del poste</option><option>Drench correctivo</option><option>Otro</option></select></div>
     <div class="field"><label>Foto</label><input type="file" id="ed-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'ed-fp')"><button class="foto-btn" onclick="document.getElementById('ed-foto').click()">📷 Foto</button><img id="ed-fp" class="foto-preview"></div>
-    <div class="field"><label>Observaciones</label><textarea id="ed-obs" placeholder="Condición del suelo..."></textarea></div>
-    <button class="btn-p" onclick="guardar('edafico')">✅ Guardar Registro</button>
+    <div class="field"><label>Observaciones</label><textarea id="ed-obs"></textarea></div>
+    <button class="btn-p" onclick="guardar('edafico')">✅ Guardar</button>
   </div>
+
   <div class="fbody" id="tab-fitosan" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="ft-fecha"></div>
     <div class="field"><label>Lote</label><select id="ft-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
     <div class="field"><label>Tipo de problema</label><select id="ft-tipo"><option value="">Seleccionar...</option><option>Insecto — masticador</option><option>Insecto — chupador</option><option>Ácaro</option><option>Hongo / enfermedad</option><option>Bacteria</option><option>Preventivo</option></select></div>
-    <div class="field"><label>Plaga o enfermedad</label><input type="text" id="ft-plaga" placeholder="Ej: trips, cochinilla, antracnosis..."></div>
-    <div class="field"><label>Producto comercial</label><input type="text" id="ft-producto" placeholder="Ej: Engeo, Mancozeb, Sulfocal..."></div>
+    <div class="field"><label>Plaga o enfermedad</label><input type="text" id="ft-plaga" placeholder="Ej: trips, cochinilla..."></div>
+    <div class="field"><label>Producto</label><input type="text" id="ft-producto" placeholder="Ej: Engeo, Mancozeb..."></div>
     <div class="frow"><div class="field"><label>Dosis</label><input type="text" id="ft-dosis" placeholder="1cc/L"></div><div class="field"><label>Volumen (L)</label><input type="number" id="ft-vol" placeholder="20"></div></div>
-    <div class="field"><label>Modo de aplicación</label><select id="ft-modo"><option value="">Seleccionar...</option><option>Foliar — bomba mochila</option><option>Drench al suelo</option><option>Trampa / cebo</option><option>Aplicación localizada</option></select></div>
-    <div class="field"><label>Período de carencia (días)</label><input type="number" id="ft-carencia" placeholder="7"></div>
-    <div class="field"><label>Foto del problema</label><input type="file" id="ft-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'ft-fp')"><button class="foto-btn" onclick="document.getElementById('ft-foto').click()">📷 Foto problema / aplicación</button><img id="ft-fp" class="foto-preview"></div>
-    <div class="field"><label>Observaciones</label><textarea id="ft-obs" placeholder="Severidad, postes afectados..."></textarea></div>
-    <button class="btn-p" onclick="guardar('fitosan')">✅ Guardar Registro</button>
+    <div class="field"><label>Modo</label><select id="ft-modo"><option value="">Seleccionar...</option><option>Foliar — bomba mochila</option><option>Drench al suelo</option><option>Trampa / cebo</option><option>Aplicación localizada</option></select></div>
+    <div class="field"><label>Carencia (días)</label><input type="number" id="ft-carencia" placeholder="7"></div>
+    <div class="field"><label>Foto</label><input type="file" id="ft-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'ft-fp')"><button class="foto-btn" onclick="document.getElementById('ft-foto').click()">📷 Foto</button><img id="ft-fp" class="foto-preview"></div>
+    <div class="field"><label>Observaciones</label><textarea id="ft-obs"></textarea></div>
+    <button class="btn-p" onclick="guardar('fitosan')">✅ Guardar</button>
   </div>
+
   <div class="fbody" id="tab-labor" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="l-fecha"></div>
     <div class="field"><label>Lote</label><select id="l-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
     <div class="field"><label>Tipo de labor</label><select id="l-tipo"><option value="">Seleccionar...</option><option>Poda de formación</option><option>Poda sanitaria</option><option>Deshierba / limpieza</option><option>Tutorado / amarre</option><option>Encendido de luces (inducción)</option><option>Apagado de luces</option><option>Revisión sistema de riego</option><option>Instalación de infraestructura</option><option>Otra</option></select></div>
     <div class="frow"><div class="field"><label>Jornales</label><input type="number" id="l-jorn" placeholder="2"></div><div class="field"><label>Costo ($)</label><input type="number" id="l-costo" placeholder="0.00" step="0.01"></div></div>
     <div class="field"><label>Foto</label><input type="file" id="l-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'l-fp')"><button class="foto-btn" onclick="document.getElementById('l-foto').click()">📷 Foto</button><img id="l-fp" class="foto-preview"></div>
-    <div class="field"><label>Observaciones</label><textarea id="l-obs" placeholder="Detalles..."></textarea></div>
-    <button class="btn-p" onclick="guardar('labor')">✅ Guardar Registro</button>
+    <div class="field"><label>Observaciones</label><textarea id="l-obs"></textarea></div>
+    <button class="btn-p" onclick="guardar('labor')">✅ Guardar</button>
   </div>
+
   <div class="fbody" id="tab-cosecha" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="c-fecha"></div>
     <div class="field"><label>Lote</label><select id="c-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Todos los lotes productivos</option></select></div>
     <div class="frow"><div class="field"><label>Cantidad (kg)</label><input type="number" id="c-kg" placeholder="0" step="0.5"></div><div class="field"><label>Precio/kg ($)</label><input type="number" id="c-precio" placeholder="0.00" step="0.01"></div></div>
-    <div class="field"><label>Calibre / calidad</label><select id="c-cal"><option value="">Seleccionar...</option><option>Primera (+500g)</option><option>Segunda (300-500g)</option><option>Tercera (-300g)</option><option>Mixto</option></select></div>
+    <div class="field"><label>Calidad</label><select id="c-cal"><option value="">Seleccionar...</option><option>Primera (+500g)</option><option>Segunda (300-500g)</option><option>Tercera (-300g)</option><option>Mixto</option></select></div>
     <div class="field"><label>Destino</label><input type="text" id="c-dest" placeholder="Mercado Manta..."></div>
     <div class="field"><label>Foto</label><input type="file" id="c-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'c-fp')"><button class="foto-btn" onclick="document.getElementById('c-foto').click()">📷 Foto</button><img id="c-fp" class="foto-preview"></div>
-    <div class="field"><label>Observaciones</label><textarea id="c-obs" placeholder="Estado de la fruta..."></textarea></div>
-    <button class="btn-p" onclick="guardar('cosecha')">✅ Guardar Registro</button>
+    <div class="field"><label>Observaciones</label><textarea id="c-obs"></textarea></div>
+    <button class="btn-p" onclick="guardar('cosecha')">✅ Guardar</button>
   </div>
 
-  <!-- FLORES -->
   <div class="fbody" id="tab-flores" style="display:none">
-    <div class="field"><label>Fecha de floración</label><input type="date" id="fl-fecha" onchange="calcularCosechaTentativa()"></div>
-    <div class="field"><label>Lote</label>
-      <select id="fl-lote">
-        <option value="">Seleccionar...</option>
-        <option>Lote 1 — 300 postes</option>
-        <option>Lote 2 — 300 postes</option>
-        <option>Lote 3 — 430 postes</option>
-      </select>
-    </div>
-    <div class="field"><label>Número de flores</label>
-      <input type="number" id="fl-num" placeholder="Ej: 500" oninput="calcularCosechaTentativa()">
-    </div>
-    <div id="fl-tentativa" style="display:none;background:var(--green-pale);border-radius:10px;padding:12px 14px;margin-bottom:15px;border-left:3px solid var(--green)">
-      <div style="font-size:12px;font-weight:600;color:var(--green)">📅 Cosecha tentativa</div>
-      <div id="fl-tentativa-fecha" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:600;margin-top:4px;color:var(--text)"></div>
+    <div class="field"><label>Fecha de floración</label><input type="date" id="fl-fecha" onchange="calcTentativa()"></div>
+    <div class="field"><label>Lote</label><select id="fl-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option></select></div>
+    <div class="field"><label>Número de flores</label><input type="number" id="fl-num" placeholder="500" oninput="calcTentativa()"></div>
+    <div class="fl-tentativa" id="fl-tentativa">
+      <div style="font-size:12px;font-weight:600;color:var(--g)">📅 Cosecha tentativa</div>
+      <div id="fl-tent-fecha" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:600;margin-top:4px"></div>
       <div style="font-size:11px;color:var(--mid);margin-top:2px">25-30 días después de la floración</div>
     </div>
-    <div class="field"><label>Foto</label>
-      <input type="file" id="fl-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'fl-fp')">
-      <button class="foto-btn" onclick="document.getElementById('fl-foto').click()">📷 Foto de la floración</button>
-      <img id="fl-fp" class="foto-preview">
-    </div>
-    <div class="field"><label>Observaciones</label>
-      <textarea id="fl-obs" placeholder="Calidad de flores, distribución en el lote..."></textarea>
-    </div>
-    <button class="btn-p" onclick="guardar('flores')">✅ Guardar Registro</button>
+    <div class="field"><label>Foto</label><input type="file" id="fl-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'fl-fp')"><button class="foto-btn" onclick="document.getElementById('fl-foto').click()">📷 Foto</button><img id="fl-fp" class="foto-preview"></div>
+    <div class="field"><label>Observaciones</label><textarea id="fl-obs"></textarea></div>
+    <button class="btn-p" onclick="guardar('flores')">✅ Guardar</button>
   </div>
 </div>
 
+<!-- HISTORIAL -->
 <div class="page" id="page-hist">
   <div class="fhead"><h2>Historial</h2><p>Todos los registros</p></div>
   <div class="hfil">
@@ -303,32 +310,29 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
   <div class="hlist" id="histList"><div class="loading"><div class="spinner"></div></div></div>
 </div>
 
+<!-- COSECHA -->
 <div class="page" id="page-cos">
-  <div class="fhead" style="background:var(--yellow-dk)"><h2>📊 Cosecha</h2><p>Totales acumulados</p></div>
+  <div class="fhead" style="background:var(--yd)"><h2>📊 Cosecha</h2><p>Totales acumulados</p></div>
   <div id="cosStats" style="padding:18px"><div class="loading"><div class="spinner"></div></div></div>
 </div>
+
 </main>
 
 <nav>
   <button class="active" onclick="showPage('dash',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    <span>Inicio</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Inicio</span>
   </button>
   <button onclick="showPage('lotes',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    <span>Lotes</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Lotes</span>
   </button>
   <button onclick="showPage('form',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    <span>Registrar</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span>Registrar</span>
   </button>
   <button onclick="showPage('hist',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v10l4 4"/><circle cx="12" cy="12" r="9"/></svg>
-    <span>Historial</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v10l4 4"/><circle cx="12" cy="12" r="9"/></svg><span>Historial</span>
   </button>
   <button onclick="showPage('cos',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-    <span>Cosecha</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg><span>Cosecha</span>
   </button>
 </nav>
 <div class="toast" id="toast"></div>
@@ -338,317 +342,356 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-const firebaseConfig={apiKey:"AIzaSyAD6EKgG10V-nRC8b8B43Z82Z_PlWpaWyQ",authDomain:"pitahaya-finca.firebaseapp.com",projectId:"pitahaya-finca",storageBucket:"pitahaya-finca.firebasestorage.app",messagingSenderId:"997510240139",appId:"1:997510240139:web:3695318a3dd03c4046418e"};
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
-const storage=getStorage(app);
+const fb = initializeApp({apiKey:"AIzaSyAD6EKgG10V-nRC8b8B43Z82Z_PlWpaWyQ",authDomain:"pitahaya-finca.firebaseapp.com",projectId:"pitahaya-finca",storageBucket:"pitahaya-finca.firebasestorage.app",messagingSenderId:"997510240139",appId:"1:997510240139:web:3695318a3dd03c4046418e"});
+const db = getFirestore(fb);
+const storage = getStorage(fb);
 
-const LOTES=[{id:'lote1',nombre:'Lote 1',postes:300,tipo:'productivo'},{id:'lote2',nombre:'Lote 2',postes:300,tipo:'productivo'},{id:'lote3',nombre:'Lote 3',postes:430,tipo:'productivo'},{id:'lote4',nombre:'Lote 4',postes:3270,tipo:'nuevo'}];
-const PROGRAMA=[
-  {id:'APP1',dia:0,nombre:'APP 1 — Arranque',modo:'Suelo granular',productos:'Alpha Acelerador 30g/poste + Bioabor 100g/poste',nota:'Al prender luces. Hueco 5-8cm a 15-20cm del tallo'},
-  {id:'APP2',dia:25,nombre:'APP 2 — Botoneo P/K/Mg',modo:'Drench 2L/poste',productos:'Ác. fosfórico 50cc + MKP 400g + Sulf. Mg 340g + Humax 170g',nota:'5d antes apagar luces. Ácido primero'},
+const LOTES = [
+  {id:'lote1',nombre:'Lote 1',postes:300,tipo:'productivo'},
+  {id:'lote2',nombre:'Lote 2',postes:300,tipo:'productivo'},
+  {id:'lote3',nombre:'Lote 3',postes:430,tipo:'productivo'},
+  {id:'lote4',nombre:'Lote 4',postes:3270,tipo:'nuevo'},
+];
+
+const PROGRAMA = [
+  {id:'APP1',dia:0,nombre:'APP 1 — Arranque',modo:'Suelo granular',productos:'Alpha Acelerador 30g/poste + Bioabor 100g/poste',nota:'Al prender luces. Hueco 5-8cm'},
+  {id:'APP2',dia:25,nombre:'APP 2 — Botoneo P/K/Mg',modo:'Drench 2L/poste',productos:'Ác.fosfórico 50cc + MKP 400g + Sulf.Mg 340g + Humax 170g',nota:'5d antes apagar luces. Ácido primero'},
   {id:'APP3',dia:30,nombre:'APP 3 — Botoneo Ca',modo:'Drench 2L/poste',productos:'Calcinit Bio 340g — SOLO',nota:'Al apagar luces. NUNCA mezclar'},
-  {id:'APP4',dia:42,nombre:'APP 4 — Pre-floración foliar',modo:'Foliar 0.3L/poste',productos:'YaraVita Caltrac 400mL/tanque 200L',nota:'⚠️ ANTES 8am. Botón grande cerrado. REPETIR 7-10 días después con la misma dosis'},
+  {id:'APP4',dia:42,nombre:'APP 4 — Pre-floración foliar',modo:'Foliar 0.3L/poste',productos:'YaraVita Caltrac 400mL/tanque 200L',nota:'⚠️ ANTES 8am. REPETIR 7-10d después'},
   {id:'APP5',dia:53,nombre:'APP 5 — Llenado K',modo:'Drench 2L/poste',productos:'Azutec 600g — SOLO',nota:'Fruto cuajado creciendo'},
   {id:'APP6',dia:58,nombre:'APP 6 — Llenado Ca',modo:'Drench 2L/poste',productos:'Calcinit Bio 230g — SOLO',nota:'5d después APP5. NUNCA mezclar'},
   {id:'APP7',dia:67,nombre:'APP 7 — Engorde final',modo:'Drench 2L/poste',productos:'Ultrasol KP 400g — SOLO',nota:'Fruto en tamaño final'},
 ];
-const CICLO_TOTAL=85;
-window._registros=[];window._filtroActivo='todos';window._fotoFiles={};
 
-window.addEventListener('DOMContentLoaded',async()=>{
-  const today=new Date().toISOString().split('T')[0];
-  document.querySelectorAll('input[type="date"]').forEach(el=>el.value=today);
-  document.getElementById('headerDate').textContent=new Date().toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'});
-  await cargarRegistros();
-  renderDash();renderLotes();
+const CICLO = 85;
+const PRODUCTS = {
+  'APP2':'Ácido fosfórico 50cc (PRIMERO) + MKP 400g + Sulfato Mg 340g + Humax 170g — Tanque 200L, 3 tandas',
+  'APP3':'Calcinit Bio 340g — Tanque 200L, 3 tandas — SOLO, nunca mezclar',
+  'APP5':'Azutec 600g — Tanque 200L, 3 tandas — SOLO',
+  'APP6':'Calcinit Bio 230g — Tanque 200L, 3 tandas — SOLO, nunca mezclar',
+  'APP7':'Ultrasol KP 400g — Tanque 200L, 3 tandas — SOLO',
+  'APP4':'YaraVita Caltrac 400mL — Tanque 200L — ANTES de las 8am',
+  'APP4rep':'YaraVita Caltrac 400mL — Tanque 200L — ANTES de las 8am (repetición)',
+  'APP 1 — Arranque (Alpha + Bioabor)':'Alpha Acelerador 30g/poste (15g cada lado) + Bioabor 100g/poste — Para 300 postes: 9kg Alpha + 30kg Bioabor',
+};
+
+window._regs = [];
+window._filtro = 'todos';
+window._fotos = {};
+
+// INIT
+window.addEventListener('DOMContentLoaded', async () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.querySelectorAll('input[type="date"]').forEach(el => el.value = today);
+  document.getElementById('headerDate').textContent = new Date().toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'});
+  updateOnlineStatus();
+  window.addEventListener('online', updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+  await cargar();
+  renderDash();
+  renderLotes();
 });
 
-async function cargarRegistros(){
-  try{const q=query(collection(db,'registros'),orderBy('timestamp','desc'));const snap=await getDocs(q);window._registros=snap.docs.map(d=>({id:d.id,...d.data()}));}
-  catch(e){window._registros=[];}
+// FIREBASE
+async function cargar() {
+  try {
+    const q = query(collection(db,'registros'), orderBy('timestamp','desc'));
+    const snap = await getDocs(q);
+    window._regs = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  } catch(e) { window._regs = []; }
 }
 
-function renderDash(){
-  document.getElementById('d-registros').textContent=window._registros.length;
-  const kg=window._registros.filter(r=>r.tipo==='cosecha').reduce((s,r)=>s+(r.kg||0),0);
-  document.getElementById('d-cosecha').textContent=kg.toFixed(1)+' kg';
-  const c=document.getElementById('recentList');
-  const recent=window._registros.slice(0,6);
-  if(!recent.length){c.innerHTML=`<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Sin registros aún.</div></div>`;}
-  else{c.innerHTML=recent.map(r=>actCardHTML(r)).join('');}
+// HELPERS
+function fmt(f) {
+  if(!f) return '—';
+  const [y,m,d] = f.split('-');
+  return d+' '+['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][parseInt(m)-1]+' '+y;
+}
+function fmtOffset(fecha, dias) {
+  const d = new Date(fecha); d.setDate(d.getDate()+dias);
+  return d.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+}
+function tipoConf(t) {
+  return {
+    drench:{ico:'💧',label:'Drench',badge:'bb',bg:'var(--bp)'},
+    foliar:{ico:'🌿',label:'Foliar',badge:'bg',bg:'var(--gp)'},
+    edafico:{ico:'🪱',label:'Edáfico',badge:'bo',bg:'var(--op)'},
+    fitosan:{ico:'🐛',label:'Fitosanitario',badge:'bp2',bg:'var(--pp)'},
+    labor:{ico:'🔧',label:'Labor',badge:'by',bg:'#fef9e7'},
+    flores:{ico:'🌸',label:'Floración',badge:'bg',bg:'#fce4f3'},
+    cosecha:{ico:'🍎',label:'Cosecha',badge:'br2',bg:'var(--rp)'},
+  }[t] || {ico:'📋',label:t,badge:'bg',bg:'#eee'};
+}
+
+// ONLINE STATUS
+function updateOnlineStatus() {
+  const el = document.getElementById('sync-status');
+  if(!el) return;
+  el.textContent = navigator.onLine ? '☁️ En la nube' : '📱 Sin señal';
+  el.style.color = navigator.onLine ? 'rgba(255,255,255,0.85)' : '#ffd700';
+}
+
+// OFFLINE QUEUE
+const QK = 'pitahaya_q';
+function getQ() { try{return JSON.parse(localStorage.getItem(QK)||'[]');}catch(e){return[];} }
+function saveQ(q) { localStorage.setItem(QK,JSON.stringify(q)); }
+async function syncQ() {
+  const q = getQ(); if(!q.length) return;
+  const pending = [...q]; saveQ([]);
+  let ok = 0;
+  for(const r of pending) {
+    try { const {_ts,...d}=r; await addDoc(collection(db,'registros'),{...d,timestamp:serverTimestamp()}); ok++; }
+    catch(e) { const rem=getQ(); rem.push(r); saveQ(rem); }
+  }
+  if(ok>0) { await cargar(); renderDash(); renderLotes(); showToast('✅ '+ok+' registros sincronizados'); }
+}
+
+// DASHBOARD
+function renderDash() {
+  document.getElementById('d-registros').textContent = window._regs.length;
+  const kg = window._regs.filter(r=>r.tipo==='cosecha').reduce((s,r)=>s+(r.kg||0),0);
+  document.getElementById('d-cosecha').textContent = kg.toFixed(1)+' kg';
+  const recent = window._regs.slice(0,6);
+  const c = document.getElementById('recentList');
+  if(!recent.length) { c.innerHTML='<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Sin registros aún.</div></div>'; }
+  else { c.innerHTML = recent.map(r => {
+    const cf = tipoConf(r.tipo);
+    return '<div class="acard"><div class="aico" style="background:'+cf.bg+'">'+cf.ico+'</div><div class="abody"><div class="atitle">'+cf.label+'</div><div class="ameta">'+fmt(r.fecha)+' · '+(r.lote||'—')+'</div>'+(r.detalle?'<div class="ameta" style="margin-top:2px">'+r.detalle+'</div>':'')+'</div>'+(r.fotoURL?'<img src="'+r.fotoURL+'" class="photo-thumb" onclick="verFoto(\''+r.fotoURL+'\')">':'')+'</div>';
+  }).join(''); }
   renderDashExtra();
 }
 
-function actCardHTML(r){
-  const c=tipoConf(r.tipo);
-  return `<div class="acard"><div class="aico" style="background:${c.bg}">${c.ico}</div><div class="abody"><div class="atitle">${c.label}</div><div class="ameta">${fmtFecha(r.fecha)} · ${r.lote||'—'}</div>${r.detalle?`<div class="ameta" style="margin-top:2px">${r.detalle}</div>`:''}</div>${r.fotoURL?`<img src="${r.fotoURL}" class="photo-thumb" onclick="verFoto('${r.fotoURL}')">`:''}
-  </div>`;
-}
-
-function renderLotes(){
-  const tabsEl=document.getElementById('loteTabs');
-  const panelsEl=document.getElementById('lotePanels');
-  tabsEl.innerHTML=LOTES.map((l,i)=>`<button class="ltab${i===0?' active':''}" onclick="selectLote('${l.id}',this)">${l.nombre}</button>`).join('');
-  panelsEl.innerHTML=LOTES.map((l,i)=>`<div class="lote-panel${i===0?' active':''}" id="panel-${l.id}">${buildLotePanel(l)}</div>`).join('');
-}
-
-function buildFloraciones(lote, regs, diaInicio) {
-  const hoy = new Date();
-  const floraciones = regs.filter(r=>
-    r.tipo==='flores' && r.lote && r.lote.includes(lote.nombre) &&
-    new Date(r.fecha) >= diaInicio
-  ).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
-
-  console.log('buildFloraciones called for', lote.nombre);
-  console.log('floraciones found:', floraciones.length);
-  if(floraciones.length > 0) {
-    console.log('primera flor:', JSON.stringify(floraciones[0]));
-  }
-
-  let html = '<div style="margin:0 18px 12px">';
-  html += '<div style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;padding:12px 0 8px">🌸 Floraciones del ciclo</div>';
-
-  if(!floraciones.length) {
-    html += '<div style="font-size:12px;color:#999;padding-bottom:8px">Sin floraciones registradas aún.</div>';
-    html += '</div>';
-    return html;
-  }
-
-  floraciones.forEach((fl, idx) => {
-    const fechaFlor = new Date(fl.fecha);
-    const ft1 = new Date(fl.cosechaTentativa1 || fl.fecha);
-    const ft2 = new Date(fl.cosechaTentativa2 || fl.fecha);
-    const diasFruto = Math.floor((ft1 - hoy) / 86400000);
-
-    const fito1 = new Date(fechaFlor); fito1.setDate(fito1.getDate()+4);
-    const fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
-    const fito3 = new Date(fechaFlor); fito3.setDate(fito3.getDate()+15);
-
-    const f1 = fl.fito1_hecho ? true : false;
-    const f2 = fl.fito2_hecho ? true : false;
-    const f3 = fl.fito3_hecho ? true : false;
-
-    const cosV = regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1&&new Date(r.fecha)<=new Date(ft2.getTime()+5*86400000));
-
-    let est, col;
-    if(cosV){est='Cosechada';col='#2d6a1f';}
-    else if(diasFruto<0){est='En cosecha';col='#c0392b';}
-    else if(diasFruto<=5){est=diasFruto+'d para cosechar';col='#c49a0a';}
-    else{est=diasFruto+'d para cosechar';col='#999';}
-
-    const fs1 = fito1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-    const fs2 = fito2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-    const fs3 = fito3.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-    const dd1 = Math.floor((fito1-hoy)/86400000);
-    const dd2 = Math.floor((fito2-hoy)/86400000);
-    const dd3 = Math.floor((fito3-hoy)/86400000);
-
-    const btnVerde = 'background:#2d6a1f;color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer';
-    const btnGris = 'background:#fff;color:#555;border:1.5px solid #ddd;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer';
-    const btnRojo = 'background:#fff;color:#c0392b;border:1.5px solid #c0392b;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer';
-
-    const flId = String(fl.id || '');
-    const ct1 = fl.cosechaTentativa1 || '';
-    const ct2 = fl.cosechaTentativa2 || '';
-
-    html += '<div style="background:#fff;border-radius:10px;padding:12px;margin-bottom:10px;border-left:3px solid #e91e8c;box-shadow:0 2px 8px rgba(0,0,0,0.06)">';
-    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">';
-    html += '<div><div style="font-size:13px;font-weight:700">Ola '+(idx+1)+' — '+fmtFecha(fl.fecha)+'</div>';
-    html += '<div style="font-size:14px;font-weight:700;color:#e91e8c;margin-top:2px">'+(fl.numFlores||0)+' flores</div></div>';
-    html += '<div style="text-align:right"><div style="font-size:12px;font-weight:600;color:'+col+'">'+est+'</div>';
-    html += '<div style="font-size:10px;color:#999;margin-top:2px">'+(ct1?fmtFecha(ct1):'—')+' — '+(ct2?fmtFecha(ct2):'—')+'</div></div></div>';
-    if(cosV) html += '<div style="font-size:11px;color:#2d6a1f;margin-bottom:8px">'+cosV.kg+' kg cosechados</div>';
-
-    html += '<div style="border-top:1px dashed #e0dbd0;padding-top:8px">';
-    html += '<div style="font-size:10px;font-weight:700;color:#7d3c98;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🐛 Fitosanitario</div>';
-
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f4f1eb">';
-    html += '<div style="font-size:12px"><b>Aplic. 1</b> '+fs1+' <span style="color:#aaa;font-size:10px">(día 4)</span></div>';
-    html += '<button style="'+(f1?btnVerde:(dd1<=0?btnRojo:btnGris))+'" onclick="toggleFito(\''+flId+'\',\'fito1_hecho\','+(f1?'false':'true')+')">'+(f1?'✅ Hecho':'❌ Pendiente')+'</button>';
-    html += '</div>';
-
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f4f1eb">';
-    html += '<div style="font-size:12px"><b>Aplic. 2</b> '+fs2+' <span style="color:#aaa;font-size:10px">(día 7)</span></div>';
-    html += '<button style="'+(f2?btnVerde:(dd2<=0?btnRojo:btnGris))+'" onclick="toggleFito(\''+flId+'\',\'fito2_hecho\','+(f2?'false':'true')+')">'+(f2?'✅ Hecho':'❌ Pendiente')+'</button>';
-    html += '</div>';
-
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0">';
-    html += '<div style="font-size:12px"><b>Aplic. 3</b> '+fs3+' <span style="color:#aaa;font-size:10px">(día 15)</span></div>';
-    html += '<button style="'+(f3?btnVerde:(dd3<=0?btnRojo:btnGris))+'" onclick="toggleFito(\''+flId+'\',\'fito3_hecho\','+(f3?'false':'true')+')">'+(f3?'✅ Hecho':'❌ Pendiente')+'</button>';
-    html += '</div>';
-
-    html += '</div></div>';
+function renderDashExtra() {
+  const regs = window._regs; const hoy = new Date();
+  let alertas = [];
+  LOTES.filter(l=>l.tipo==='productivo').forEach(lote => {
+    const enc = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
+    if(!enc) return;
+    const dI = new Date(enc.fecha);
+    PROGRAMA.forEach(ap => {
+      const fad = new Date(dI); fad.setDate(fad.getDate()+ap.dia);
+      const dd = Math.floor((fad-hoy)/86400000);
+      const reg = regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&((r.appPrograma&&r.appPrograma.includes(ap.id))||(r.tipoAplicacion&&r.tipoAplicacion.includes(ap.id)))&&new Date(r.fecha)>=dI);
+      if(!reg&&dd>=-1&&dd<=3) alertas.push({lote:lote.nombre,app:ap.nombre,dd,urgente:dd<=0});
+    });
+    regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI).forEach((fl,fi) => {
+      const ft1 = new Date(fl.cosechaTentativa1||fl.fecha);
+      const dd = Math.floor((ft1-hoy)/86400000);
+      const cos = regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1);
+      if(!cos&&dd>=-3&&dd<=3) alertas.push({lote:lote.nombre,app:'🍎 Cosecha Ola '+(fi+1)+' — '+fl.numFlores+' flores',dd,urgente:dd<=0});
+      const fechaFlor = new Date(fl.fecha);
+      [[4,'Aplic.1'],[7,'Aplic.2'],[15,'Aplic.3']].forEach(([d,n]) => {
+        const fd = new Date(fechaFlor); fd.setDate(fd.getDate()+d);
+        const ddf = Math.floor((fd-hoy)/86400000);
+        const campo = n==='Aplic.1'?'fito1_hecho':n==='Aplic.2'?'fito2_hecho':'fito3_hecho';
+        if(!fl[campo]&&ddf>=-1&&ddf<=2) alertas.push({lote:lote.nombre,app:'🐛 '+n+' Ola '+(fi+1),dd:ddf,urgente:ddf<=0});
+      });
+    });
   });
+  const ae = document.getElementById('dash-alertas');
+  ae.innerHTML = alertas.length ? '<div style="margin:0 18px 12px"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:17px;color:var(--r);padding:14px 0 8px;letter-spacing:.5px">⚠️ Alertas del Día</div>'+alertas.map(a=>'<div style="background:'+(a.urgente?'var(--rp)':'#fef9e7')+';border-radius:10px;padding:10px 14px;margin-bottom:7px;border-left:3px solid '+(a.urgente?'var(--r)':'var(--y)')+'"><div style="font-size:12px;font-weight:600;color:'+(a.urgente?'var(--r)':'var(--yd)')+'">'+a.lote+'</div><div style="font-size:13px;font-weight:600;margin-top:2px">'+a.app+'</div><div style="font-size:11px;color:var(--mid);margin-top:2px">'+(a.dd<0?'Hace '+Math.abs(a.dd)+'d sin registrar':a.dd===0?'HOY':'En '+a.dd+'d')+'</div></div>').join('')+'</div>' : '';
 
+  const le = document.getElementById('dash-lotes-estado');
+  let lh = '<div style="margin:0 18px 12px"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:17px;color:var(--g);padding:4px 0 8px;letter-spacing:.5px">🌱 Estado de Lotes</div>';
+  LOTES.forEach(lote => {
+    if(lote.tipo==='nuevo'){lh+='<div style="background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:7px;box-shadow:var(--sh);display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600">'+lote.nombre+'</span><span class="badge by">Vegetativo</span></div>';return;}
+    const enc = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
+    if(!enc){lh+='<div style="background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:7px;box-shadow:var(--sh);display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600">'+lote.nombre+'</span><span class="badge by">Sin ciclo</span></div>';return;}
+    const dI=new Date(enc.fecha);const da=Math.floor((hoy-dI)/86400000);
+    const ap=PROGRAMA.find(a=>{const fad=new Date(dI);fad.setDate(fad.getDate()+a.dia);const dd=Math.floor((fad-hoy)/86400000);const reg=regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&((r.appPrograma&&r.appPrograma.includes(a.id))||(r.tipoAplicacion&&r.tipoAplicacion.includes(a.id)))&&new Date(r.fecha)>=dI);return!reg&&dd>=-3;});
+    const dd2=ap?Math.floor((new Date(dI.getTime()+(ap.dia*86400000))-hoy)/86400000):null;
+    const al=ap?(dd2<=0?ap.id+' HOY ⚠️':dd2<=3?ap.id+' en '+dd2+'d ⚡':ap.id+' en '+dd2+'d'):'Ciclo completo ✅';
+    const ac=dd2<=0?'var(--r)':dd2<=3?'var(--yd)':'var(--mid)';
+    lh+='<div style="background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:7px;box-shadow:var(--sh);display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">'+lote.nombre+'</div><div style="font-size:11px;color:var(--lt)">Día '+da+' del ciclo</div></div><div style="font-size:11px;font-weight:600;color:'+ac+';text-align:right">'+al+'</div></div>';
+  });
+  le.innerHTML = lh+'</div>';
+
+  const ce = document.getElementById('dash-cosechas-proximas');
+  let citems = [];
+  LOTES.filter(l=>l.tipo==='productivo').forEach(lote=>{
+    const enc=regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
+    if(!enc) return;
+    const dI=new Date(enc.fecha);
+    regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI).forEach((fl,i)=>{
+      const ft1=new Date(fl.cosechaTentativa1||fl.fecha);const ft2=new Date(fl.cosechaTentativa2||fl.fecha);
+      const dd=Math.floor((ft1-hoy)/86400000);
+      const cos=regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1&&new Date(r.fecha)<=new Date(ft2.getTime()+5*86400000));
+      if(!cos) citems.push({lote:lote.nombre,flores:fl.numFlores,ft1,ft2,dd,i});
+    });
+  });
+  citems.sort((a,b)=>a.dd-b.dd);
+  ce.innerHTML = citems.length ? '<div style="margin:0 18px 12px"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:17px;color:var(--yd);padding:4px 0 8px;letter-spacing:.5px">🍎 Próximas Cosechas</div>'+citems.map(c=>'<div style="background:var(--card);border-radius:10px;padding:11px 14px;margin-bottom:7px;box-shadow:var(--sh);border-left:3px solid '+(c.dd<=0?'var(--r)':c.dd<=5?'var(--y)':'var(--br)')+'"><div style="display:flex;justify-content:space-between"><div><div style="font-size:12px;font-weight:600;color:var(--mid)">'+c.lote+' · Ola '+(c.i+1)+'</div><div style="font-size:14px;font-weight:700;color:#e91e8c">🌸 '+c.flores+' flores</div></div><div style="text-align:right"><div style="font-size:12px;font-weight:700;color:'+(c.dd<0?'var(--r)':c.dd===0?'var(--r)':c.dd<=5?'var(--yd)':'var(--g))+'">'+(c.dd<=0?'⚡ En cosecha':'En '+c.dd+'d')+'</div><div style="font-size:10px;color:var(--lt);margin-top:2px">'+c.ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+' — '+c.ft2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+'</div></div></div></div>').join('')+'</div>' : '';
+}
+
+// LOTES
+function renderLotes() {
+  const tabsEl = document.getElementById('loteTabs');
+  const panelsEl = document.getElementById('lotePanels');
+  tabsEl.innerHTML = LOTES.map((l,i) => '<button class="ltab'+(i===0?' active':'')+'" onclick="selectLote(\''+l.id+'\',this)">'+l.nombre+'</button>').join('');
+  panelsEl.innerHTML = LOTES.map((l,i) => '<div class="lote-panel'+(i===0?' active':'')+'" id="panel-'+l.id+'">'+buildPanel(l)+'</div>').join('');
+}
+
+function buildPanel(lote) {
+  const regs = window._regs; const hoy = new Date();
+  if(lote.tipo==='nuevo') return '<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">'+lote.nombre+'</div><div class="ciclo-sub">'+lote.postes+' postes — vegetativo</div><div class="ciclo-estado">🌱 Etapa vegetativa</div></div><div style="padding:14px 16px;font-size:13px;color:var(--mid)">Plantas jóvenes en desarrollo.</div></div></div>';
+  const encList = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  if(!encList.length) return '<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">'+lote.nombre+'</div><div class="ciclo-sub">'+lote.postes+' postes productivos</div><div class="ciclo-estado">⏳ Sin ciclo activo</div></div><div style="padding:16px"><p style="font-size:13px;color:var(--mid);margin-bottom:12px">Registra el encendido de luces para activar el cronograma.</p><button onclick="irLuces(\''+lote.nombre+'\')" class="btn-p">+ Registrar encendido de luces</button></div></div></div>';
+  
+  const ult = encList[encList.length-1];
+  const dI = new Date(ult.fecha); const da = Math.floor((hoy-dI)/86400000);
+  const prog = Math.min(100,Math.round((da/CICLO)*100));
+  const apActual = PROGRAMA.filter(a=>a.dia<=da).slice(-1)[0];
+  const apProx = PROGRAMA.find(a=>a.dia>da);
+  let est = apActual?apActual.nombre:'Inicio';
+  if(apProx) est += ' → '+apProx.nombre+' en '+(apProx.dia-da)+'d';
+  const apag = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Apagado')&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI);
+  const apagF = apag.length?apag[apag.length-1].fecha:null;
+  const cos = regs.filter(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI);
+  const kgC = cos.reduce((s,r)=>s+(r.kg||0),0); const valC = cos.reduce((s,r)=>s+((r.kg||0)*(r.precio||0)),0);
+
+  // APPS
+  const appsHtml = PROGRAMA.map(ap => {
+    const fad = new Date(dI); fad.setDate(fad.getDate()+ap.dia);
+    const dd = Math.floor((fad-hoy)/86400000);
+    const reg = regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&((r.appPrograma&&r.appPrograma.includes(ap.id))||(r.tipoAplicacion&&r.tipoAplicacion.includes(ap.id)))&&new Date(r.fecha)>=dI);
+    let dc,bt,bc;
+    if(reg){dc='dot-hecho';bt='✓ Registrada';bc='bg';}
+    else if(dd>=-2&&dd<=2){dc='dot-hoy';bt='HOY';bc='br2';}
+    else if(dd>2&&dd<=7){dc='dot-prox';bt='Esta semana';bc='by';}
+    else if(dd>0){dc='dot-fut';bt='En '+dd+'d';bc='';}
+    else{dc='dot-fut';bt='⚠️ Sin registrar';bc='br2';}
+    return '<div class="app-row"><div class="app-dot '+dc+'"></div><div class="app-info"><div class="app-nombre">'+ap.nombre+'</div><div class="app-fecha">'+ap.modo+' · '+fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+'</div><div class="app-prod">'+ap.productos+'</div>'+(ap.nota?'<div style="font-size:10px;color:var(--lt);font-style:italic">'+ap.nota+'</div>':'')+'</div>'+(bt?'<span class="app-badge badge '+bc+'">'+bt+'</span>':'')+'</div>';
+  }).join('');
+
+  // FLORACIONES
+  const flores = regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  let flHtml = '<div style="padding:13px 16px;border-top:1px solid var(--br)"><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🌸 Floraciones del ciclo</div>';
+  if(!flores.length) {
+    flHtml += '<div style="font-size:12px;color:var(--lt);padding-bottom:8px">Sin floraciones registradas aún.</div>';
+  } else {
+    flores.forEach(function(fl, idx) {
+      var fechaFlor = new Date(fl.fecha);
+      var ft1 = fl.cosechaTentativa1 ? new Date(fl.cosechaTentativa1) : new Date(fechaFlor.getTime()+25*86400000);
+      var ft2 = fl.cosechaTentativa2 ? new Date(fl.cosechaTentativa2) : new Date(fechaFlor.getTime()+30*86400000);
+      var df = Math.floor((ft1-hoy)/86400000);
+      var fito1 = new Date(fechaFlor); fito1.setDate(fito1.getDate()+4);
+      var fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
+      var fito3 = new Date(fechaFlor); fito3.setDate(fito3.getDate()+15);
+      var f1 = fl.fito1_hecho === true;
+      var f2 = fl.fito2_hecho === true;
+      var f3 = fl.fito3_hecho === true;
+      var cosV = regs.find(function(r){return r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1&&new Date(r.fecha)<=new Date(ft2.getTime()+5*86400000);});
+      var est2 = cosV?'✅ Cosechada':df<0?'🍎 En cosecha':df<=5?df+'d para cosechar':df+'d para cosechar';
+      var col2 = cosV?'#2d6a1f':df<0?'#c0392b':df<=5?'#c49a0a':'#999';
+      var flId = fl.id;
+      var dd1=Math.floor((fito1-hoy)/86400000), dd2=Math.floor((fito2-hoy)/86400000), dd3=Math.floor((fito3-hoy)/86400000);
+      var fs1=fito1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+      var fs2=fito2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+      var fs3=fito3.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+      function btnF(hecho,num,dd) {
+        var cls = hecho?'btn-hecho':dd<=0?'btn-pendiente-urgente':'btn-pendiente';
+        var txt = hecho?'✅ Hecho':'❌ Pendiente';
+        var campo = 'fito'+num+'_hecho';
+        var val = hecho?'false':'true';
+        return '<button class="'+cls+'" onclick="tgFito(\''+flId+'\',\''+campo+'\','+val+')">'+txt+'</button>';
+      }
+      flHtml += '<div class="flor-card">';
+      flHtml += '<div class="flor-head"><div><div class="flor-titulo">Ola '+(idx+1)+' — '+fmt(fl.fecha)+'</div><div class="flor-flores">'+(fl.numFlores||0)+' flores</div></div><div style="text-align:right"><div class="flor-estado" style="color:'+col2+'">'+est2+'</div><div class="flor-fecha">'+(fl.cosechaTentativa1?fmt(fl.cosechaTentativa1):'—')+' — '+(fl.cosechaTentativa2?fmt(fl.cosechaTentativa2):'—')+'</div></div></div>';
+      if(cosV) flHtml += '<div style="font-size:11px;color:#2d6a1f;margin-bottom:6px">🍎 '+cosV.kg+' kg cosechados</div>';
+      flHtml += '<div class="fito-section"><div class="fito-titulo">🐛 Fitosanitario</div>';
+      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 1</b> '+fs1+' <span style="color:#aaa;font-size:10px">(día 4)</span></div>'+btnF(f1,1,dd1)+'</div>';
+      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 2</b> '+fs2+' <span style="color:#aaa;font-size:10px">(día 7)</span></div>'+btnF(f2,2,dd2)+'</div>';
+      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 3</b> '+fs3+' <span style="color:#aaa;font-size:10px">(día 15)</span></div>'+btnF(f3,3,dd3)+'</div>';
+      flHtml += '</div></div>';
+    });
+  }
+  flHtml += '</div>';
+
+  let html = '<div style="padding:14px 0"><div class="ciclo-card">';
+  html += '<div class="ciclo-head"><div class="ciclo-title">'+lote.nombre+' — Ciclo Activo</div><div class="ciclo-sub">'+lote.postes+' postes · Iniciado '+fmt(ult.fecha)+'</div><div class="ciclo-estado">📅 Día '+da+' de ~'+CICLO+'</div></div>';
+  html += '<div class="progreso-wrap"><div class="progreso-label"><span>'+est+'</span><span style="font-weight:600;color:var(--g)">'+prog+'%</span></div><div class="progreso-bar"><div class="progreso-fill" style="width:'+prog+'%"></div></div><div class="progreso-dias"><span>Día 0</span><span>Día '+CICLO+'</span></div></div>';
+  html += '<div class="fechas-row"><div class="fecha-item"><div class="fecha-val">'+fmt(ult.fecha)+'</div><div class="fecha-lbl">💡 Luces encendidas</div></div><div class="fecha-item"><div class="fecha-val">'+(apagF?fmt(apagF):'~'+fmtOffset(ult.fecha,30))+'</div><div class="fecha-lbl">🌙 Luces apagadas</div></div>'+(kgC>0?'<div class="fecha-item"><div class="fecha-val">'+kgC.toFixed(1)+' kg</div><div class="fecha-lbl">🍎 Cosechado</div></div><div class="fecha-item"><div class="fecha-val">$'+valC.toFixed(0)+'</div><div class="fecha-lbl">💰 Ingresos</div></div>':'')+'</div>';
+  html += '<div class="apps-lista"><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Aplicaciones del ciclo</div>'+appsHtml+'</div>';
+  html += flHtml;
+  html += '<div style="padding:0 16px 14px"><button onclick="irLuces(\''+lote.nombre+'\')" class="btn-nuevo-ciclo">+ Iniciar nuevo ciclo</button></div>';
+  html += '</div>';
+  if(encList.length>1){
+    html+='<div class="stitle" style="padding-left:0">Ciclos anteriores</div>';
+    encList.slice(0,-1).reverse().forEach(function(enc,i){
+      var nC=encList.length-1-i;var fF=encList[nC]?encList[nC].fecha:'—';
+      var cX=regs.filter(function(r){return r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=new Date(enc.fecha)&&(fF==='—'||new Date(r.fecha)<new Date(fF));});
+      var kgX=cX.reduce(function(s,r){return s+(r.kg||0);},0);
+      html+='<div class="ciclo-ant"><div style="font-weight:600;font-size:13px">Ciclo '+nC+' — '+fmt(enc.fecha)+'</div><div style="font-size:11px;color:var(--lt);margin-top:4px">'+(kgX>0?'🍎 '+kgX.toFixed(1)+' kg cosechados':'Sin cosecha registrada')+'</div></div>';
+    });
+  }
   html += '</div>';
   return html;
 }
 
-function buildLotePanel(lote){
-  const regs=window._registros;
-  const encendidos=regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
-  if(lote.tipo==='nuevo'){
-    return `<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">${lote.nombre}</div><div class="ciclo-sub">${lote.postes} postes — 3 meses de edad</div><div class="ciclo-estado">🌱 Etapa vegetativa</div></div><div style="padding:14px 16px;font-size:13px;color:var(--mid)">Plantas jóvenes en desarrollo vegetativo.</div></div></div>`;
-  }
-  if(!encendidos.length){
-    return `<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">${lote.nombre}</div><div class="ciclo-sub">${lote.postes} postes productivos</div><div class="ciclo-estado">⏳ Sin ciclo activo</div></div><div style="padding:16px"><p style="font-size:13px;color:var(--mid);margin-bottom:12px">Registra el encendido de luces para activar el cronograma automático.</p><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-p">+ Registrar encendido de luces</button></div></div></div>`;
-  }
-  const ultimoEnc=encendidos[encendidos.length-1];
-  const diaInicio=new Date(ultimoEnc.fecha);
-  const hoy=new Date();
-  const diaActual=Math.floor((hoy-diaInicio)/(1000*60*60*24));
-  const progreso=Math.min(100,Math.round((diaActual/CICLO_TOTAL)*100));
-  const appActual=PROGRAMA.filter(a=>a.dia<=diaActual).slice(-1)[0];
-  const appProx=PROGRAMA.find(a=>a.dia>diaActual);
-  let estadoText=appActual?appActual.nombre:'Inicio del ciclo';
-  if(appProx) estadoText+=` → ${appProx.nombre} en ${appProx.dia-diaActual}d`;
-  const apagados=regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Apagado')&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio);
-  const apagadoFecha=apagados.length?apagados[apagados.length-1].fecha:null;
-  const cosechas=regs.filter(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio);
-  const totalKgCiclo=cosechas.reduce((s,r)=>s+(r.kg||0),0);
-  const totalValCiclo=cosechas.reduce((s,r)=>s+((r.kg||0)*(r.precio||0)),0);
+// TOGGLE FITO
+window.tgFito = async function(flId, campo, valor) {
+  var v = (valor === true || valor === 'true');
+  try {
+    await updateDoc(doc(db,'registros',flId), {[campo]: v});
+    await cargar(); renderLotes(); renderDash();
+    showToast(v ? '✅ Hecho' : '↩️ Desmarcado');
+  } catch(e) { showToast('❌ Error',true); }
+};
 
-  let html=`<div style="padding:14px 0"><div class="ciclo-card">
-    <div class="ciclo-head"><div class="ciclo-title">${lote.nombre} — Ciclo Activo</div><div class="ciclo-sub">${lote.postes} postes · Iniciado ${fmtFecha(ultimoEnc.fecha)}</div><div class="ciclo-estado">📅 Día ${diaActual} de ~${CICLO_TOTAL}</div></div>
-    <div class="progreso-wrap">
-      <div class="progreso-label"><span>${estadoText}</span><span style="font-weight:600;color:var(--green)">${progreso}%</span></div>
-      <div class="progreso-bar"><div class="progreso-fill" style="width:${progreso}%"></div></div>
-      <div class="progreso-dias"><span>Día 0</span><span>Día ${CICLO_TOTAL}</span></div>
-    </div>
-    <div class="fechas-row">
-      <div class="fecha-item"><div class="fecha-val">${fmtFecha(ultimoEnc.fecha)}</div><div class="fecha-lbl">💡 Luces encendidas</div></div>
-      <div class="fecha-item"><div class="fecha-val">${apagadoFecha?fmtFecha(apagadoFecha):'~'+fmtFechaOffset(ultimoEnc.fecha,30)}</div><div class="fecha-lbl">🌙 Luces apagadas</div></div>
-      ${totalKgCiclo>0?`<div class="fecha-item"><div class="fecha-val">${totalKgCiclo.toFixed(1)} kg</div><div class="fecha-lbl">🍎 Cosechado</div></div><div class="fecha-item"><div class="fecha-val">$${totalValCiclo.toFixed(0)}</div><div class="fecha-lbl">💰 Ingresos</div></div>`:''}
-    </div>
-    <div class="apps-lista">
-      <div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Aplicaciones del ciclo</div>
-      ${PROGRAMA.map(ap=>{
-        const fad=new Date(diaInicio);fad.setDate(fad.getDate()+ap.dia);
-        const dd=Math.floor((fad-hoy)/(1000*60*60*24));
-        // Verificar si hay registro REAL de esta APP
-        const registrada = regs.find(r=>
-          (r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico') &&
-          r.lote && r.lote.includes(lote.nombre) &&
-          ((r.appPrograma && r.appPrograma.includes(ap.id)) ||
-           (r.tipoAplicacion && r.tipoAplicacion.includes(ap.id))) &&
-          new Date(r.fecha) >= diaInicio
-        );
-        let dc,bt,bc;
-        if(registrada){dc='dot-hecho';bt='✓ Registrada';bc='bg';}
-        else if(dd>=-2&&dd<=2){dc='dot-hoy';bt='HOY';bc='br';}
-        else if(dd>2&&dd<=7){dc='dot-prox';bt='Esta semana';bc='by';}
-        else if(dd>0){dc='dot-fut';bt=`En ${dd}d`;bc='';}
-        else{dc='dot-fut';bt='⚠️ Sin registrar';bc='br';}
-        return `<div class="app-row"><div class="app-dot ${dc}"></div><div class="app-info"><div class="app-nombre">${ap.nombre}</div><div class="app-fecha">${ap.modo} · ${fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})}</div><div class="app-prod">${ap.productos}</div>${ap.nota?`<div style="font-size:10px;color:var(--light);font-style:italic">${ap.nota}</div>`:''}</div>${bt?`<span class="app-badge badge ${bc}">${bt}</span>`:''}</div>`;
-      }).join('')}
-    </div>
-    <div style="padding:0 16px 14px"><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-nuevo-ciclo">+ Iniciar nuevo ciclo</button></div>
-  </div>
-  ${buildFloraciones(lote, regs, diaInicio)}
-</div>`;
-
-  if(encendidos.length>1){
-    html+=`<div class="stitle" style="padding-left:0">Ciclos anteriores</div>`;
-    encendidos.slice(0,-1).reverse().forEach((enc,idx)=>{
-      const numCiclo=encendidos.length-1-idx;
-      const fechaFin=encendidos[numCiclo]?encendidos[numCiclo].fecha:'—';
-      const cos=regs.filter(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=new Date(enc.fecha)&&(fechaFin==='—'||new Date(r.fecha)<new Date(fechaFin)));
-      const kg=cos.reduce((s,r)=>s+(r.kg||0),0);
-      html+=`<div class="ciclo-ant"><div style="font-weight:600;font-size:13px">Ciclo ${numCiclo} — ${fmtFecha(enc.fecha)}</div><div style="font-size:11px;color:var(--light);margin-top:4px">${kg>0?`🍎 ${kg.toFixed(1)} kg cosechados`:'Sin registro de cosecha'}</div></div>`;
-    });
-  }
-  html+=`</div>`;
-  return html;
-}
-
-window.selectLote=function(id,btn){
+// SELECT LOTE
+window.selectLote = function(id, btn) {
   document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.lote-panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('panel-'+id).classList.add('active');
 };
 
-window.irARegistrarLuces=function(nombreLote){
+window.irLuces = function(nombre) {
   showPage('form',document.querySelectorAll('nav button')[2]);
   switchTab('labor',document.querySelectorAll('.ftab')[4]);
   setTimeout(()=>{
-    const sel=document.getElementById('l-lote');
-    for(let i=0;i<sel.options.length;i++){if(sel.options[i].text.includes(nombreLote)){sel.selectedIndex=i;break;}}
+    const s=document.getElementById('l-lote');
+    for(let i=0;i<s.options.length;i++){if(s.options[i].text.includes(nombre)){s.selectedIndex=i;break;}}
     document.getElementById('l-tipo').value='Encendido de luces (inducción)';
   },100);
   showToast('📅 Completa la fecha de encendido');
 };
 
-// ---- PRODUCTOS AUTOCOMPLETE ----
-const PRODUCTOS_MAP = {
-  'APP2': 'Ácido fosfórico 50cc (PRIMERO) + MKP 400g + Sulfato Mg 340g + Humax 170g — Tanque 200L, 3 tandas',
-  'APP3': 'Calcinit Bio 340g — Tanque 200L, 3 tandas — SOLO, nunca mezclar',
-  'APP5': 'Azutec 600g — Tanque 200L, 3 tandas — SOLO',
-  'APP6': 'Calcinit Bio 230g — Tanque 200L, 3 tandas — SOLO, nunca mezclar',
-  'APP7': 'Ultrasol KP 400g — Tanque 200L, 3 tandas — SOLO',
-  'APP4': 'YaraVita Caltrac 400mL — Tanque 200L (cubre 666 postes) — ANTES de las 8am',
-  'APP4rep': 'YaraVita Caltrac 400mL — Tanque 200L — ANTES de las 8am (repetición)',
-  'APP 1 — Arranque (Alpha + Bioabor)': 'Alpha Acelerador 30g/poste (15g cada lado) + Bioabor 100g/poste — Para 300 postes: 9kg Alpha + 30kg Bioabor — Hueco 5-8cm a 15-20cm del tallo',
-};
-
-window.autocompletarProductos = function(selectId, targetId) {
-  const val = document.getElementById(selectId).value;
+// AUTOCOMPLETAR
+window.autocompletar = function(selId, targetId) {
+  const val = document.getElementById(selId).value;
   const target = document.getElementById(targetId);
-  if(PRODUCTOS_MAP[val]) {
-    target.value = PRODUCTOS_MAP[val];
-    target.style.borderColor = 'var(--green)';
-    target.style.background = '#fff';
-  }
+  if(PRODUCTS[val]) { target.value = PRODUCTS[val]; target.style.borderColor='var(--g)'; target.style.background='#fff'; }
 };
 
-// ---- SYNC STATUS ----
-function updateSyncStatus() {
-  const el = document.getElementById('sync-status');
-  if(!el) return;
-  const q = getQueue ? getQueue() : [];
-  if(!navigator.onLine) {
-    el.textContent = '📱 Guardando en celular';
-    el.style.color = '#ffd700';
-  } else if(q.length > 0) {
-    el.textContent = `⏳ Sincronizando ${q.length} registro(s)`;
-    el.style.color = '#ffd700';
-  } else {
-    el.textContent = '☁️ En la nube';
-    el.style.color = 'rgba(255,255,255,0.85)';
-  }
-}
-setInterval(updateSyncStatus, 3000);
-
-window.sugerirApp=function(){
-  const lv=document.getElementById('f-lote').value;
-  const c=document.getElementById('app-sugerida');
+window.sugerirApp = function() {
+  const lv = document.getElementById('f-lote').value;
+  const c = document.getElementById('app-sugerida');
   if(!lv){c.innerHTML='';return;}
-  const ln=lv.split('—')[0].trim();
-  const lr=window._registros.find(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(ln));
+  const ln = lv.split('—')[0].trim();
+  const lr = window._regs.find(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(ln));
   if(!lr){c.innerHTML='';return;}
-  const da=Math.floor((new Date()-new Date(lr.fecha))/(1000*60*60*24));
-  const prox=PROGRAMA.filter(a=>a.dia>=da-3).slice(0,2);
+  const da = Math.floor((new Date()-new Date(lr.fecha))/86400000);
+  const prox = PROGRAMA.filter(a=>a.dia>=da-3).slice(0,2);
   if(!prox.length){c.innerHTML='';return;}
   const INC={'APP3':'APP 2','APP5':'APP 6','APP6':'APP 5'};
-  c.innerHTML=`<div class="app-preview"><h4>📅 ${ln} — Día ${da} del ciclo</h4>${prox.map(a=>`<p><strong>${a.nombre}</strong><br>${a.productos}</p>`).join('')}${prox[0]&&INC[prox[0].id]?`<div class="incomp-warn">⚠️ NO mezclar con: ${INC[prox[0].id]}</div>`:''}</div>`;
+  c.innerHTML='<div class="app-preview"><h4>📅 '+ln+' — Día '+da+' del ciclo</h4>'+prox.map(a=>'<p><strong>'+a.nombre+'</strong><br>'+a.productos+'</p>').join('')+(prox[0]&&INC[prox[0].id]?'<div class="incomp-warn">⚠️ NO mezclar con: '+INC[prox[0].id]+'</div>':'')+'</div>';
 };
 
-// ---- FLORES ----
-window.calcularCosechaTentativa = function() {
-  const fecha = document.getElementById('fl-fecha').value;
-  const num = document.getElementById('fl-num').value;
+// FLORES TENTATIVA
+window.calcTentativa = function() {
+  const f = document.getElementById('fl-fecha').value;
+  const n = document.getElementById('fl-num').value;
   const div = document.getElementById('fl-tentativa');
-  const label = document.getElementById('fl-tentativa-fecha');
-  if(!fecha || !num) { div.style.display='none'; return; }
-  const d1 = new Date(fecha); d1.setDate(d1.getDate()+25);
-  const d2 = new Date(fecha); d2.setDate(d2.getDate()+30);
-  const opts = {day:'2-digit',month:'short'};
-  label.textContent = `${d1.toLocaleDateString('es-EC',opts)} — ${d2.toLocaleDateString('es-EC',opts)}`;
-  div.style.display = 'block';
+  if(!f||!n){div.style.display='none';return;}
+  const d1=new Date(f);d1.setDate(d1.getDate()+25);
+  const d2=new Date(f);d2.setDate(d2.getDate()+30);
+  document.getElementById('fl-tent-fecha').textContent=d1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+' — '+d2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+  div.style.display='block';
 };
 
-window.switchTab=function(tab,btn){
+// SWITCH TAB
+window.switchTab = function(tab, btn) {
   document.querySelectorAll('.fbody').forEach(t=>t.style.display='none');
   document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+tab).style.display='block';
@@ -658,451 +701,154 @@ window.switchTab=function(tab,btn){
   if(di&&!di.value) di.value=today;
 };
 
-window.previewFoto=function(input,prevId){
-  const file=input.files[0];if(!file)return;
-  window._fotoFiles[prevId]=file;
+// FOTO PREVIEW
+window.previewFoto = function(input, prevId) {
+  const file=input.files[0]; if(!file) return;
+  window._fotos[prevId]=file;
   const reader=new FileReader();
   reader.onload=e=>{const img=document.getElementById(prevId);img.src=e.target.result;img.style.display='block';};
   reader.readAsDataURL(file);
 };
 
-async function subirFoto(file){
-  if(!file)return null;
-  try{const sr=ref(storage,`fotos/${Date.now()}_${file.name}`);const blob=await comprimirImagen(file);await uploadBytes(sr,blob);return await getDownloadURL(sr);}
-  catch(e){return null;}
+async function subirFoto(file) {
+  if(!file) return null;
+  try {
+    const sr=ref(storage,'fotos/'+Date.now()+'_'+file.name);
+    const blob=await new Promise(resolve=>{const c=document.createElement('canvas');const i=new Image();i.onload=()=>{const M=1200;let w=i.width,h=i.height;if(w>M){h=Math.round(h*M/w);w=M;}c.width=w;c.height=h;c.getContext('2d').drawImage(i,0,0,w,h);c.toBlob(b=>resolve(b),'image/jpeg',0.75);};i.src=URL.createObjectURL(file);});
+    await uploadBytes(sr,blob);
+    return await getDownloadURL(sr);
+  } catch(e){return null;}
 }
 
-async function comprimirImagen(file){
-  return new Promise(resolve=>{
-    const canvas=document.createElement('canvas');const img=new Image();
-    img.onload=()=>{const MAX=1200;let w=img.width,h=img.height;if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);canvas.toBlob(blob=>resolve(blob),'image/jpeg',0.75);};
-    img.src=URL.createObjectURL(file);
-  });
-}
-
-window.guardar=async function(tipo){
-  const btn=document.querySelector(`#tab-${tipo} .btn-p`);
+// GUARDAR
+window.guardar = async function(tipo) {
+  const btn=document.querySelector('#tab-'+tipo+' .btn-p');
   if(btn){btn.disabled=true;btn.textContent='Guardando...';}
   const tm={drench:{f:'f-fecha',l:'f-lote',fp:'f-fp'},foliar:{f:'fo-fecha',l:'fo-lote',fp:'fo-fp'},edafico:{f:'ed-fecha',l:'ed-lote',fp:'ed-fp'},fitosan:{f:'ft-fecha',l:'ft-lote',fp:'ft-fp'},labor:{f:'l-fecha',l:'l-lote',fp:'l-fp'},cosecha:{f:'c-fecha',l:'c-lote',fp:'c-fp'},flores:{f:'fl-fecha',l:'fl-lote',fp:'fl-fp'}};
   const t=tm[tipo];
   let reg={tipo,timestamp:serverTimestamp()};
   reg.fecha=document.getElementById(t.f).value;
   reg.lote=document.getElementById(t.l).value;
-  const fotoFile=window._fotoFiles[t.fp];
+  const fotoFile=window._fotos[t.fp];
   if(!reg.fecha||!reg.lote){showToast('⚠️ Completa fecha y lote',true);resetBtn(btn);return;}
-  if(tipo==='drench'){reg.appPrograma=document.getElementById('f-app').value;reg.productos=document.getElementById('f-productos').value;reg.volumen=document.getElementById('f-vol').value;reg.tandas=document.getElementById('f-tandas').value;reg.obs=document.getElementById('f-obs').value;reg.detalle=reg.appPrograma||reg.productos?.substring(0,40);if(!reg.productos){showToast('⚠️ Completa los productos',true);resetBtn(btn);return;}}
-  else if(tipo==='foliar'){reg.appPrograma=document.getElementById('fo-app').value;reg.producto=document.getElementById('fo-prod').value;reg.dosis=document.getElementById('fo-dosis').value;reg.volumen=document.getElementById('fo-vol').value;reg.hora=document.getElementById('fo-hora').value;reg.obs=document.getElementById('fo-obs').value;reg.detalle=reg.producto+(reg.dosis?' · '+reg.dosis:'');if(!reg.producto){showToast('⚠️ Completa el producto',true);resetBtn(btn);return;}if(reg.hora&&parseInt(reg.hora.split(':')[0])>=8)showToast('⚠️ APP4 debe ser ANTES de las 8am',true);}
-  else if(tipo==='edafico'){reg.tipoAplicacion=document.getElementById('ed-tipo').value;reg.productos=document.getElementById('ed-productos').value;reg.dosis=document.getElementById('ed-dosis').value;reg.total=document.getElementById('ed-total').value;reg.modo=document.getElementById('ed-modo').value;reg.obs=document.getElementById('ed-obs').value;reg.detalle=reg.tipoAplicacion||reg.productos?.substring(0,40);if(reg.tipoAplicacion&&reg.tipoAplicacion.includes('APP 1'))reg.appPrograma='APP1';reg.appPrograma=reg.appPrograma||reg.tipoAplicacion;if(!reg.productos){showToast('⚠️ Completa los productos',true);resetBtn(btn);return;}}
+  if(tipo==='drench'){reg.appPrograma=document.getElementById('f-app').value;reg.productos=document.getElementById('f-productos').value;reg.volumen=document.getElementById('f-vol').value;reg.tandas=document.getElementById('f-tandas').value;reg.obs=document.getElementById('f-obs').value;reg.detalle=reg.appPrograma||reg.productos.substring(0,40);if(!reg.productos){showToast('⚠️ Completa los productos',true);resetBtn(btn);return;}}
+  else if(tipo==='foliar'){reg.appPrograma=document.getElementById('fo-app').value;reg.producto=document.getElementById('fo-prod').value;reg.dosis=document.getElementById('fo-dosis').value;reg.volumen=document.getElementById('fo-vol').value;reg.hora=document.getElementById('fo-hora').value;reg.obs=document.getElementById('fo-obs').value;reg.detalle=reg.producto+(reg.dosis?' · '+reg.dosis:'');if(!reg.producto){showToast('⚠️ Completa el producto',true);resetBtn(btn);return;}}
+  else if(tipo==='edafico'){reg.tipoAplicacion=document.getElementById('ed-tipo').value;reg.productos=document.getElementById('ed-productos').value;reg.dosis=document.getElementById('ed-dosis').value;reg.total=document.getElementById('ed-total').value;reg.modo=document.getElementById('ed-modo').value;reg.obs=document.getElementById('ed-obs').value;if(reg.tipoAplicacion&&reg.tipoAplicacion.includes('APP 1'))reg.appPrograma='APP1';reg.appPrograma=reg.appPrograma||reg.tipoAplicacion;reg.detalle=reg.tipoAplicacion||reg.productos.substring(0,40);if(!reg.productos){showToast('⚠️ Completa los productos',true);resetBtn(btn);return;}}
   else if(tipo==='fitosan'){reg.tipoProblema=document.getElementById('ft-tipo').value;reg.plaga=document.getElementById('ft-plaga').value;reg.producto=document.getElementById('ft-producto').value;reg.dosis=document.getElementById('ft-dosis').value;reg.volumen=document.getElementById('ft-vol').value;reg.modo=document.getElementById('ft-modo').value;reg.carencia=document.getElementById('ft-carencia').value;reg.obs=document.getElementById('ft-obs').value;reg.detalle=(reg.plaga||reg.tipoProblema||'')+(reg.producto?' · '+reg.producto:'');if(!reg.producto){showToast('⚠️ Completa el producto',true);resetBtn(btn);return;}}
   else if(tipo==='labor'){reg.tipoLabor=document.getElementById('l-tipo').value;reg.jornales=document.getElementById('l-jorn').value;reg.costo=document.getElementById('l-costo').value;reg.obs=document.getElementById('l-obs').value;reg.detalle=reg.tipoLabor;if(!reg.tipoLabor){showToast('⚠️ Selecciona el tipo',true);resetBtn(btn);return;}}
   else if(tipo==='cosecha'){reg.kg=parseFloat(document.getElementById('c-kg').value)||0;reg.precio=parseFloat(document.getElementById('c-precio').value)||0;reg.calidad=document.getElementById('c-cal').value;reg.destino=document.getElementById('c-dest').value;reg.obs=document.getElementById('c-obs').value;reg.detalle=reg.kg+' kg'+(reg.precio?' · $'+(reg.kg*reg.precio).toFixed(2):'');if(!reg.kg){showToast('⚠️ Completa los kg',true);resetBtn(btn);return;}}
-  else if(tipo==='flores'){
-    reg.numFlores=parseInt(document.getElementById('fl-num').value)||0;
-    reg.obs=document.getElementById('fl-obs').value;
-    const fd=new Date(reg.fecha);
-    const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);
-    const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);
-    reg.cosechaTentativa1=ft1.toISOString().split('T')[0];
-    reg.cosechaTentativa2=ft2.toISOString().split('T')[0];
-    reg.detalle=reg.numFlores+' flores → cosecha ~'+ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+' a '+ft2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-    if(!reg.numFlores){showToast('⚠️ Ingresa el número de flores',true);resetBtn(btn);return;}
-  }
-  if(fotoFile && navigator.onLine){showToast('📷 Subiendo foto...');reg.fotoURL=await subirFoto(fotoFile);}
-  const resultado = await guardarConOffline(reg);
-  await cargarRegistros();
-  renderDash();renderLotes();limpiarForm(tipo);
-  if(resultado==='queued'){
-    showToast('💾 Sin señal — guardado localmente');
-  } else {
-    showToast('✅ Registro guardado');
-  }
-  setTimeout(()=>showPage('hist',document.querySelectorAll('nav button')[3]),800);
+  else if(tipo==='flores'){reg.numFlores=parseInt(document.getElementById('fl-num').value)||0;reg.obs=document.getElementById('fl-obs').value;const fd=new Date(reg.fecha);const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);reg.cosechaTentativa1=ft1.toISOString().split('T')[0];reg.cosechaTentativa2=ft2.toISOString().split('T')[0];reg.detalle=reg.numFlores+' flores → cosecha ~'+ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});if(!reg.numFlores){showToast('⚠️ Ingresa el número de flores',true);resetBtn(btn);return;}}
+  if(fotoFile){showToast('📷 Subiendo foto...');reg.fotoURL=await subirFoto(fotoFile);}
+  try {
+    if(navigator.onLine){await addDoc(collection(db,'registros'),reg);}
+    else{const q=getQ();q.push({...reg,_ts:Date.now()});saveQ(q);showToast('💾 Sin señal — guardado localmente');resetBtn(btn);limpiar(tipo);return;}
+    await cargar(); renderDash(); renderLotes(); limpiar(tipo);
+    showToast('✅ Guardado');
+    setTimeout(()=>showPage('hist',document.querySelectorAll('nav button')[3]),700);
+  } catch(e){showToast('❌ Error al guardar',true);}
   resetBtn(btn);
 };
 
-function resetBtn(btn){if(btn){btn.disabled=false;btn.textContent='✅ Guardar Registro';}}
-
-function limpiarForm(tipo){
+function resetBtn(btn){if(btn){btn.disabled=false;btn.textContent='✅ Guardar';}}
+function limpiar(tipo){
   const today=new Date().toISOString().split('T')[0];
   const map={drench:['f-lote','f-app','f-productos','f-vol','f-tandas','f-obs'],foliar:['fo-lote','fo-app','fo-prod','fo-dosis','fo-vol','fo-hora','fo-obs'],edafico:['ed-lote','ed-tipo','ed-productos','ed-dosis','ed-total','ed-modo','ed-obs'],fitosan:['ft-lote','ft-tipo','ft-plaga','ft-producto','ft-dosis','ft-vol','ft-modo','ft-carencia','ft-obs'],labor:['l-lote','l-tipo','l-jorn','l-costo','l-obs'],cosecha:['c-lote','c-kg','c-precio','c-cal','c-dest','c-obs'],flores:['fl-lote','fl-num','fl-obs']};
   (map[tipo]||[]).forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const di=document.getElementById(`tab-${tipo}`).querySelector('input[type="date"]');if(di)di.value=today;
+  const di=document.getElementById('tab-'+tipo).querySelector('input[type="date"]');if(di)di.value=today;
   const fm={drench:'f-fp',foliar:'fo-fp',edafico:'ed-fp',fitosan:'ft-fp',labor:'l-fp',cosecha:'c-fp',flores:'fl-fp'};
-  const pid=fm[tipo];if(pid){const img=document.getElementById(pid);if(img){img.style.display='none';img.src='';}delete window._fotoFiles[pid];}
+  const pid=fm[tipo];if(pid){const img=document.getElementById(pid);if(img){img.style.display='none';img.src='';}delete window._fotos[pid];}
   if(tipo==='drench')document.getElementById('app-sugerida').innerHTML='';
   if(tipo==='flores'){const td=document.getElementById('fl-tentativa');if(td)td.style.display='none';}
 }
 
-window.filtrar=function(f,btn){window._filtroActivo=f;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));if(btn)btn.classList.add('active');renderHistorial();};
-
-function renderHistorial(){
-  const lista=window._filtroActivo==='todos'?window._registros:window._registros.filter(r=>r.tipo===window._filtroActivo);
+// HISTORIAL
+window.filtrar = function(f, btn) {
+  window._filtro=f;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderHist();
+};
+function renderHist() {
+  const lista=window._filtro==='todos'?window._regs:window._regs.filter(r=>r.tipo===window._filtro);
   const c=document.getElementById('histList');
-  if(!lista.length){c.innerHTML=`<div class="empty"><div class="empty-ico">📂</div><div class="empty-txt">No hay registros.</div></div>`;return;}
-  c.innerHTML=lista.map(r=>histCardHTML(r)).join('');
+  if(!lista.length){c.innerHTML='<div class="empty"><div class="empty-ico">📂</div><div class="empty-txt">No hay registros.</div></div>';return;}
+  c.innerHTML=lista.map(r=>{
+    const cf=tipoConf(r.tipo);let det='';
+    if(r.tipo==='drench')det=(r.appPrograma?r.appPrograma+'<br>':'')+(r.productos||'')+(r.volumen?' · '+r.volumen+'L':'')+(r.tandas?' · '+r.tandas+' tandas':'');
+    else if(r.tipo==='foliar')det=(r.producto||'')+(r.dosis?' · '+r.dosis:'')+(r.hora?'<br>Hora: '+r.hora:'');
+    else if(r.tipo==='edafico')det=(r.tipoAplicacion?r.tipoAplicacion+'<br>':'')+(r.productos||'')+(r.dosis?' · '+r.dosis+'/poste':'');
+    else if(r.tipo==='fitosan')det=(r.plaga?r.plaga+' · ':'')+(r.producto||'')+(r.dosis?' · '+r.dosis:'')+(r.carencia?'<br>Carencia: '+r.carencia+'d':'');
+    else if(r.tipo==='labor')det=(r.tipoLabor||'')+(r.jornales?' · '+r.jornales+' jornales':'')+(r.costo?' · $'+r.costo:'');
+    else if(r.tipo==='flores')det=(r.numFlores||0)+' flores'+(r.cosechaTentativa1?'<br>📅 Cosecha: '+fmt(r.cosechaTentativa1)+' — '+fmt(r.cosechaTentativa2):'');
+    else if(r.tipo==='cosecha')det=(r.kg||0)+' kg'+(r.calidad?' · '+r.calidad:'')+(r.precio?' · $'+((r.kg||0)*(r.precio||0)).toFixed(2):'')+( r.destino?'<br>'+r.destino:'');
+    if(r.obs)det+='<br><span style="color:var(--lt)">📝 '+r.obs+'</span>';
+    return '<div class="hcard"><div class="htop"><div><div class="htitle2">'+cf.ico+' '+cf.label+'</div><div class="hdate2">'+fmt(r.fecha)+'</div></div><div class="hactions"><span class="badge '+cf.badge+'">'+(r.lote?r.lote.split('—')[0].trim():'—')+'</span>'+(r.fotoURL?'<img src="'+r.fotoURL+'" class="photo-thumb" onclick="verFoto(\''+r.fotoURL+'\')">':'')+'<button class="del-btn" style="color:var(--b)" onclick="editarReg(\''+r.id+'\',\''+r.tipo+'\')">✏️</button><button class="del-btn" onclick="eliminar(\''+r.id+'\')">🗑</button></div></div>'+(det?'<div class="hdetail">'+det+'</div>':'')+'</div>';
+  }).join('');
 }
 
-function histCardHTML(r){
-  const conf=tipoConf(r.tipo);let det='';
-  if(r.tipo==='drench')det=(r.appPrograma?r.appPrograma+'<br>':'')+(r.productos||'')+(r.volumen?' · '+r.volumen+'L':'')+(r.tandas?' · '+r.tandas+' tandas':'');
-  else if(r.tipo==='foliar')det=(r.producto||'')+(r.dosis?' · '+r.dosis:'')+(r.hora?'<br>Hora: '+r.hora:'');
-  else if(r.tipo==='edafico')det=(r.tipoAplicacion?r.tipoAplicacion+'<br>':'')+(r.productos||'')+(r.dosis?' · '+r.dosis+'/poste':'');
-  else if(r.tipo==='fitosan')det=(r.plaga?r.plaga+' · ':'')+(r.producto||'')+(r.dosis?' · '+r.dosis:'')+(r.carencia?'<br>Carencia: '+r.carencia+'d':'');
-  else if(r.tipo==='labor')det=(r.tipoLabor||'')+(r.jornales?' · '+r.jornales+' jornales':'')+(r.costo?' · $'+r.costo:'');
-  else if(r.tipo==='cosecha')det=`${r.kg||0} kg`+(r.calidad?' · '+r.calidad:'')+(r.precio?' · $'+((r.kg||0)*(r.precio||0)).toFixed(2):'')+( r.destino?'<br>'+r.destino:'');
-  else if(r.tipo==='flores')det=`${r.numFlores||0} flores`+(r.cosechaTentativa1?`<br>📅 Cosecha tentativa: ${fmtFecha(r.cosechaTentativa1)} — ${fmtFecha(r.cosechaTentativa2)}`:'');
-  if(r.obs)det+='<br><span style="color:var(--light)">📝 '+r.obs+'</span>';
-  return `<div class="hcard"><div class="htop"><div><div class="htitle2">${conf.ico} ${conf.label}</div><div class="hdate2">${fmtFecha(r.fecha)}</div></div><div class="hactions"><span class="badge ${conf.badge}">${r.lote?r.lote.split('—')[0].trim():'—'}</span>${r.fotoURL?`<img src="${r.fotoURL}" class="photo-thumb" onclick="verFoto('${r.fotoURL}')">`:''}
-  <button class="del-btn" onclick="editarRegistro('${r.id}')" style="color:var(--blue)">✏️</button>
-  <button class="del-btn" onclick="eliminar('${r.id}')">🗑</button></div></div>${det?`<div class="hdetail">${det}</div>`:''}</div>`;
-}
-
-window.eliminar=async function(id){
+// ELIMINAR
+window.eliminar = async function(id) {
   if(!confirm('¿Eliminar?'))return;
-  try{await deleteDoc(doc(db,'registros',id));await cargarRegistros();renderHistorial();renderDash();renderLotes();renderCosecha();showToast('🗑 Eliminado');}
+  try{await deleteDoc(doc(db,'registros',id));await cargar();renderHist();renderDash();renderLotes();renderCos();showToast('🗑 Eliminado');}
   catch(e){showToast('❌ Error',true);}
 };
 
-window.verFoto=function(url){
+// EDITAR
+window.editarReg = function(id, tipo) {
+  const r = window._regs.find(x=>x.id===id); if(!r) return;
+  let campos='';
+  if(tipo==='cosecha') campos='<div class="field"><label>Kg</label><input type="number" id="e-kg" value="'+(r.kg||0)+'" step="0.5"></div><div class="field"><label>Precio/kg ($)</label><input type="number" id="e-precio" value="'+(r.precio||0)+'" step="0.01"></div><div class="field"><label>Calidad</label><select id="e-cal"><option>Primera (+500g)</option><option>Segunda (300-500g)</option><option>Tercera (-300g)</option><option>Mixto</option></select></div><div class="field"><label>Destino</label><input type="text" id="e-dest" value="'+(r.destino||'')+'"></div>';
+  else if(tipo==='drench') campos='<div class="field"><label>Productos</label><textarea id="e-prod">'+(r.productos||'')+'</textarea></div>';
+  else if(tipo==='flores') campos='<div class="field"><label>Número de flores</label><input type="number" id="e-flores" value="'+(r.numFlores||0)+'"></div>';
+  const ov=document.createElement('div');ov.className='modal-overlay';ov.style.alignItems='flex-start';ov.style.overflowY='auto';ov.style.padding='20px';
+  ov.innerHTML='<div style="background:var(--card);border-radius:var(--r14);width:100%;max-width:500px;margin:auto;overflow:hidden"><div style="background:var(--g);padding:16px 18px;color:#fff;display:flex;justify-content:space-between;align-items:center"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px">Editar Registro</div><button onclick="this.closest(\'.modal-overlay\').remove()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer">✕</button></div><div style="padding:18px"><div class="field"><label>Fecha</label><input type="date" id="e-fecha" value="'+(r.fecha||'')+'"></div><div class="field"><label>Observaciones</label><textarea id="e-obs">'+(r.obs||'')+'</textarea></div>'+campos+'<button class="btn-p" onclick="guardarEdit(\''+id+'\',\''+tipo+'\')">✅ Guardar Cambios</button></div></div>';
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+  document.body.appendChild(ov);
+  if(tipo==='cosecha'){setTimeout(()=>{const s=document.getElementById('e-cal');for(let i=0;i<s.options.length;i++){if(s.options[i].text===r.calidad){s.selectedIndex=i;break;}}},50);}
+};
+
+window.guardarEdit = async function(id, tipo) {
+  const u={fecha:document.getElementById('e-fecha')?.value,obs:document.getElementById('e-obs')?.value};
+  if(tipo==='cosecha'){u.kg=parseFloat(document.getElementById('e-kg')?.value)||0;u.precio=parseFloat(document.getElementById('e-precio')?.value)||0;u.calidad=document.getElementById('e-cal')?.value;u.destino=document.getElementById('e-dest')?.value;u.detalle=u.kg+' kg'+(u.precio?' · $'+(u.kg*u.precio).toFixed(2):'');}
+  else if(tipo==='drench'){u.productos=document.getElementById('e-prod')?.value;u.detalle=u.productos?.substring(0,40);}
+  else if(tipo==='flores'){u.numFlores=parseInt(document.getElementById('e-flores')?.value)||0;const fd=new Date(u.fecha);const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);u.cosechaTentativa1=ft1.toISOString().split('T')[0];u.cosechaTentativa2=ft2.toISOString().split('T')[0];u.detalle=u.numFlores+' flores';}
+  try{await updateDoc(doc(db,'registros',id),u);document.querySelector('.modal-overlay')?.remove();await cargar();renderDash();renderHist();renderLotes();showToast('✅ Actualizado');}
+  catch(e){showToast('❌ Error',true);}
+};
+
+// VER FOTO
+window.verFoto = function(url) {
   const o=document.createElement('div');o.className='modal-overlay';
-  o.innerHTML=`<button class="modal-close" onclick="this.parentElement.remove()">✕</button><img src="${url}" class="modal-img">`;
+  o.innerHTML='<button class="modal-close" onclick="this.parentElement.remove()">✕</button><img src="'+url+'" class="modal-img">';
   o.onclick=e=>{if(e.target===o)o.remove();};document.body.appendChild(o);
 };
 
-function renderCosecha(){
-  const cosechas=window._registros.filter(r=>r.tipo==='cosecha');
+// COSECHA STATS
+function renderCos() {
+  const cos=window._regs.filter(r=>r.tipo==='cosecha');
   const c=document.getElementById('cosStats');
-  if(!cosechas.length){c.innerHTML=`<div class="empty"><div class="empty-ico">🍎</div><div class="empty-txt">Sin cosechas aún.</div></div>`;return;}
-  const totalKg=cosechas.reduce((s,r)=>s+(r.kg||0),0);
-  const totalVal=cosechas.reduce((s,r)=>s+((r.kg||0)*(r.precio||0)),0);
-  const porLote={};
-  cosechas.forEach(r=>{const k=r.lote||'Sin lote';if(!porLote[k])porLote[k]={kg:0,val:0,n:0};porLote[k].kg+=r.kg||0;porLote[k].val+=(r.kg||0)*(r.precio||0);porLote[k].n++;});
-  let html=`<div class="cos-sum"><h3>Totales Acumulados</h3><div class="cgrid"><div><div class="cnum">${totalKg.toFixed(1)}</div><div class="clbl">kg total</div></div><div><div class="cnum">$${totalVal.toFixed(0)}</div><div class="clbl">ingresos</div></div><div><div class="cnum">${cosechas.length}</div><div class="clbl">cosechas</div></div></div></div><div class="stitle">Por Lote</div>`;
-  Object.entries(porLote).forEach(([lote,d])=>{html+=`<div class="hcard" style="margin:0 18px 9px"><div class="htitle2">🌱 ${lote}</div><div class="hdetail" style="margin-top:6px"><strong>${d.kg.toFixed(1)} kg</strong> en ${d.n} cosecha(s)${d.val>0?' · <strong style="color:var(--green)">$'+d.val.toFixed(2)+'</strong>':''}</div></div>`;});
-  c.innerHTML=html;
+  if(!cos.length){c.innerHTML='<div class="empty"><div class="empty-ico">🍎</div><div class="empty-txt">Sin cosechas aún.</div></div>';return;}
+  const kg=cos.reduce((s,r)=>s+(r.kg||0),0),val=cos.reduce((s,r)=>s+((r.kg||0)*(r.precio||0)),0);
+  const pL={};cos.forEach(r=>{const k=r.lote||'Sin lote';if(!pL[k])pL[k]={kg:0,val:0,n:0};pL[k].kg+=r.kg||0;pL[k].val+=(r.kg||0)*(r.precio||0);pL[k].n++;});
+  c.innerHTML='<div class="cos-sum"><h3>Totales Acumulados</h3><div class="cgrid"><div><div class="cnum">'+kg.toFixed(1)+'</div><div class="clbl">kg total</div></div><div><div class="cnum">$'+val.toFixed(0)+'</div><div class="clbl">ingresos</div></div><div><div class="cnum">'+cos.length+'</div><div class="clbl">cosechas</div></div></div></div><div class="stitle">Por Lote</div>'+Object.entries(pL).map(([l,d])=>'<div class="hcard" style="margin:0 18px 9px"><div class="htitle2">🌱 '+l+'</div><div class="hdetail" style="margin-top:6px"><strong>'+d.kg.toFixed(1)+' kg</strong> en '+d.n+' cosecha(s)'+(d.val>0?' · <strong style="color:var(--g)">$'+d.val.toFixed(2)+'</strong>':'')+'</div></div>').join('');
 }
 
-function tipoConf(tipo){const m={drench:{ico:'💧',label:'Drench',badge:'bb',bg:'var(--blue-pale)'},foliar:{ico:'🌿',label:'Foliar',badge:'bg',bg:'var(--green-pale)'},edafico:{ico:'🪱',label:'Edáfico',badge:'bo',bg:'var(--orange-pale)'},fitosan:{ico:'🐛',label:'Fitosanitario',badge:'bp',bg:'var(--purple-pale)'},labor:{ico:'🔧',label:'Labor',badge:'by',bg:'#fef9e7'},flores:{ico:'🌸',label:'Floración',badge:'bg',bg:'#fce4f3'},cosecha:{ico:'🍎',label:'Cosecha',badge:'br',bg:'var(--red-pale)'}};return m[tipo]||{ico:'📋',label:tipo,badge:'bg',bg:'#eee'};}
-
-function fmtFecha(f){if(!f)return '—';const[y,m,d]=f.split('-');const ms=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];return `${d} ${ms[parseInt(m)-1]} ${y}`;}
-
-function fmtFechaOffset(fecha,dias){const d=new Date(fecha);d.setDate(d.getDate()+dias);return d.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});}
-
-window.showPage=function(id,btn){
+// PAGE NAV
+window.showPage = function(id, btn) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   if(btn)btn.classList.add('active');
-  if(id==='hist')renderHistorial();
-  if(id==='cos')renderCosecha();
+  if(id==='hist')renderHist();
+  if(id==='cos')renderCos();
   if(id==='lotes')renderLotes();
   if(id==='dash')renderDash();
 };
 
-// ---- DASHBOARD EXTRA ----
-function renderDashExtra() {
-  const regs = window._registros;
-  const hoy = new Date();
-  
-  // ALERTAS
-  let alertas = [];
-  LOTES.filter(l=>l.tipo==='productivo').forEach(lote=>{
-    const enc = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
-    if(!enc) return;
-    const diaInicio = new Date(enc.fecha);
-    PROGRAMA.forEach(ap=>{
-      const fad = new Date(diaInicio); fad.setDate(fad.getDate()+ap.dia);
-      const dd = Math.floor((fad-hoy)/(1000*60*60*24));
-      const registrada = regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&r.appPrograma&&r.appPrograma.includes(ap.id)&&new Date(r.fecha)>=diaInicio);
-      if(!registrada && dd >= -1 && dd <= 3) {
-        alertas.push({lote:lote.nombre, app:ap.nombre, dd, urgente: dd<=0});
-      }
-    });
-    // Alerta cosecha próxima y fitosanitarios de flores
-    regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio).forEach((fl,fidx)=>{
-      const ft1 = new Date(fl.cosechaTentativa1||fl.fecha);
-      const fechaFlor = new Date(fl.fecha);
-      const dd = Math.floor((ft1-hoy)/(1000*60*60*24));
-      const cosechada = regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1);
-      if(!cosechada && dd >= -3 && dd <= 3) {
-        alertas.push({lote:lote.nombre, app:`🍎 Cosecha Ola ${fidx+1} — ${fl.numFlores} flores`, dd, urgente: dd<=0});
-      }
-      // Alertas fitosanitarias de esta ola
-      const fito1 = new Date(fechaFlor); fito1.setDate(fito1.getDate()+4);
-      const fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
-      const fito3 = new Date(fechaFlor); fito3.setDate(fito3.getDate()+15);
-      const fitoRegs = regs.filter(r=>r.tipo==='fitosan'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=fechaFlor&&new Date(r.fecha)<=new Date(fechaFlor.getTime()+20*86400000));
-      [[fito1,'Aplic. 1 flores'],[fito2,'Aplic. 2 flores'],[fito3,'Aplic. 3 flores']].forEach(([fecha,nombre],i)=>{
-        const ddF = Math.floor((fecha-hoy)/86400000);
-        const hecha = fitoRegs.find(r=>{ const d=new Date(r.fecha); return Math.abs(d-fecha)<4*86400000; });
-        if(!hecha && ddF>=-1 && ddF<=2) {
-          alertas.push({lote:lote.nombre, app:`🐛 ${nombre} Ola ${fidx+1}`, dd:ddF, urgente:ddF<=0});
-        }
-      });
-    });
-  });
-
-  const alertasEl = document.getElementById('dash-alertas');
-  if(alertas.length) {
-    alertasEl.innerHTML = `<div style="margin:0 18px 12px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--red);padding:14px 0 8px;letter-spacing:.5px">⚠️ Alertas del Día</div>
-      ${alertas.map(a=>`<div style="background:${a.urgente?'var(--red-pale)':'#fef9e7'};border-radius:10px;padding:10px 14px;margin-bottom:7px;border-left:3px solid ${a.urgente?'var(--red)':'var(--yellow)'}">
-        <div style="font-size:12px;font-weight:600;color:${a.urgente?'var(--red)':'var(--yellow-dk)'}">${a.lote}</div>
-        <div style="font-size:13px;font-weight:600;margin-top:2px">${a.app}</div>
-        <div style="font-size:11px;color:var(--mid);margin-top:2px">${a.dd<0?`Hace ${Math.abs(a.dd)} día(s) — sin registrar`:a.dd===0?'HOY':`En ${a.dd} día(s)`}</div>
-      </div>`).join('')}
-    </div>`;
-  } else {
-    alertasEl.innerHTML = '';
-  }
-
-  // ESTADO DE LOTES
-  const lotesEl = document.getElementById('dash-lotes-estado');
-  let lotesHtml = `<div style="margin:0 18px 12px">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--green);padding:4px 0 8px;letter-spacing:.5px">🌱 Estado de Lotes</div>`;
-  LOTES.forEach(lote=>{
-    if(lote.tipo==='nuevo'){
-      lotesHtml+=`<div style="background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:7px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600">${lote.nombre}</span><span class="badge by">Vegetativo</span></div>`;
-      return;
-    }
-    const enc = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
-    if(!enc){
-      lotesHtml+=`<div style="background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:7px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600">${lote.nombre}</span><span class="badge by">Sin ciclo</span></div>`;
-      return;
-    }
-    const diaInicio = new Date(enc.fecha);
-    const diaActual = Math.floor((hoy-diaInicio)/(1000*60*60*24));
-    const appProx = PROGRAMA.find(a=>{
-      const fad=new Date(diaInicio);fad.setDate(fad.getDate()+a.dia);
-      const dd=Math.floor((fad-hoy)/(1000*60*60*24));
-      const reg=regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&r.appPrograma&&r.appPrograma.includes(a.id)&&new Date(r.fecha)>=diaInicio);
-      return !reg && dd>=-3;
-    });
-    const ddProx = appProx ? Math.floor((new Date(diaInicio.getTime()+(appProx.dia*86400000))-hoy)/86400000) : null;
-    let appLabel = appProx ? (ddProx<=0?`${appProx.id} HOY ⚠️`:ddProx<=3?`${appProx.id} en ${ddProx}d ⚡`:`${appProx.id} en ${ddProx}d`) : 'Ciclo completo ✅';
-    let appColor = ddProx<=0?'var(--red)':ddProx<=3?'var(--yellow-dk)':'var(--mid)';
-    lotesHtml+=`<div style="background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:7px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center">
-      <div><div style="font-size:13px;font-weight:600">${lote.nombre}</div><div style="font-size:11px;color:var(--light)">Día ${diaActual} del ciclo</div></div>
-      <div style="font-size:11px;font-weight:600;color:${appColor};text-align:right">${appLabel}</div>
-    </div>`;
-  });
-  lotesHtml += `</div>`;
-  lotesEl.innerHTML = lotesHtml;
-
-  // PRÓXIMAS COSECHAS
-  const cosEl = document.getElementById('dash-cosechas-proximas');
-  let cosItems = [];
-  LOTES.filter(l=>l.tipo==='productivo').forEach(lote=>{
-    const enc = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
-    if(!enc) return;
-    const diaInicio = new Date(enc.fecha);
-    regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio).forEach((fl,idx)=>{
-      const ft1=new Date(fl.cosechaTentativa1||fl.fecha);
-      const ft2=new Date(fl.cosechaTentativa2||fl.fecha);
-      const dd=Math.floor((ft1-hoy)/86400000);
-      const cosechada=regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1&&new Date(r.fecha)<=new Date(ft2.getTime()+5*86400000));
-      if(!cosechada) cosItems.push({lote:lote.nombre, flores:fl.numFlores, ft1, ft2, dd, idx});
-    });
-  });
-  cosItems.sort((a,b)=>a.dd-b.dd);
-  if(cosItems.length){
-    cosEl.innerHTML=`<div style="margin:0 18px 12px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--yellow-dk);padding:4px 0 8px;letter-spacing:.5px">🍎 Próximas Cosechas</div>
-      ${cosItems.map(c=>`<div style="background:var(--card);border-radius:10px;padding:11px 14px;margin-bottom:7px;box-shadow:var(--shadow);border-left:3px solid ${c.dd<=0?'var(--red)':c.dd<=5?'var(--yellow)':'var(--border)'}">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div><div style="font-size:12px;font-weight:600;color:var(--mid)">${c.lote} · Ola ${c.idx+1}</div>
-          <div style="font-size:14px;font-weight:700;color:#e91e8c;margin-top:2px">🌸 ${c.flores} flores</div></div>
-          <div style="text-align:right"><div style="font-size:12px;font-weight:700;color:${c.dd<=0?'var(--red)':c.dd<=5?'var(--yellow-dk)':'var(--green)'}">${c.dd<0?'⚡ En cosecha':c.dd===0?'⚡ HOY':'En '+c.dd+'d'}</div>
-          <div style="font-size:10px;color:var(--light);margin-top:2px">${c.ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})} — ${c.ft2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})}</div></div>
-        </div>
-      </div>`).join('')}
-    </div>`;
-  } else {
-    cosEl.innerHTML='';
-  }
-}
-
-// ---- EDITAR REGISTRO ----
-window.editarRegistro = function(id) {
-  const r = window._registros.find(x=>x.id===id);
-  if(!r) return;
-
-  // Crear modal de edición
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.style.alignItems = 'flex-start';
-  overlay.style.overflowY = 'auto';
-  overlay.style.padding = '20px';
-
-  let camposExtra = '';
-  if(r.tipo==='cosecha') {
-    camposExtra = `
-      <div class="field"><label>Kg cosechados</label><input type="number" id="edit-kg" value="${r.kg||''}" step="0.5"></div>
-      <div class="field"><label>Precio/kg ($)</label><input type="number" id="edit-precio" value="${r.precio||''}" step="0.01"></div>
-      <div class="field"><label>Calidad</label><select id="edit-cal">
-        <option value="">Seleccionar...</option>
-        <option ${r.calidad==='Primera (+500g)'?'selected':''}>Primera (+500g)</option>
-        <option ${r.calidad==='Segunda (300-500g)'?'selected':''}>Segunda (300-500g)</option>
-        <option ${r.calidad==='Tercera (-300g)'?'selected':''}>Tercera (-300g)</option>
-        <option ${r.calidad==='Mixto'?'selected':''}>Mixto</option>
-      </select></div>
-      <div class="field"><label>Destino</label><input type="text" id="edit-dest" value="${r.destino||''}"></div>`;
-  } else if(r.tipo==='drench') {
-    camposExtra = `<div class="field"><label>Productos</label><textarea id="edit-productos">${r.productos||''}</textarea></div>
-      <div class="field"><label>Volumen (L)</label><input type="number" id="edit-vol" value="${r.volumen||''}"></div>`;
-  } else if(r.tipo==='flores') {
-    camposExtra = `<div class="field"><label>Número de flores</label><input type="number" id="edit-flores" value="${r.numFlores||''}"></div>`;
-  }
-
-  overlay.innerHTML = `
-    <div style="background:var(--card);border-radius:var(--r);width:100%;max-width:500px;margin:auto;overflow:hidden">
-      <div style="background:var(--green);padding:16px 18px;color:#fff;display:flex;justify-content:space-between;align-items:center">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.5px">Editar Registro</div>
-        <button onclick="this.closest('.modal-overlay').remove()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer">✕</button>
-      </div>
-      <div style="padding:18px">
-        <div class="field"><label>Fecha</label><input type="date" id="edit-fecha" value="${r.fecha||''}"></div>
-        <div class="field"><label>Lote</label><input type="text" id="edit-lote" value="${r.lote||''}"></div>
-        ${camposExtra}
-        <div class="field"><label>Observaciones</label><textarea id="edit-obs">${r.obs||''}</textarea></div>
-        <button class="btn-p" onclick="guardarEdicion('${id}','${r.tipo}')">✅ Guardar Cambios</button>
-      </div>
-    </div>`;
-  document.body.appendChild(overlay);
+window.showToast = function(msg, isErr=false) {
+  const t=document.getElementById('toast');t.textContent=msg;t.style.background=isErr?'var(--r)':'var(--g)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);
 };
 
-window.guardarEdicion = async function(id, tipo) {
-  const updates = {
-    fecha: document.getElementById('edit-fecha')?.value,
-    lote: document.getElementById('edit-lote')?.value,
-    obs: document.getElementById('edit-obs')?.value,
-  };
-  if(tipo==='cosecha') {
-    updates.kg = parseFloat(document.getElementById('edit-kg')?.value)||0;
-    updates.precio = parseFloat(document.getElementById('edit-precio')?.value)||0;
-    updates.calidad = document.getElementById('edit-cal')?.value;
-    updates.destino = document.getElementById('edit-dest')?.value;
-    updates.detalle = updates.kg+' kg'+(updates.precio?' · $'+(updates.kg*updates.precio).toFixed(2):'');
-  } else if(tipo==='drench') {
-    updates.productos = document.getElementById('edit-productos')?.value;
-    updates.volumen = document.getElementById('edit-vol')?.value;
-    updates.detalle = updates.productos?.substring(0,40);
-  } else if(tipo==='flores') {
-    updates.numFlores = parseInt(document.getElementById('edit-flores')?.value)||0;
-    const fd=new Date(updates.fecha);
-    const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);
-    const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);
-    updates.cosechaTentativa1=ft1.toISOString().split('T')[0];
-    updates.cosechaTentativa2=ft2.toISOString().split('T')[0];
-    updates.detalle=updates.numFlores+' flores';
-  }
-  try {
-    await updateDoc(doc(db,'registros',id), updates);
-    document.querySelector('.modal-overlay')?.remove();
-    await cargarRegistros();
-    renderDash(); renderHistorial(); renderLotes();
-    showToast('✅ Registro actualizado');
-  } catch(e) {
-    showToast('❌ Error al actualizar',true);
-  }
-};
-
-window.toggleFito = async function(flId, campo, valor) {
-  try {
-    await updateDoc(doc(db,'registros',flId), {[campo]: valor});
-    await cargarRegistros();
-    renderLotes();
-    renderDash();
-    showToast(valor ? '✅ Marcado como hecho' : '↩️ Desmarcado');
-  } catch(e) {
-    showToast('❌ Error al actualizar', true);
-  }
-};
-
-window.showToast=function(msg,isErr=false){const t=document.getElementById('toast');t.textContent=msg;t.style.background=isErr?'var(--red)':'var(--green)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);};
-
-// ---- OFFLINE QUEUE ----
-const QUEUE_KEY = 'pitahaya_offline_queue';
-
-function getQueue() {
-  try { return JSON.parse(localStorage.getItem(QUEUE_KEY)||'[]'); } catch(e){ return []; }
-}
-function saveQueue(q) {
-  localStorage.setItem(QUEUE_KEY, JSON.stringify(q));
-}
-
-async function guardarConOffline(reg) {
-  if(navigator.onLine) {
-    try {
-      await addDoc(collection(db,'registros'), {...reg, timestamp: serverTimestamp()});
-      return true;
-    } catch(e) {
-      // Si falla aunque hay internet, guardar en cola
-      const q = getQueue();
-      q.push({...reg, _ts: Date.now()});
-      saveQueue(q);
-      return 'queued';
-    }
-  } else {
-    // Sin internet — guardar en cola local
-    const q = getQueue();
-    q.push({...reg, _ts: Date.now()});
-    saveQueue(q);
-    return 'queued';
-  }
-}
-
-async function sincronizarCola() {
-  const q = getQueue();
-  if(!q.length) return;
-  const pendientes = [...q];
-  saveQueue([]);
-  let exitos = 0;
-  for(const reg of pendientes) {
-    try {
-      const {_ts, ...data} = reg;
-      await addDoc(collection(db,'registros'), {...data, timestamp: serverTimestamp()});
-      exitos++;
-    } catch(e) {
-      const remaining = getQueue();
-      remaining.push(reg);
-      saveQueue(remaining);
-    }
-  }
-  if(exitos > 0) {
-    await cargarRegistros();
-    renderDash(); renderLotes();
-    showToast(`✅ ${exitos} registro(s) sincronizados`);
-  }
-}
-
-// Mostrar indicador offline
-function updateOnlineStatus() {
-  const existing = document.getElementById('offline-bar');
-  if(!navigator.onLine) {
-    if(!existing) {
-      const bar = document.createElement('div');
-      bar.id = 'offline-bar';
-      bar.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#c0392b;color:#fff;text-align:center;font-size:12px;font-weight:600;padding:6px;z-index:200;font-family:DM Sans,sans-serif';
-      bar.textContent = '📵 Sin señal — los registros se guardan localmente';
-      document.body.appendChild(bar);
-      document.querySelector('header').style.top = '30px';
-    }
-  } else {
-    if(existing) {
-      existing.remove();
-      document.querySelector('header').style.top = '0';
-    }
-    sincronizarCola();
-  }
-}
-
-window.addEventListener('online', updateOnlineStatus);
-window.addEventListener('offline', updateOnlineStatus);
-updateOnlineStatus();
-
-// Mostrar pendientes en dashboard
-function getPendientesCount() { return getQueue().length; }
 </script>
 </body>
 </html>
