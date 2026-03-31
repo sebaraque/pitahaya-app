@@ -588,20 +588,23 @@ function buildPanel(lote) {
       var fs1=fito1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
       var fs2=fito2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
       var fs3=fito3.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-      function btnF(hecho,num,dd) {
+
+      var mkBtn = function(hecho,num,dd) {
         var cls = hecho?'btn-hecho':dd<=0?'btn-pendiente-urgente':'btn-pendiente';
         var txt = hecho?'✅ Hecho':'❌ Pendiente';
         var campo = 'fito'+num+'_hecho';
         var val = hecho?'false':'true';
         return '<button class="'+cls+'" onclick="tgFito(\''+flId+'\',\''+campo+'\','+val+')">'+txt+'</button>';
-      }
+      };
+
       flHtml += '<div class="flor-card">';
       flHtml += '<div class="flor-head"><div><div class="flor-titulo">Ola '+(idx+1)+' — '+fmt(fl.fecha)+'</div><div class="flor-flores">'+(fl.numFlores||0)+' flores</div></div><div style="text-align:right"><div class="flor-estado" style="color:'+col2+'">'+est2+'</div><div class="flor-fecha">'+(fl.cosechaTentativa1?fmt(fl.cosechaTentativa1):'—')+' — '+(fl.cosechaTentativa2?fmt(fl.cosechaTentativa2):'—')+'</div></div></div>';
       if(cosV) flHtml += '<div style="font-size:11px;color:#2d6a1f;margin-bottom:6px">🍎 '+cosV.kg+' kg cosechados</div>';
-      flHtml += '<div class="fito-section"><div class="fito-titulo">🐛 Fitosanitario</div>';
-      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 1</b> '+fs1+' <span style="color:#aaa;font-size:10px">(día 4)</span></div>'+btnF(f1,1,dd1)+'</div>';
-      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 2</b> '+fs2+' <span style="color:#aaa;font-size:10px">(día 7)</span></div>'+btnF(f2,2,dd2)+'</div>';
-      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 3</b> '+fs3+' <span style="color:#aaa;font-size:10px">(día 15)</span></div>'+btnF(f3,3,dd3)+'</div>';
+      flHtml += '<div class="fito-section">';
+      flHtml += '<div class="fito-titulo">🐛 Fitosanitario</div>';
+      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 1</b> '+fs1+' <span style="color:#aaa;font-size:10px">(día 4)</span></div>'+mkBtn(f1,1,dd1)+'</div>';
+      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 2</b> '+fs2+' <span style="color:#aaa;font-size:10px">(día 7)</span></div>'+mkBtn(f2,2,dd2)+'</div>';
+      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 3</b> '+fs3+' <span style="color:#aaa;font-size:10px">(día 15)</span></div>'+mkBtn(f3,3,dd3)+'</div>';
       flHtml += '</div></div>';
     });
   }
