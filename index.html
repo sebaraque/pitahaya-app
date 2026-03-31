@@ -393,83 +393,6 @@ function renderLotes(){
   panelsEl.innerHTML=LOTES.map((l,i)=>`<div class="lote-panel${i===0?' active':''}" id="panel-${l.id}">${buildLotePanel(l)}</div>`).join('');
 }
 
-function buildLotePanel(lote){
-  const regs=window._registros;
-  const encendidos=regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
-  if(lote.tipo==='nuevo'){
-    return `<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">${lote.nombre}</div><div class="ciclo-sub">${lote.postes} postes — 3 meses de edad</div><div class="ciclo-estado">🌱 Etapa vegetativa</div></div><div style="padding:14px 16px;font-size:13px;color:var(--mid)">Plantas jóvenes en desarrollo vegetativo.</div></div></div>`;
-  }
-  if(!encendidos.length){
-    return `<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">${lote.nombre}</div><div class="ciclo-sub">${lote.postes} postes productivos</div><div class="ciclo-estado">⏳ Sin ciclo activo</div></div><div style="padding:16px"><p style="font-size:13px;color:var(--mid);margin-bottom:12px">Registra el encendido de luces para activar el cronograma automático.</p><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-p">+ Registrar encendido de luces</button></div></div></div>`;
-  }
-  const ultimoEnc=encendidos[encendidos.length-1];
-  const diaInicio=new Date(ultimoEnc.fecha);
-  const hoy=new Date();
-  const diaActual=Math.floor((hoy-diaInicio)/(1000*60*60*24));
-  const progreso=Math.min(100,Math.round((diaActual/CICLO_TOTAL)*100));
-  const appActual=PROGRAMA.filter(a=>a.dia<=diaActual).slice(-1)[0];
-  const appProx=PROGRAMA.find(a=>a.dia>diaActual);
-  let estadoText=appActual?appActual.nombre:'Inicio del ciclo';
-  if(appProx) estadoText+=` → ${appProx.nombre} en ${appProx.dia-diaActual}d`;
-  const apagados=regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Apagado')&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio);
-  const apagadoFecha=apagados.length?apagados[apagados.length-1].fecha:null;
-  const cosechas=regs.filter(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio);
-  const totalKgCiclo=cosechas.reduce((s,r)=>s+(r.kg||0),0);
-  const totalValCiclo=cosechas.reduce((s,r)=>s+((r.kg||0)*(r.precio||0)),0);
-
-  let html=`<div style="padding:14px 0"><div class="ciclo-card">
-    <div class="ciclo-head"><div class="ciclo-title">${lote.nombre} — Ciclo Activo</div><div class="ciclo-sub">${lote.postes} postes · Iniciado ${fmtFecha(ultimoEnc.fecha)}</div><div class="ciclo-estado">📅 Día ${diaActual} de ~${CICLO_TOTAL}</div></div>
-    <div class="progreso-wrap">
-      <div class="progreso-label"><span>${estadoText}</span><span style="font-weight:600;color:var(--green)">${progreso}%</span></div>
-      <div class="progreso-bar"><div class="progreso-fill" style="width:${progreso}%"></div></div>
-      <div class="progreso-dias"><span>Día 0</span><span>Día ${CICLO_TOTAL}</span></div>
-    </div>
-    <div class="fechas-row">
-      <div class="fecha-item"><div class="fecha-val">${fmtFecha(ultimoEnc.fecha)}</div><div class="fecha-lbl">💡 Luces encendidas</div></div>
-      <div class="fecha-item"><div class="fecha-val">${apagadoFecha?fmtFecha(apagadoFecha):'~'+fmtFechaOffset(ultimoEnc.fecha,30)}</div><div class="fecha-lbl">🌙 Luces apagadas</div></div>
-      ${totalKgCiclo>0?`<div class="fecha-item"><div class="fecha-val">${totalKgCiclo.toFixed(1)} kg</div><div class="fecha-lbl">🍎 Cosechado</div></div><div class="fecha-item"><div class="fecha-val">$${totalValCiclo.toFixed(0)}</div><div class="fecha-lbl">💰 Ingresos</div></div>`:''}
-    </div>
-    <div class="apps-lista">
-      <div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Aplicaciones del ciclo</div>
-      ${PROGRAMA.map(ap=>{
-        const fad=new Date(diaInicio);fad.setDate(fad.getDate()+ap.dia);
-        const dd=Math.floor((fad-hoy)/(1000*60*60*24));
-        // Verificar si hay registro REAL de esta APP
-        const registrada = regs.find(r=>
-          (r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico') &&
-          r.lote && r.lote.includes(lote.nombre) &&
-          ((r.appPrograma && r.appPrograma.includes(ap.id)) ||
-           (r.tipoAplicacion && r.tipoAplicacion.includes(ap.id))) &&
-          new Date(r.fecha) >= diaInicio
-        );
-        let dc,bt,bc;
-        if(registrada){dc='dot-hecho';bt='✓ Registrada';bc='bg';}
-        else if(dd>=-2&&dd<=2){dc='dot-hoy';bt='HOY';bc='br';}
-        else if(dd>2&&dd<=7){dc='dot-prox';bt='Esta semana';bc='by';}
-        else if(dd>0){dc='dot-fut';bt=`En ${dd}d`;bc='';}
-        else{dc='dot-fut';bt='⚠️ Sin registrar';bc='br';}
-        return `<div class="app-row"><div class="app-dot ${dc}"></div><div class="app-info"><div class="app-nombre">${ap.nombre}</div><div class="app-fecha">${ap.modo} · ${fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})}</div><div class="app-prod">${ap.productos}</div>${ap.nota?`<div style="font-size:10px;color:var(--light);font-style:italic">${ap.nota}</div>`:''}</div>${bt?`<span class="app-badge badge ${bc}">${bt}</span>`:''}</div>`;
-      }).join('')}
-    </div>
-    <div style="padding:0 16px 14px"><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-nuevo-ciclo">+ Iniciar nuevo ciclo</button></div>
-  </div>
-  ${buildFloraciones(lote, regs, diaInicio)}
-</div>`;
-
-  if(encendidos.length>1){
-    html+=`<div class="stitle" style="padding-left:0">Ciclos anteriores</div>`;
-    encendidos.slice(0,-1).reverse().forEach((enc,idx)=>{
-      const numCiclo=encendidos.length-1-idx;
-      const fechaFin=encendidos[numCiclo]?encendidos[numCiclo].fecha:'—';
-      const cos=regs.filter(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=new Date(enc.fecha)&&(fechaFin==='—'||new Date(r.fecha)<new Date(fechaFin)));
-      const kg=cos.reduce((s,r)=>s+(r.kg||0),0);
-      html+=`<div class="ciclo-ant"><div style="font-weight:600;font-size:13px">Ciclo ${numCiclo} — ${fmtFecha(enc.fecha)}</div><div style="font-size:11px;color:var(--light);margin-top:4px">${kg>0?`🍎 ${kg.toFixed(1)} kg cosechados`:'Sin registro de cosecha'}</div></div>`;
-    });
-  }
-  html+=`</div>`;
-  return html;
-}
-
 function buildFloraciones(lote, regs, diaInicio) {
   const hoy = new Date();
   const floraciones = regs.filter(r=>
@@ -553,6 +476,83 @@ function buildFloraciones(lote, regs, diaInicio) {
   });
 
   html += '</div>';
+  return html;
+}
+
+function buildLotePanel(lote){
+  const regs=window._registros;
+  const encendidos=regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  if(lote.tipo==='nuevo'){
+    return `<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">${lote.nombre}</div><div class="ciclo-sub">${lote.postes} postes — 3 meses de edad</div><div class="ciclo-estado">🌱 Etapa vegetativa</div></div><div style="padding:14px 16px;font-size:13px;color:var(--mid)">Plantas jóvenes en desarrollo vegetativo.</div></div></div>`;
+  }
+  if(!encendidos.length){
+    return `<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">${lote.nombre}</div><div class="ciclo-sub">${lote.postes} postes productivos</div><div class="ciclo-estado">⏳ Sin ciclo activo</div></div><div style="padding:16px"><p style="font-size:13px;color:var(--mid);margin-bottom:12px">Registra el encendido de luces para activar el cronograma automático.</p><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-p">+ Registrar encendido de luces</button></div></div></div>`;
+  }
+  const ultimoEnc=encendidos[encendidos.length-1];
+  const diaInicio=new Date(ultimoEnc.fecha);
+  const hoy=new Date();
+  const diaActual=Math.floor((hoy-diaInicio)/(1000*60*60*24));
+  const progreso=Math.min(100,Math.round((diaActual/CICLO_TOTAL)*100));
+  const appActual=PROGRAMA.filter(a=>a.dia<=diaActual).slice(-1)[0];
+  const appProx=PROGRAMA.find(a=>a.dia>diaActual);
+  let estadoText=appActual?appActual.nombre:'Inicio del ciclo';
+  if(appProx) estadoText+=` → ${appProx.nombre} en ${appProx.dia-diaActual}d`;
+  const apagados=regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Apagado')&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio);
+  const apagadoFecha=apagados.length?apagados[apagados.length-1].fecha:null;
+  const cosechas=regs.filter(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=diaInicio);
+  const totalKgCiclo=cosechas.reduce((s,r)=>s+(r.kg||0),0);
+  const totalValCiclo=cosechas.reduce((s,r)=>s+((r.kg||0)*(r.precio||0)),0);
+
+  let html=`<div style="padding:14px 0"><div class="ciclo-card">
+    <div class="ciclo-head"><div class="ciclo-title">${lote.nombre} — Ciclo Activo</div><div class="ciclo-sub">${lote.postes} postes · Iniciado ${fmtFecha(ultimoEnc.fecha)}</div><div class="ciclo-estado">📅 Día ${diaActual} de ~${CICLO_TOTAL}</div></div>
+    <div class="progreso-wrap">
+      <div class="progreso-label"><span>${estadoText}</span><span style="font-weight:600;color:var(--green)">${progreso}%</span></div>
+      <div class="progreso-bar"><div class="progreso-fill" style="width:${progreso}%"></div></div>
+      <div class="progreso-dias"><span>Día 0</span><span>Día ${CICLO_TOTAL}</span></div>
+    </div>
+    <div class="fechas-row">
+      <div class="fecha-item"><div class="fecha-val">${fmtFecha(ultimoEnc.fecha)}</div><div class="fecha-lbl">💡 Luces encendidas</div></div>
+      <div class="fecha-item"><div class="fecha-val">${apagadoFecha?fmtFecha(apagadoFecha):'~'+fmtFechaOffset(ultimoEnc.fecha,30)}</div><div class="fecha-lbl">🌙 Luces apagadas</div></div>
+      ${totalKgCiclo>0?`<div class="fecha-item"><div class="fecha-val">${totalKgCiclo.toFixed(1)} kg</div><div class="fecha-lbl">🍎 Cosechado</div></div><div class="fecha-item"><div class="fecha-val">$${totalValCiclo.toFixed(0)}</div><div class="fecha-lbl">💰 Ingresos</div></div>`:''}
+    </div>
+    <div class="apps-lista">
+      <div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Aplicaciones del ciclo</div>
+      ${PROGRAMA.map(ap=>{
+        const fad=new Date(diaInicio);fad.setDate(fad.getDate()+ap.dia);
+        const dd=Math.floor((fad-hoy)/(1000*60*60*24));
+        // Verificar si hay registro REAL de esta APP
+        const registrada = regs.find(r=>
+          (r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico') &&
+          r.lote && r.lote.includes(lote.nombre) &&
+          ((r.appPrograma && r.appPrograma.includes(ap.id)) ||
+           (r.tipoAplicacion && r.tipoAplicacion.includes(ap.id))) &&
+          new Date(r.fecha) >= diaInicio
+        );
+        let dc,bt,bc;
+        if(registrada){dc='dot-hecho';bt='✓ Registrada';bc='bg';}
+        else if(dd>=-2&&dd<=2){dc='dot-hoy';bt='HOY';bc='br';}
+        else if(dd>2&&dd<=7){dc='dot-prox';bt='Esta semana';bc='by';}
+        else if(dd>0){dc='dot-fut';bt=`En ${dd}d`;bc='';}
+        else{dc='dot-fut';bt='⚠️ Sin registrar';bc='br';}
+        return `<div class="app-row"><div class="app-dot ${dc}"></div><div class="app-info"><div class="app-nombre">${ap.nombre}</div><div class="app-fecha">${ap.modo} · ${fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})}</div><div class="app-prod">${ap.productos}</div>${ap.nota?`<div style="font-size:10px;color:var(--light);font-style:italic">${ap.nota}</div>`:''}</div>${bt?`<span class="app-badge badge ${bc}">${bt}</span>`:''}</div>`;
+      }).join('')}
+    </div>
+    <div style="padding:0 16px 14px"><button onclick="irARegistrarLuces('${lote.nombre}')" class="btn-nuevo-ciclo">+ Iniciar nuevo ciclo</button></div>
+  </div>
+  ${buildFloraciones(lote, regs, diaInicio)}
+</div>`;
+
+  if(encendidos.length>1){
+    html+=`<div class="stitle" style="padding-left:0">Ciclos anteriores</div>`;
+    encendidos.slice(0,-1).reverse().forEach((enc,idx)=>{
+      const numCiclo=encendidos.length-1-idx;
+      const fechaFin=encendidos[numCiclo]?encendidos[numCiclo].fecha:'—';
+      const cos=regs.filter(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=new Date(enc.fecha)&&(fechaFin==='—'||new Date(r.fecha)<new Date(fechaFin)));
+      const kg=cos.reduce((s,r)=>s+(r.kg||0),0);
+      html+=`<div class="ciclo-ant"><div style="font-weight:600;font-size:13px">Ciclo ${numCiclo} — ${fmtFecha(enc.fecha)}</div><div style="font-size:11px;color:var(--light);margin-top:4px">${kg>0?`🍎 ${kg.toFixed(1)} kg cosechados`:'Sin registro de cosecha'}</div></div>`;
+    });
+  }
+  html+=`</div>`;
   return html;
 }
 
