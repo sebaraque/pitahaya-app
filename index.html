@@ -316,6 +316,12 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
   <div id="cosStats" style="padding:18px"><div class="loading"><div class="spinner"></div></div></div>
 </div>
 
+<!-- FLORACIÓN -->
+<div class="page" id="page-flor">
+  <div class="fhead" style="background:#c2185b"><h2>🌸 Floraciones</h2><p>Control fitosanitario por ola</p></div>
+  <div id="florList" style="padding:18px"><div class="loading"><div class="spinner"></div></div></div>
+</div>
+
 </main>
 
 <nav>
@@ -327,6 +333,9 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
   </button>
   <button onclick="showPage('form',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span>Registrar</span>
+  </button>
+  <button onclick="showPage('flor',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/><path d="M12 2a4 4 0 0 0 0 8 4 4 0 0 0 0-8z"/><path d="M4.93 4.93a4 4 0 0 0 5.66 5.66"/><path d="M13.41 13.41a4 4 0 0 0 5.66 5.66"/><path d="M2 12a4 4 0 0 0 8 0 4 4 0 0 0-8 0z"/><path d="M14 12a4 4 0 0 0 8 0 4 4 0 0 0-8 0z"/></svg><span>Floración</span>
   </button>
   <button onclick="showPage('hist',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v10l4 4"/><circle cx="12" cy="12" r="9"/></svg><span>Historial</span>
@@ -399,13 +408,11 @@ async function cargar() {
     const snap = await getDocs(q);
     window._regs = snap.docs.map(d => {
       const data = {id:d.id, ...d.data()};
-      // Normalizar fechas Firestore Timestamp → string YYYY-MM-DD
       ['fecha','cosechaTentativa1','cosechaTentativa2'].forEach(k => {
         if(data[k] && typeof data[k] === 'object' && data[k].toDate) {
           data[k] = data[k].toDate().toISOString().split('T')[0];
         }
       });
-      // Asegurar campos fito existen en floraciones
       if(data.tipo === 'flores') {
         if(typeof data.fito1_hecho === 'undefined') data.fito1_hecho = false;
         if(typeof data.fito2_hecho === 'undefined') data.fito2_hecho = false;
@@ -540,9 +547,6 @@ function renderDashExtra() {
 
 // LOTES
 function renderLotes() {
-  console.log('=== renderLotes EJECUTADO ===');
-  console.log('Total registros:', window._regs.length);
-  console.log('Registros tipo flores:', window._regs.filter(r=>r.tipo==='flores').map(r=>({id:r.id,lote:r.lote,fecha:r.fecha,tipoFecha:typeof r.fecha,raw:r.fecha})));
   const tabsEl = document.getElementById('loteTabs');
   const panelsEl = document.getElementById('lotePanels');
   tabsEl.innerHTML = LOTES.map((l,i) => '<button class="ltab'+(i===0?' active':'')+'" onclick="selectLote(\''+l.id+'\',this)">'+l.nombre+'</button>').join('');
@@ -550,7 +554,6 @@ function renderLotes() {
 }
 
 function buildPanel(lote) {
-  console.log('=== buildPanel ===', lote.nombre, lote.tipo);
   const regs = window._regs; const hoy = new Date();
   if(lote.tipo==='nuevo') return '<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">'+lote.nombre+'</div><div class="ciclo-sub">'+lote.postes+' postes — vegetativo</div><div class="ciclo-estado">🌱 Etapa vegetativa</div></div><div style="padding:14px 16px;font-size:13px;color:var(--mid)">Plantas jóvenes en desarrollo.</div></div></div>';
   const encList = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
@@ -583,28 +586,15 @@ function buildPanel(lote) {
   }).join('');
 
   // FLORACIONES
-  const todasFlores = regs.filter(r=>r.tipo==='flores');
-  const floresLote = regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre));
-  const flores = floresLote.filter(r=>r.fecha&&new Date(r.fecha+'T12:00:00')>=dI).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
-  console.log('=== DEBUG FLORACIONES ===');
-  console.log('Lote:', lote.nombre);
-  console.log('Total flores en _regs:', todasFlores.length, todasFlores.map(r=>({id:r.id,lote:r.lote,fecha:r.fecha,tipo_fecha:typeof r.fecha})));
-  console.log('Flores de este lote:', floresLote.length);
-  console.log('Flores después filtro fecha (dI='+dI+'):', flores.length);
-  if(floresLote.length && !flores.length) console.log('⚠️ FLORES FILTRADAS POR FECHA — fechas:', floresLote.map(r=>r.fecha), 'dI:', dI.toISOString());
+  const flores = regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
   let flHtml = '<div style="padding:13px 16px;border-top:1px solid var(--br)"><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🌸 Floraciones del ciclo</div>';
   if(!flores.length) {
     flHtml += '<div style="font-size:12px;color:var(--lt);padding-bottom:8px">Sin floraciones registradas aún.</div>';
   } else {
     flores.forEach(function(fl, idx) {
-      try {
-      console.log('Renderizando floración #'+(idx+1), 'id:', fl.id, 'fecha:', fl.fecha, 'fito1:', fl.fito1_hecho, 'fito2:', fl.fito2_hecho, 'fito3:', fl.fito3_hecho);
-      var fechaStr = (typeof fl.fecha === 'string') ? fl.fecha : '';
-      if(!fechaStr) return;
-      var fechaFlor = new Date(fechaStr+'T12:00:00');
-      if(isNaN(fechaFlor.getTime())) return;
-      var ft1 = fl.cosechaTentativa1 ? new Date(fl.cosechaTentativa1+'T12:00:00') : new Date(fechaFlor.getTime()+25*86400000);
-      var ft2 = fl.cosechaTentativa2 ? new Date(fl.cosechaTentativa2+'T12:00:00') : new Date(fechaFlor.getTime()+30*86400000);
+      var fechaFlor = new Date(fl.fecha);
+      var ft1 = fl.cosechaTentativa1 ? new Date(fl.cosechaTentativa1) : new Date(fechaFlor.getTime()+25*86400000);
+      var ft2 = fl.cosechaTentativa2 ? new Date(fl.cosechaTentativa2) : new Date(fechaFlor.getTime()+30*86400000);
       var df = Math.floor((ft1-hoy)/86400000);
       var fito1 = new Date(fechaFlor); fito1.setDate(fito1.getDate()+4);
       var fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
@@ -638,8 +628,6 @@ function buildPanel(lote) {
       flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 2</b> '+fs2+' <span style="color:#aaa;font-size:10px">(día 7)</span></div>'+mkBtn(f2,2,dd2)+'</div>';
       flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 3</b> '+fs3+' <span style="color:#aaa;font-size:10px">(día 15)</span></div>'+mkBtn(f3,3,dd3)+'</div>';
       flHtml += '</div></div>';
-      console.log('✅ Floración #'+(idx+1)+' HTML generado OK, incluye fito-section:', flHtml.includes('fito-section'));
-      } catch(err) { console.error('Error renderizando floración:', fl, err); }
     });
   }
   flHtml += '</div>';
@@ -667,12 +655,12 @@ function buildPanel(lote) {
 
 // TOGGLE FITO
 window.tgFito = async function(flId, campo, valor) {
-  var v = (valor === true || valor === 'true' || valor === true);
+  var v = (valor === true || valor === 'true');
   try {
     await updateDoc(doc(db,'registros',flId), {[campo]: v});
     await cargar(); renderLotes(); renderDash();
     showToast(v ? '✅ Hecho' : '↩️ Desmarcado');
-  } catch(e) { console.error('Error tgFito:', e); showToast('❌ Error',true); }
+  } catch(e) { showToast('❌ Error',true); }
 };
 
 // SELECT LOTE
@@ -880,10 +868,143 @@ window.showPage = function(id, btn) {
   if(id==='cos')renderCos();
   if(id==='lotes')renderLotes();
   if(id==='dash')renderDash();
+  if(id==='flor')renderFlor();
 };
 
 window.showToast = function(msg, isErr=false) {
   const t=document.getElementById('toast');t.textContent=msg;t.style.background=isErr?'var(--r)':'var(--g)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);
+};
+
+// ==========================================
+// SECCIÓN FLORACIÓN — INDEPENDIENTE
+// ==========================================
+function renderFlor() {
+  var c = document.getElementById('florList');
+  var flores = window._regs.filter(function(r){ return r.tipo === 'flores'; });
+  flores.sort(function(a,b){ return new Date(b.fecha) - new Date(a.fecha); });
+
+  if(!flores.length) {
+    c.innerHTML = '<div class="empty"><div class="empty-ico">🌸</div><div class="empty-txt">Sin floraciones registradas.<br>Ve a Registrar → Flores para agregar una.</div></div>';
+    return;
+  }
+
+  var hoy = new Date();
+  var html = '';
+
+  for(var i = 0; i < flores.length; i++) {
+    var fl = flores[i];
+    var fechaStr = '';
+    if(typeof fl.fecha === 'string') { fechaStr = fl.fecha; }
+    else if(fl.fecha && fl.fecha.toDate) { fechaStr = fl.fecha.toDate().toISOString().split('T')[0]; }
+    if(!fechaStr) continue;
+
+    var fechaFlor = new Date(fechaStr + 'T12:00:00');
+    if(isNaN(fechaFlor.getTime())) continue;
+
+    var loteNom = fl.lote || 'Sin lote';
+    var nFlores = fl.numFlores || 0;
+
+    // Cosecha tentativa
+    var ct1str = fl.cosechaTentativa1 || '';
+    var ct2str = fl.cosechaTentativa2 || '';
+    if(typeof ct1str === 'object' && ct1str.toDate) ct1str = ct1str.toDate().toISOString().split('T')[0];
+    if(typeof ct2str === 'object' && ct2str.toDate) ct2str = ct2str.toDate().toISOString().split('T')[0];
+
+    // Fitosanitario: día 4, día 7, día 15
+    var fito1date = new Date(fechaFlor); fito1date.setDate(fito1date.getDate() + 4);
+    var fito2date = new Date(fechaFlor); fito2date.setDate(fito2date.getDate() + 7);
+    var fito3date = new Date(fechaFlor); fito3date.setDate(fito3date.getDate() + 15);
+
+    var f1 = fl.fito1_hecho === true;
+    var f2 = fl.fito2_hecho === true;
+    var f3 = fl.fito3_hecho === true;
+
+    var dd1 = Math.floor((fito1date - hoy) / 86400000);
+    var dd2 = Math.floor((fito2date - hoy) / 86400000);
+    var dd3 = Math.floor((fito3date - hoy) / 86400000);
+
+    var fs1 = fito1date.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+    var fs2 = fito2date.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+    var fs3 = fito3date.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+
+    var fmtF = function(f) {
+      if(!f) return '—';
+      var p = f.split('-');
+      var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+      return p[2] + ' ' + meses[parseInt(p[1])-1] + ' ' + p[0];
+    };
+
+    // Estado cosecha
+    var cosechaEst = '';
+    if(ct1str) {
+      var dfCos = Math.floor((new Date(ct1str+'T12:00:00') - hoy) / 86400000);
+      if(dfCos < 0) cosechaEst = '<span style="color:#c0392b;font-weight:600">🍎 En cosecha</span>';
+      else if(dfCos <= 5) cosechaEst = '<span style="color:#c49a0a;font-weight:600">'+dfCos+'d para cosechar</span>';
+      else cosechaEst = '<span style="color:#999">'+dfCos+'d para cosechar</span>';
+    }
+
+    // Build card
+    html += '<div class="flor-card">';
+    html += '<div class="flor-head"><div>';
+    html += '<div class="flor-titulo">' + loteNom.split('—')[0].trim() + ' — ' + fmtF(fechaStr) + '</div>';
+    html += '<div class="flor-flores">' + nFlores + ' flores</div>';
+    html += '</div><div style="text-align:right">';
+    if(cosechaEst) html += '<div style="font-size:12px">' + cosechaEst + '</div>';
+    if(ct1str && ct2str) html += '<div class="flor-fecha">' + fmtF(ct1str) + ' — ' + fmtF(ct2str) + '</div>';
+    html += '</div></div>';
+
+    // FITO SECTION
+    html += '<div class="fito-section">';
+    html += '<div class="fito-titulo">🐛 Fitosanitario</div>';
+
+    // Aplic 1
+    html += '<div class="fito-row"><div class="fito-label"><b>Aplic. 1</b> — ' + fs1 + ' <span style="color:#aaa;font-size:10px">(día 4)</span></div>';
+    if(f1) {
+      html += '<button class="btn-hecho" onclick="tgFito2(\'' + fl.id + '\',\'fito1_hecho\',false)">✅ Hecho</button>';
+    } else {
+      var cls1 = dd1 <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
+      html += '<button class="' + cls1 + '" onclick="tgFito2(\'' + fl.id + '\',\'fito1_hecho\',true)">❌ Pendiente</button>';
+    }
+    html += '</div>';
+
+    // Aplic 2
+    html += '<div class="fito-row"><div class="fito-label"><b>Aplic. 2</b> — ' + fs2 + ' <span style="color:#aaa;font-size:10px">(día 7)</span></div>';
+    if(f2) {
+      html += '<button class="btn-hecho" onclick="tgFito2(\'' + fl.id + '\',\'fito2_hecho\',false)">✅ Hecho</button>';
+    } else {
+      var cls2 = dd2 <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
+      html += '<button class="' + cls2 + '" onclick="tgFito2(\'' + fl.id + '\',\'fito2_hecho\',true)">❌ Pendiente</button>';
+    }
+    html += '</div>';
+
+    // Aplic 3
+    html += '<div class="fito-row"><div class="fito-label"><b>Aplic. 3</b> — ' + fs3 + ' <span style="color:#aaa;font-size:10px">(día 15)</span></div>';
+    if(f3) {
+      html += '<button class="btn-hecho" onclick="tgFito2(\'' + fl.id + '\',\'fito3_hecho\',false)">✅ Hecho</button>';
+    } else {
+      var cls3 = dd3 <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
+      html += '<button class="' + cls3 + '" onclick="tgFito2(\'' + fl.id + '\',\'fito3_hecho\',true)">❌ Pendiente</button>';
+    }
+    html += '</div>';
+
+    html += '</div>'; // fito-section
+    html += '</div>'; // flor-card
+  }
+
+  c.innerHTML = html;
+}
+
+window.tgFito2 = async function(flId, campo, valor) {
+  try {
+    await updateDoc(doc(db, 'registros', flId), {[campo]: valor});
+    await cargar();
+    renderFlor();
+    renderDash();
+    showToast(valor ? '✅ Hecho' : '↩️ Desmarcado');
+  } catch(e) {
+    console.error('Error tgFito2:', e);
+    showToast('❌ Error: ' + e.message, true);
+  }
 };
 
 </script>
