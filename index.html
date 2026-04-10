@@ -540,6 +540,9 @@ function renderDashExtra() {
 
 // LOTES
 function renderLotes() {
+  console.log('=== renderLotes EJECUTADO ===');
+  console.log('Total registros:', window._regs.length);
+  console.log('Registros tipo flores:', window._regs.filter(r=>r.tipo==='flores').map(r=>({id:r.id,lote:r.lote,fecha:r.fecha,tipoFecha:typeof r.fecha,raw:r.fecha})));
   const tabsEl = document.getElementById('loteTabs');
   const panelsEl = document.getElementById('lotePanels');
   tabsEl.innerHTML = LOTES.map((l,i) => '<button class="ltab'+(i===0?' active':'')+'" onclick="selectLote(\''+l.id+'\',this)">'+l.nombre+'</button>').join('');
@@ -547,6 +550,7 @@ function renderLotes() {
 }
 
 function buildPanel(lote) {
+  console.log('=== buildPanel ===', lote.nombre, lote.tipo);
   const regs = window._regs; const hoy = new Date();
   if(lote.tipo==='nuevo') return '<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">'+lote.nombre+'</div><div class="ciclo-sub">'+lote.postes+' postes — vegetativo</div><div class="ciclo-estado">🌱 Etapa vegetativa</div></div><div style="padding:14px 16px;font-size:13px;color:var(--mid)">Plantas jóvenes en desarrollo.</div></div></div>';
   const encList = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
