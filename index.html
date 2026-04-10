@@ -397,7 +397,22 @@ async function cargar() {
   try {
     const q = query(collection(db,'registros'), orderBy('timestamp','desc'));
     const snap = await getDocs(q);
-    window._regs = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    window._regs = snap.docs.map(d => {
+      const data = {id:d.id, ...d.data()};
+      // Normalizar fechas Firestore Timestamp → string YYYY-MM-DD
+      ['fecha','cosechaTentativa1','cosechaTentativa2'].forEach(k => {
+        if(data[k] && typeof data[k] === 'object' && data[k].toDate) {
+          data[k] = data[k].toDate().toISOString().split('T')[0];
+        }
+      });
+      // Asegurar campos fito existen en floraciones
+      if(data.tipo === 'flores') {
+        if(typeof data.fito1_hecho === 'undefined') data.fito1_hecho = false;
+        if(typeof data.fito2_hecho === 'undefined') data.fito2_hecho = false;
+        if(typeof data.fito3_hecho === 'undefined') data.fito3_hecho = false;
+      }
+      return data;
+    });
   } catch(e) { window._regs = []; }
 }
 
@@ -564,15 +579,19 @@ function buildPanel(lote) {
   }).join('');
 
   // FLORACIONES
-  const flores = regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  const flores = regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&r.fecha&&new Date(r.fecha+'T12:00:00')>=dI).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
   let flHtml = '<div style="padding:13px 16px;border-top:1px solid var(--br)"><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🌸 Floraciones del ciclo</div>';
   if(!flores.length) {
     flHtml += '<div style="font-size:12px;color:var(--lt);padding-bottom:8px">Sin floraciones registradas aún.</div>';
   } else {
     flores.forEach(function(fl, idx) {
-      var fechaFlor = new Date(fl.fecha);
-      var ft1 = fl.cosechaTentativa1 ? new Date(fl.cosechaTentativa1) : new Date(fechaFlor.getTime()+25*86400000);
-      var ft2 = fl.cosechaTentativa2 ? new Date(fl.cosechaTentativa2) : new Date(fechaFlor.getTime()+30*86400000);
+      try {
+      var fechaStr = (typeof fl.fecha === 'string') ? fl.fecha : '';
+      if(!fechaStr) return;
+      var fechaFlor = new Date(fechaStr+'T12:00:00');
+      if(isNaN(fechaFlor.getTime())) return;
+      var ft1 = fl.cosechaTentativa1 ? new Date(fl.cosechaTentativa1+'T12:00:00') : new Date(fechaFlor.getTime()+25*86400000);
+      var ft2 = fl.cosechaTentativa2 ? new Date(fl.cosechaTentativa2+'T12:00:00') : new Date(fechaFlor.getTime()+30*86400000);
       var df = Math.floor((ft1-hoy)/86400000);
       var fito1 = new Date(fechaFlor); fito1.setDate(fito1.getDate()+4);
       var fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
@@ -606,6 +625,7 @@ function buildPanel(lote) {
       flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 2</b> '+fs2+' <span style="color:#aaa;font-size:10px">(día 7)</span></div>'+mkBtn(f2,2,dd2)+'</div>';
       flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 3</b> '+fs3+' <span style="color:#aaa;font-size:10px">(día 15)</span></div>'+mkBtn(f3,3,dd3)+'</div>';
       flHtml += '</div></div>';
+      } catch(err) { console.error('Error renderizando floración:', fl, err); }
     });
   }
   flHtml += '</div>';
@@ -633,12 +653,12 @@ function buildPanel(lote) {
 
 // TOGGLE FITO
 window.tgFito = async function(flId, campo, valor) {
-  var v = (valor === true || valor === 'true');
+  var v = (valor === true || valor === 'true' || valor === true);
   try {
     await updateDoc(doc(db,'registros',flId), {[campo]: v});
     await cargar(); renderLotes(); renderDash();
     showToast(v ? '✅ Hecho' : '↩️ Desmarcado');
-  } catch(e) { showToast('❌ Error',true); }
+  } catch(e) { console.error('Error tgFito:', e); showToast('❌ Error',true); }
 };
 
 // SELECT LOTE
@@ -740,7 +760,7 @@ window.guardar = async function(tipo) {
   else if(tipo==='fitosan'){reg.tipoProblema=document.getElementById('ft-tipo').value;reg.plaga=document.getElementById('ft-plaga').value;reg.producto=document.getElementById('ft-producto').value;reg.dosis=document.getElementById('ft-dosis').value;reg.volumen=document.getElementById('ft-vol').value;reg.modo=document.getElementById('ft-modo').value;reg.carencia=document.getElementById('ft-carencia').value;reg.obs=document.getElementById('ft-obs').value;reg.detalle=(reg.plaga||reg.tipoProblema||'')+(reg.producto?' · '+reg.producto:'');if(!reg.producto){showToast('⚠️ Completa el producto',true);resetBtn(btn);return;}}
   else if(tipo==='labor'){reg.tipoLabor=document.getElementById('l-tipo').value;reg.jornales=document.getElementById('l-jorn').value;reg.costo=document.getElementById('l-costo').value;reg.obs=document.getElementById('l-obs').value;reg.detalle=reg.tipoLabor;if(!reg.tipoLabor){showToast('⚠️ Selecciona el tipo',true);resetBtn(btn);return;}}
   else if(tipo==='cosecha'){reg.kg=parseFloat(document.getElementById('c-kg').value)||0;reg.precio=parseFloat(document.getElementById('c-precio').value)||0;reg.calidad=document.getElementById('c-cal').value;reg.destino=document.getElementById('c-dest').value;reg.obs=document.getElementById('c-obs').value;reg.detalle=reg.kg+' kg'+(reg.precio?' · $'+(reg.kg*reg.precio).toFixed(2):'');if(!reg.kg){showToast('⚠️ Completa los kg',true);resetBtn(btn);return;}}
-  else if(tipo==='flores'){reg.numFlores=parseInt(document.getElementById('fl-num').value)||0;reg.obs=document.getElementById('fl-obs').value;const fd=new Date(reg.fecha);const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);reg.cosechaTentativa1=ft1.toISOString().split('T')[0];reg.cosechaTentativa2=ft2.toISOString().split('T')[0];reg.detalle=reg.numFlores+' flores → cosecha ~'+ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});if(!reg.numFlores){showToast('⚠️ Ingresa el número de flores',true);resetBtn(btn);return;}}
+  else if(tipo==='flores'){reg.numFlores=parseInt(document.getElementById('fl-num').value)||0;reg.obs=document.getElementById('fl-obs').value;const fd=new Date(reg.fecha);const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);reg.cosechaTentativa1=ft1.toISOString().split('T')[0];reg.cosechaTentativa2=ft2.toISOString().split('T')[0];reg.fito1_hecho=false;reg.fito2_hecho=false;reg.fito3_hecho=false;reg.detalle=reg.numFlores+' flores → cosecha ~'+ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});if(!reg.numFlores){showToast('⚠️ Ingresa el número de flores',true);resetBtn(btn);return;}}
   if(fotoFile){showToast('📷 Subiendo foto...');reg.fotoURL=await subirFoto(fotoFile);}
   try {
     if(navigator.onLine){await addDoc(collection(db,'registros'),reg);}
