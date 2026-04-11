@@ -316,6 +316,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
   <div id="cosStats" style="padding:18px"><div class="loading"><div class="spinner"></div></div></div>
 </div>
 
+
 <!-- FLORACIÓN -->
 <div class="page" id="page-flor">
   <div class="fhead" style="background:#c2185b"><h2>🌸 Floraciones</h2><p>Control fitosanitario por ola</p></div>
@@ -335,7 +336,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span>Registrar</span>
   </button>
   <button onclick="showPage('flor',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/><path d="M12 2a4 4 0 0 0 0 8 4 4 0 0 0 0-8z"/><path d="M4.93 4.93a4 4 0 0 0 5.66 5.66"/><path d="M13.41 13.41a4 4 0 0 0 5.66 5.66"/><path d="M2 12a4 4 0 0 0 8 0 4 4 0 0 0-8 0z"/><path d="M14 12a4 4 0 0 0 8 0 4 4 0 0 0-8 0z"/></svg><span>Floración</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="5" r="2.5"/><circle cx="17.5" cy="8.5" r="2.5"/><circle cx="6.5" cy="8.5" r="2.5"/><circle cx="17.5" cy="15.5" r="2.5"/><circle cx="6.5" cy="15.5" r="2.5"/><circle cx="12" cy="19" r="2.5"/></svg><span>Floración</span>
   </button>
   <button onclick="showPage('hist',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v10l4 4"/><circle cx="12" cy="12" r="9"/></svg><span>Historial</span>
@@ -876,121 +877,77 @@ window.showToast = function(msg, isErr=false) {
 };
 
 // ==========================================
-// SECCIÓN FLORACIÓN — INDEPENDIENTE
+// SECCION FLORACION
 // ==========================================
 function renderFlor() {
   var c = document.getElementById('florList');
   var flores = window._regs.filter(function(r){ return r.tipo === 'flores'; });
   flores.sort(function(a,b){ return new Date(b.fecha) - new Date(a.fecha); });
-
   if(!flores.length) {
-    c.innerHTML = '<div class="empty"><div class="empty-ico">🌸</div><div class="empty-txt">Sin floraciones registradas.<br>Ve a Registrar → Flores para agregar una.</div></div>';
+    c.innerHTML = '<div class="empty"><div class="empty-ico">🌸</div><div class="empty-txt">Sin floraciones registradas.<br>Ve a Registrar y Flores para agregar una.</div></div>';
     return;
   }
-
   var hoy = new Date();
   var html = '';
-
   for(var i = 0; i < flores.length; i++) {
     var fl = flores[i];
-    var fechaStr = '';
-    if(typeof fl.fecha === 'string') { fechaStr = fl.fecha; }
-    else if(fl.fecha && fl.fecha.toDate) { fechaStr = fl.fecha.toDate().toISOString().split('T')[0]; }
+    var fechaStr = (typeof fl.fecha === 'string') ? fl.fecha : '';
     if(!fechaStr) continue;
-
     var fechaFlor = new Date(fechaStr + 'T12:00:00');
     if(isNaN(fechaFlor.getTime())) continue;
-
     var loteNom = fl.lote || 'Sin lote';
     var nFlores = fl.numFlores || 0;
-
-    // Cosecha tentativa
-    var ct1str = fl.cosechaTentativa1 || '';
-    var ct2str = fl.cosechaTentativa2 || '';
-    if(typeof ct1str === 'object' && ct1str.toDate) ct1str = ct1str.toDate().toISOString().split('T')[0];
-    if(typeof ct2str === 'object' && ct2str.toDate) ct2str = ct2str.toDate().toISOString().split('T')[0];
-
-    // Fitosanitario: día 4, día 7, día 15
+    var ct1str = (typeof fl.cosechaTentativa1 === 'string') ? fl.cosechaTentativa1 : '';
+    var ct2str = (typeof fl.cosechaTentativa2 === 'string') ? fl.cosechaTentativa2 : '';
     var fito1date = new Date(fechaFlor); fito1date.setDate(fito1date.getDate() + 4);
     var fito2date = new Date(fechaFlor); fito2date.setDate(fito2date.getDate() + 7);
     var fito3date = new Date(fechaFlor); fito3date.setDate(fito3date.getDate() + 15);
-
     var f1 = fl.fito1_hecho === true;
     var f2 = fl.fito2_hecho === true;
     var f3 = fl.fito3_hecho === true;
-
     var dd1 = Math.floor((fito1date - hoy) / 86400000);
     var dd2 = Math.floor((fito2date - hoy) / 86400000);
     var dd3 = Math.floor((fito3date - hoy) / 86400000);
-
     var fs1 = fito1date.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
     var fs2 = fito2date.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
     var fs3 = fito3date.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-
     var fmtF = function(f) {
-      if(!f) return '—';
+      if(!f) return '---';
       var p = f.split('-');
       var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
       return p[2] + ' ' + meses[parseInt(p[1])-1] + ' ' + p[0];
     };
-
-    // Estado cosecha
     var cosechaEst = '';
     if(ct1str) {
       var dfCos = Math.floor((new Date(ct1str+'T12:00:00') - hoy) / 86400000);
-      if(dfCos < 0) cosechaEst = '<span style="color:#c0392b;font-weight:600">🍎 En cosecha</span>';
+      if(dfCos < 0) cosechaEst = '<span style="color:#c0392b;font-weight:600">En cosecha</span>';
       else if(dfCos <= 5) cosechaEst = '<span style="color:#c49a0a;font-weight:600">'+dfCos+'d para cosechar</span>';
       else cosechaEst = '<span style="color:#999">'+dfCos+'d para cosechar</span>';
     }
-
-    // Build card
     html += '<div class="flor-card">';
     html += '<div class="flor-head"><div>';
-    html += '<div class="flor-titulo">' + loteNom.split('—')[0].trim() + ' — ' + fmtF(fechaStr) + '</div>';
+    html += '<div class="flor-titulo">' + loteNom.split('\u2014')[0].trim() + ' -- ' + fmtF(fechaStr) + '</div>';
     html += '<div class="flor-flores">' + nFlores + ' flores</div>';
     html += '</div><div style="text-align:right">';
     if(cosechaEst) html += '<div style="font-size:12px">' + cosechaEst + '</div>';
-    if(ct1str && ct2str) html += '<div class="flor-fecha">' + fmtF(ct1str) + ' — ' + fmtF(ct2str) + '</div>';
+    if(ct1str && ct2str) html += '<div class="flor-fecha">' + fmtF(ct1str) + ' -- ' + fmtF(ct2str) + '</div>';
     html += '</div></div>';
-
-    // FITO SECTION
     html += '<div class="fito-section">';
-    html += '<div class="fito-titulo">🐛 Fitosanitario</div>';
-
-    // Aplic 1
-    html += '<div class="fito-row"><div class="fito-label"><b>Aplic. 1</b> — ' + fs1 + ' <span style="color:#aaa;font-size:10px">(día 4)</span></div>';
-    if(f1) {
-      html += '<button class="btn-hecho" onclick="tgFito2(\'' + fl.id + '\',\'fito1_hecho\',false)">✅ Hecho</button>';
-    } else {
-      var cls1 = dd1 <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
-      html += '<button class="' + cls1 + '" onclick="tgFito2(\'' + fl.id + '\',\'fito1_hecho\',true)">❌ Pendiente</button>';
-    }
-    html += '</div>';
-
-    // Aplic 2
-    html += '<div class="fito-row"><div class="fito-label"><b>Aplic. 2</b> — ' + fs2 + ' <span style="color:#aaa;font-size:10px">(día 7)</span></div>';
-    if(f2) {
-      html += '<button class="btn-hecho" onclick="tgFito2(\'' + fl.id + '\',\'fito2_hecho\',false)">✅ Hecho</button>';
-    } else {
-      var cls2 = dd2 <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
-      html += '<button class="' + cls2 + '" onclick="tgFito2(\'' + fl.id + '\',\'fito2_hecho\',true)">❌ Pendiente</button>';
-    }
-    html += '</div>';
-
-    // Aplic 3
-    html += '<div class="fito-row"><div class="fito-label"><b>Aplic. 3</b> — ' + fs3 + ' <span style="color:#aaa;font-size:10px">(día 15)</span></div>';
-    if(f3) {
-      html += '<button class="btn-hecho" onclick="tgFito2(\'' + fl.id + '\',\'fito3_hecho\',false)">✅ Hecho</button>';
-    } else {
-      var cls3 = dd3 <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
-      html += '<button class="' + cls3 + '" onclick="tgFito2(\'' + fl.id + '\',\'fito3_hecho\',true)">❌ Pendiente</button>';
-    }
-    html += '</div>';
-
-    html += '</div>'; // fito-section
-    html += '</div>'; // flor-card
+    html += '<div class="fito-titulo">Fitosanitario</div>';
+    var mkB = function(hecho, num, dd, fs) {
+      var campo = 'fito'+num+'_hecho';
+      if(hecho) {
+        return '<div class="fito-row"><div class="fito-label"><b>Aplic. '+num+'</b> -- '+fs+' <span style="color:#aaa;font-size:10px">(dia '+(num==1?'4':num==2?'7':'15')+')</span></div><button class="btn-hecho" onclick="tgFito2(\''+fl.id+'\',\''+campo+'\',false)">Hecho</button></div>';
+      } else {
+        var cls = dd <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
+        return '<div class="fito-row"><div class="fito-label"><b>Aplic. '+num+'</b> -- '+fs+' <span style="color:#aaa;font-size:10px">(dia '+(num==1?'4':num==2?'7':'15')+')</span></div><button class="'+cls+'" onclick="tgFito2(\''+fl.id+'\',\''+campo+'\',true)">Pendiente</button></div>';
+      }
+    };
+    html += mkB(f1, 1, dd1, fs1);
+    html += mkB(f2, 2, dd2, fs2);
+    html += mkB(f3, 3, dd3, fs3);
+    html += '</div></div>';
   }
-
   c.innerHTML = html;
 }
 
@@ -1000,10 +957,10 @@ window.tgFito2 = async function(flId, campo, valor) {
     await cargar();
     renderFlor();
     renderDash();
-    showToast(valor ? '✅ Hecho' : '↩️ Desmarcado');
+    showToast(valor ? 'Hecho' : 'Desmarcado');
   } catch(e) {
     console.error('Error tgFito2:', e);
-    showToast('❌ Error: ' + e.message, true);
+    showToast('Error: ' + e.message, true);
   }
 };
 
