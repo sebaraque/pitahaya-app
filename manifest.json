@@ -1,8 +1,7 @@
 {
   "name": "Pitahaya Pro — Finca María Cristina",
   "short_name": "Pitahaya Pro",
-  "description": "Gestión de finca pitahaya",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#2d6a1f",
   "theme_color": "#2d6a1f",
