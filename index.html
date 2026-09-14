@@ -184,7 +184,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
     <div style="text-align:right">
       <div style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.65)" id="headerDate"></div>
       <div id="sync-status" style="font-size:10px;margin-top:3px;font-weight:600;color:rgba(255,255,255,0.85)">☁️ En la nube</div>
-      <div style="font-size:8px;color:rgba(255,255,255,0.35);margin-top:1px">v3.0</div>
+      <div style="font-size:8px;color:rgba(255,255,255,0.35);margin-top:1px">v4.0</div>
     </div>
   </div>
 </header>
@@ -230,20 +230,9 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 
   <div class="fbody" id="tab-drench">
     <div class="field"><label>Fecha</label><input type="date" id="f-fecha"></div>
-    <div class="field"><label>Lote</label><select id="f-lote" onchange="sugerirApp()"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
+    <div class="field"><label>Lote</label><select id="f-lote" onchange="sugerirApp()"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 400 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
     <div id="app-sugerida"></div>
-    <div class="field"><label>Aplicación del programa</label><select id="f-app" onchange="autocompletar('f-app','f-productos')"><option value="">Seleccionar...</option><option value="APP2">APP 2 — P/K/Mg (Día 30)</option><option value="APP3">APP 3 — Calcio (Día 35)</option><option value="APP6">APP 6 — Ca floracion (Día 54)</option><option value="APP7">APP 7 — K cuajado (Día 57)</option><option value="APP8">APP 8 — K+Caltrac (Día 60)</option><option value="APP9">APP 9 — Calcio (Día 63)</option><option value="APP10">APP 10 — K (Día 66)</option><option value="APP11">APP 11 — K (Día 69)</option><option value="APP12">APP 12 — Ca+Caltrac (Día 72)</option><option value="APP13">APP 13 — K (Día 75)</option><option value="APP14">APP 14 — K ULTIMA (Día 78)</option><option value="otro">Otra</option></select></div>
-    <div class="field"><label>Productos aplicados</label><textarea id="f-productos" placeholder="Ej: MKP 400g, Sulfato Mg 340g..."></textarea></div>
-    <div class="frow"><div class="field"><label>Volumen (L)</label><input type="number" id="f-vol" placeholder="200"></div><div class="field"><label>Tandas</label><input type="number" id="f-tandas" placeholder="3"></div></div>
-    <div class="field"><label>Foto</label><input type="file" id="f-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'f-fp')"><button class="foto-btn" onclick="document.getElementById('f-foto').click()">📷 Foto</button><img id="f-fp" class="foto-preview"></div>
-    <div class="field"><label>Observaciones</label><textarea id="f-obs"></textarea></div>
-    <button class="btn-p" onclick="guardar('drench')">✅ Guardar</button>
-  </div>
-
-  <div class="fbody" id="tab-foliar" style="display:none">
-    <div class="field"><label>Fecha</label><input type="date" id="fo-fecha"></div>
-    <div class="field"><label>Lote</label><select id="fo-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
-    <div class="field"><label>Aplicación</label><select id="fo-app" onchange="autocompletar('fo-app','fo-prod')"><option value="">Seleccionar...</option><option value="APP5">APP 5 — Florstim boton (Día 50)</option><option value="APP8">APP 8 — Caltrac fruto (Día 60)</option><option value="APP12">APP 12 — Caltrac fruto 2 (Día 72)</option><option value="otro">Foliar adicional</option></select></div>
+    <div class="field"><label>Aplicación del programa</label><select id="f-app" onchange="autocompletar('f-app','f-productos')"><option value="">Seleccionar...</option><option value="APP2">APP 2 — P/K/Mg (Dia 30)</option><option value="APP3">APP 3 — Calcio (Dia 35)</option><option value="APP6">APP 6 — Foliar engorde (Dia 60)</option><option value="APP10">APP 10 — Foliar medio (Dia 70)</option><option value="APP13">APP 13 — Foliar final (Dia 78)</option><option value="otro">Foliar adicional</option></select></div>
     <div class="field"><label>Producto</label><input type="text" id="fo-prod" placeholder="Ej: YaraVita Caltrac..."></div>
     <div class="frow"><div class="field"><label>Dosis (mL/L)</label><input type="text" id="fo-dosis" placeholder="2 mL/L"></div><div class="field"><label>Volumen (L)</label><input type="number" id="fo-vol" placeholder="200"></div></div>
     <div class="field"><label>Hora</label><input type="time" id="fo-hora"></div>
@@ -254,8 +243,8 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 
   <div class="fbody" id="tab-edafico" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="ed-fecha"></div>
-    <div class="field"><label>Lote</label><select id="ed-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
-    <div class="field"><label>Tipo</label><select id="ed-tipo" onchange="autocompletar('ed-tipo','ed-productos')"><option value="">Seleccionar...</option><option value="APP1">APP 1 — Arranque (Día 0)</option><option value="APP4">APP 4 — Refuerzo pre-flor (Día 45)</option><option>Granular incorporado</option><option>Materia orgánica / compost</option><option>Corrector de pH</option><option>Cal agrícola / dolomita</option><option>Otro</option></select></div>
+    <div class="field"><label>Lote</label><select id="ed-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 400 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
+    <div class="field"><label>Tipo</label><select id="ed-tipo" onchange="autocompletar('ed-tipo','ed-productos')"><option value="">Seleccionar...</option><option value="APP1">APP 1 — Arranque (Día 0)</option><option value="APP4">APP 4 — Refuerzo suelo (Dia 45)</option><option>Granular incorporado</option><option>Materia orgánica / compost</option><option>Corrector de pH</option><option>Cal agrícola / dolomita</option><option>Otro</option></select></div>
     <div class="field"><label>Productos</label><textarea id="ed-productos" placeholder="Ej: Alpha Acelerador 30g/poste + Bioabor 100g/poste"></textarea></div>
     <div class="frow"><div class="field"><label>Dosis/poste</label><input type="text" id="ed-dosis" placeholder="30g"></div><div class="field"><label>Total</label><input type="text" id="ed-total" placeholder="9 kg"></div></div>
     <div class="field"><label>Modo</label><select id="ed-modo"><option value="">Seleccionar...</option><option>Hueco 5-8cm a 15-20cm del tallo</option><option>Incorporado superficial</option><option>Banda al pie del poste</option><option>Drench correctivo</option><option>Otro</option></select></div>
@@ -266,7 +255,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 
   <div class="fbody" id="tab-fitosan" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="ft-fecha"></div>
-    <div class="field"><label>Lote</label><select id="ft-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
+    <div class="field"><label>Lote</label><select id="ft-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 400 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
     <div class="field"><label>Tipo de problema</label><select id="ft-tipo" onchange="autocompletar('ft-tipo','ft-producto')"><option value="">Seleccionar...</option><option>Insecto — masticador</option><option>Insecto — chupador</option><option>Ácaro</option><option>Hongo / enfermedad</option><option>Bacteria</option><option>Preventivo</option><option value="FITO1">FITO 1 — Preventivo (Día 45-50)</option><option value="FITO2">FITO 2 — Intermedio (Día 58)</option><option value="FITO3">FITO 3 — Final (Día 75)</option></select></div>
     <div class="field"><label>Plaga o enfermedad</label><input type="text" id="ft-plaga" placeholder="Ej: trips, cochinilla..."></div>
     <div class="field"><label>Producto</label><input type="text" id="ft-producto" placeholder="Ej: Engeo, Mancozeb..."></div>
@@ -280,7 +269,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 
   <div class="fbody" id="tab-labor" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="l-fecha"></div>
-    <div class="field"><label>Lote</label><select id="l-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
+    <div class="field"><label>Lote</label><select id="l-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 400 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
     <div class="field"><label>Tipo de labor</label><select id="l-tipo"><option value="">Seleccionar...</option><option>Poda de formación</option><option>Poda sanitaria</option><option>Deshierba / limpieza</option><option>Tutorado / amarre</option><option>Encendido de luces (inducción)</option><option>Apagado de luces</option><option>Revisión sistema de riego</option><option>Instalación de infraestructura</option><option>Otra</option></select></div>
     <div class="frow"><div class="field"><label>Jornales</label><input type="number" id="l-jorn" placeholder="2"></div><div class="field"><label>Costo ($)</label><input type="number" id="l-costo" placeholder="0.00" step="0.01"></div></div>
     <div class="field"><label>Foto</label><input type="file" id="l-foto" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this,'l-fp')"><button class="foto-btn" onclick="document.getElementById('l-foto').click()">📷 Foto</button><img id="l-fp" class="foto-preview"></div>
@@ -290,7 +279,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 
   <div class="fbody" id="tab-cosecha" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="c-fecha"></div>
-    <div class="field"><label>Lote</label><select id="c-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option><option>Todos los lotes productivos</option></select></div>
+    <div class="field"><label>Lote</label><select id="c-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 400 postes</option><option>Todos los lotes productivos</option></select></div>
     <div class="frow"><div class="field"><label>Cantidad (kg)</label><input type="number" id="c-kg" placeholder="0" step="0.5"></div><div class="field"><label>Precio/kg ($)</label><input type="number" id="c-precio" placeholder="0.00" step="0.01"></div></div>
     <div class="field"><label>Calidad</label><select id="c-cal"><option value="">Seleccionar...</option><option>Primera (+500g)</option><option>Segunda (300-500g)</option><option>Tercera (-300g)</option><option>Mixto</option></select></div>
     <div class="field"><label>Destino</label><input type="text" id="c-dest" placeholder="Mercado Manta..."></div>
@@ -301,7 +290,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 
   <div class="fbody" id="tab-flores" style="display:none">
     <div class="field"><label>Fecha de floración</label><input type="date" id="fl-fecha" onchange="calcTentativa()"></div>
-    <div class="field"><label>Lote</label><select id="fl-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 430 postes</option></select></div>
+    <div class="field"><label>Lote</label><select id="fl-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 400 postes</option></select></div>
     <div class="field"><label>Número de flores</label><input type="number" id="fl-num" placeholder="500" oninput="calcTentativa()"></div>
     <div class="fl-tentativa" id="fl-tentativa">
       <div style="font-size:12px;font-weight:600;color:var(--g)">📅 Cosecha tentativa</div>
@@ -379,25 +368,24 @@ const storage = getStorage(fb);
 const LOTES = [
   {id:'lote1',nombre:'Lote 1',postes:300,tipo:'productivo'},
   {id:'lote2',nombre:'Lote 2',postes:300,tipo:'productivo'},
-  {id:'lote3',nombre:'Lote 3',postes:430,tipo:'productivo'},
+  {id:'lote3',nombre:'Lote 3',postes:400,tipo:'productivo'},
   {id:'lote4',nombre:'Lote 4',postes:3270,tipo:'nuevo'},
 ];
 
 const PROGRAMA = [
   {id:'APP1',dia:0,nombre:'APP 1 — Arranque',modo:'Suelo granular',productos:'Alpha Acelerador 60g/poste (30g cada lado) + Bioabor BBO 100g/poste',nota:'Prende luces'},
-  {id:'APP2',dia:30,nombre:'APP 2 — P/K/Mg',modo:'Drench 2L/poste',productos:'Soli Phos 2000g + Sulfato Mg 1200g + Humater 500mL / tanque 200L',nota:'Apaga luces. Tanque cubre 100 postes'},
-  {id:'APP3',dia:35,nombre:'APP 3 — Calcio boton',modo:'Drench 2L/poste',productos:'Calcinit Bio 2000g/tanque 200L — SOLO',nota:'NUNCA mezclar Calcinit'},
-  {id:'APP4',dia:45,nombre:'APP 4 — Refuerzo pre-flor',modo:'Suelo granular',productos:'Alpha Acelerador 30g/poste + Bioabor BBO 100g/poste',nota:'Pre-floracion'},
-  {id:'APP5',dia:50,nombre:'APP 5 — Florstim boton',modo:'Foliar mochila 20L',productos:'Florstim Gold 50mL/mochila (2.5mL/L)',nota:'SOLO al boton cerrado. ANTES 8am'},
-  {id:'APP6',dia:54,nombre:'APP 6 — Ca floracion',modo:'Fertirriego goteo',productos:'Calcinit Bio 2000g/tanque 200L — SOLO',nota:'Inicio patron Ca-K-K. Floracion'},
-  {id:'APP7',dia:57,nombre:'APP 7 — K cuajado',modo:'Fertirriego goteo',productos:'Soli Plex 1600g + Soli K 2400g / tanque 200L',nota:'Inicio engorde'},
-  {id:'APP8',dia:60,nombre:'APP 8 — K + Caltrac',modo:'Fertirriego + foliar',productos:'Soli Plex 1600g + Soli K 2400g + Caltrac 50mL/mochila foliar al fruto',nota:'Caltrac SOLO al fruto. ANTES 8am'},
-  {id:'APP9',dia:63,nombre:'APP 9 — Calcio',modo:'Fertirriego goteo',productos:'Calcinit Bio 2000g/tanque 200L — SOLO',nota:'NUNCA mezclar Calcinit'},
-  {id:'APP10',dia:66,nombre:'APP 10 — K engorde',modo:'Fertirriego goteo',productos:'Soli Plex 1600g + Soli K 2400g / tanque 200L',nota:'Engorde constante'},
-  {id:'APP11',dia:69,nombre:'APP 11 — K engorde',modo:'Fertirriego goteo',productos:'Soli Plex 1600g + Soli K 2400g / tanque 200L',nota:'Engorde constante'},
-  {id:'APP12',dia:72,nombre:'APP 12 — Ca + Caltrac',modo:'Fertirriego + foliar',productos:'Calcinit Bio 2000g/tanque SOLO + Caltrac 50mL/mochila foliar al fruto',nota:'Segunda foliar Ca. ANTES 8am'},
-  {id:'APP13',dia:75,nombre:'APP 13 — K',modo:'Fertirriego goteo',productos:'Soli Plex 1600g + Soli K 2400g / tanque 200L',nota:'Engorde'},
-  {id:'APP14',dia:78,nombre:'APP 14 — K ULTIMA',modo:'Fertirriego goteo',productos:'Soli Plex 1600g + Soli K 2400g / tanque 200L',nota:'ULTIMA aplicacion. Dia 81-85 solo agua'},
+  {id:'APP2',dia:30,nombre:'APP 2 — P/K/Mg',modo:'Drench 2L/poste',productos:'Soli Phos 2000g + Sulfato Mg 1200g + Humater 500mL / tanque 200L',nota:'Apaga luces. 1 tanque = 300 postes'},
+  {id:'APP3',dia:35,nombre:'APP 3 — Calcio boton',modo:'Fertirriego',productos:'Calcinit Bio 2000g/tanque — SOLO',nota:'NUNCA mezclar. 5min agua > fertiriego > 5min agua'},
+  {id:'APP4',dia:45,nombre:'APP 4 — Refuerzo suelo',modo:'Suelo granular',productos:'Alpha Acelerador 100g/poste (1 vasito grande) + Bioabor BBO 100g/poste',nota:'Pre-floracion'},
+  {id:'APP5',dia:57,nombre:'APP 5 — K arranque',modo:'Fertirriego',productos:'Soli Plex 1600g (7v) + Soli K 3000g (10v) / tanque',nota:'Etapa 1 engorde'},
+  {id:'APP6',dia:60,nombre:'APP 6 — K + Foliar',modo:'Fertirriego + foliar',productos:'Soli Plex 1600g + Soli K 3000g + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',nota:'Foliar 6-8PM mochila motor. No sobre flores'},
+  {id:'APP7',dia:63,nombre:'APP 7 — Calcio',modo:'Fertirriego',productos:'Calcinit Bio 2500g/tanque — SOLO',nota:'NUNCA mezclar Calcinit'},
+  {id:'APP8',dia:66,nombre:'APP 8 — K medio',modo:'Fertirriego',productos:'Soli Plex 1800g (8v) + Soli K 3500g (12v) / tanque',nota:'Etapa 2 engorde'},
+  {id:'APP9',dia:69,nombre:'APP 9 — K medio',modo:'Fertirriego',productos:'Soli Plex 1800g (8v) + Soli K 3500g (12v) / tanque',nota:'Etapa 2 engorde'},
+  {id:'APP10',dia:70,nombre:'APP 10 — Foliar',modo:'Foliar mochila motor',productos:'Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL / tanque 200L',nota:'6-8PM. No sobre flores. Sin chorreo'},
+  {id:'APP11',dia:72,nombre:'APP 11 — Calcio',modo:'Fertirriego',productos:'Calcinit Bio 3000g/tanque — SOLO',nota:'NUNCA mezclar Calcinit'},
+  {id:'APP12',dia:75,nombre:'APP 12 — K final',modo:'Fertirriego',productos:'Soli Plex 2000g (9v) + Soli K 4000g (14v) / tanque',nota:'Etapa 3 engorde'},
+  {id:'APP13',dia:78,nombre:'APP 13 — K ULTIMA + Foliar',modo:'Fertirriego + foliar',productos:'Soli Plex 2000g + Soli K 4000g + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',nota:'ULTIMA. Dia 81-85 solo agua. Foliar 6-8PM'},
 ];
 
 const FITOPROGRAMA = [
@@ -411,17 +399,16 @@ const PRODUCTS = {
   'APP1':'Alpha Acelerador 60g/poste (30g cada lado) + Bioabor BBO 100g/poste',
   'APP2':'Soli Phos 2000g + Sulfato Mg 1200g + Humater 500mL — Tanque 200L',
   'APP3':'Calcinit Bio 2000g — Tanque 200L — SOLO, nunca mezclar',
-  'APP4':'Alpha Acelerador 30g/poste + Bioabor BBO 100g/poste — Pre-floracion',
-  'APP5':'Florstim Gold 50mL/mochila 20L (2.5mL/L) — SOLO al boton. ANTES 8am',
-  'APP6':'Calcinit Bio 2000g — Tanque 200L — SOLO (fertirriego)',
-  'APP7':'Soli Plex 1600g + Soli K 2400g — Tanque 200L',
-  'APP8':'Soli Plex 1600g + Soli K 2400g + Caltrac 50mL/mochila foliar al fruto',
-  'APP9':'Calcinit Bio 2000g — Tanque 200L — SOLO',
-  'APP10':'Soli Plex 1600g + Soli K 2400g — Tanque 200L',
-  'APP11':'Soli Plex 1600g + Soli K 2400g — Tanque 200L',
-  'APP12':'Calcinit Bio 2000g SOLO + Caltrac 50mL/mochila foliar al fruto',
-  'APP13':'Soli Plex 1600g + Soli K 2400g — Tanque 200L',
-  'APP14':'Soli Plex 1600g + Soli K 2400g — Tanque 200L — ULTIMA',
+  'APP4':'Alpha Acelerador 100g/poste (1 vasito grande) + Bioabor BBO 100g/poste',
+  'APP5':'Soli Plex 1600g (7v) + Soli K 3000g (10v) — Tanque 200L',
+  'APP6':'Soli Plex 1600g + Soli K 3000g + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',
+  'APP7':'Calcinit Bio 2500g — Tanque 200L — SOLO, nunca mezclar',
+  'APP8':'Soli Plex 1800g (8v) + Soli K 3500g (12v) — Tanque 200L',
+  'APP9':'Soli Plex 1800g (8v) + Soli K 3500g (12v) — Tanque 200L',
+  'APP10':'FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL / tanque 200L',
+  'APP11':'Calcinit Bio 3000g — Tanque 200L — SOLO, nunca mezclar',
+  'APP12':'Soli Plex 2000g (9v) + Soli K 4000g (14v) — Tanque 200L',
+  'APP13':'Soli Plex 2000g + Soli K 4000g + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',
   'FITO1':'Agrotin 50cc + Sparko 100g + Volathion 500g + Nativo 250cc / tanque 200L',
   'FITO2':'Agrotin 50cc + Fiprosol 250cc + Pilarfirm 150g + Saga 250cc / tanque 200L',
   'FITO3':'Agrotin 100cc + Confidor 100cc + Agronate 100g + Potencial 250cc / tanque 200L',
