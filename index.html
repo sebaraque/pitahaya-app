@@ -184,32 +184,14 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
     <div style="text-align:right">
       <div style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.65)" id="headerDate"></div>
       <div id="sync-status" style="font-size:10px;margin-top:3px;font-weight:600;color:rgba(255,255,255,0.85)">☁️ En la nube</div>
-      <div style="font-size:8px;color:rgba(255,255,255,0.35);margin-top:1px">v4.0</div>
+      <div style="font-size:8px;color:rgba(255,255,255,0.35);margin-top:1px">v5.0</div>
     </div>
   </div>
 </header>
 <main>
 
-<!-- DASHBOARD -->
-<div class="page active" id="page-dash">
-  <div class="hero">
-    <h2>Resumen General</h2>
-    <div class="sgrid">
-      <div class="scard"><div class="snum">4,300</div><div class="slbl">postes totales</div></div>
-      <div class="scard"><div class="snum">1,030</div><div class="slbl">en producción</div></div>
-      <div class="scard"><div class="snum" id="d-registros">—</div><div class="slbl">registros</div></div>
-      <div class="scard"><div class="snum" id="d-cosecha">— kg</div><div class="slbl">cosechados</div></div>
-    </div>
-  </div>
-  <div id="dash-alertas"></div>
-  <div id="dash-lotes-estado"></div>
-  <div id="dash-cosechas-proximas"></div>
-  <div class="stitle">Actividad Reciente</div>
-  <div class="alist" id="recentList"><div class="loading"><div class="spinner"></div></div></div>
-</div>
-
 <!-- LOTES -->
-<div class="page" id="page-lotes">
+<div class="page active" id="page-lotes">
   <div class="fhead"><h2>Resumen por Lote</h2><p>Ciclos activos y floraciones</p></div>
   <div class="lote-tabs" id="loteTabs"></div>
   <div id="lotePanels"></div>
@@ -335,10 +317,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 </main>
 
 <nav>
-  <button class="active" onclick="showPage('dash',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Inicio</span>
-  </button>
-  <button onclick="showPage('lotes',this)">
+  <button class="active" onclick="showPage('lotes',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Lotes</span>
   </button>
   <button onclick="showPage('form',this)">
@@ -373,19 +352,19 @@ const LOTES = [
 ];
 
 const PROGRAMA = [
-  {id:'APP1',dia:0,nombre:'APP 1 — Arranque',modo:'Suelo granular',productos:'Alpha Acelerador 60g/poste (30g cada lado) + Bioabor BBO 100g/poste',nota:'Prende luces'},
-  {id:'APP2',dia:30,nombre:'APP 2 — P/K/Mg',modo:'Drench 2L/poste',productos:'Soli Phos 2000g + Sulfato Mg 1200g + Humater 500mL / tanque 200L',nota:'Apaga luces. 1 tanque = 300 postes'},
-  {id:'APP3',dia:35,nombre:'APP 3 — Calcio boton',modo:'Fertirriego',productos:'Calcinit Bio 2000g/tanque — SOLO',nota:'NUNCA mezclar. 5min agua > fertiriego > 5min agua'},
-  {id:'APP4',dia:45,nombre:'APP 4 — Refuerzo suelo',modo:'Suelo granular',productos:'Alpha Acelerador 100g/poste (1 vasito grande) + Bioabor BBO 100g/poste',nota:'Pre-floracion'},
-  {id:'APP5',dia:57,nombre:'APP 5 — K arranque',modo:'Fertirriego',productos:'Soli Plex 1600g (7v) + Soli K 3000g (10v) / tanque',nota:'Etapa 1 engorde'},
-  {id:'APP6',dia:60,nombre:'APP 6 — K + Foliar',modo:'Fertirriego + foliar',productos:'Soli Plex 1600g + Soli K 3000g + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',nota:'Foliar 6-8PM mochila motor. No sobre flores'},
-  {id:'APP7',dia:63,nombre:'APP 7 — Calcio',modo:'Fertirriego',productos:'Calcinit Bio 2500g/tanque — SOLO',nota:'NUNCA mezclar Calcinit'},
-  {id:'APP8',dia:66,nombre:'APP 8 — K medio',modo:'Fertirriego',productos:'Soli Plex 1800g (8v) + Soli K 3500g (12v) / tanque',nota:'Etapa 2 engorde'},
-  {id:'APP9',dia:69,nombre:'APP 9 — K medio',modo:'Fertirriego',productos:'Soli Plex 1800g (8v) + Soli K 3500g (12v) / tanque',nota:'Etapa 2 engorde'},
+  {id:'APP1',dia:0,nombre:'APP 1 — Arranque',modo:'Suelo',productos:'Alpha 60g/poste (30g cada lado) + Bioabor 100g/poste',nota:'Prende luces'},
+  {id:'APP2',dia:30,nombre:'APP 2 — P/K/Mg',modo:'Drench 2L/poste',productos:'Soli Phos 2000g (8-9 vasos) + Sulfato Mg 1200g (4 vasos) + Humater 500mL',nota:'Apaga luces. 1 tanque = 300 postes'},
+  {id:'APP3',dia:35,nombre:'APP 3 — Calcio boton',modo:'Fertirriego',productos:'Calcinit Bio 2000g — SOLO',nota:'NUNCA mezclar. 5min agua > fertiriego > 5min agua'},
+  {id:'APP4',dia:45,nombre:'APP 4 — Refuerzo suelo',modo:'Suelo',productos:'Alpha 100g/poste (1 vasito grande) + Bioabor 100g/poste',nota:'Pre-floracion. Dia 54 floracion'},
+  {id:'APP5',dia:57,nombre:'APP 5 — K arranque',modo:'Fertirriego',productos:'Soli Plex 1600g (7 vasos) + Soli K 3000g (10 vasos)',nota:'Etapa 1 engorde'},
+  {id:'APP6',dia:60,nombre:'APP 6 — K + Foliar',modo:'Fertirriego + foliar',productos:'Soli Plex 1600g (7 vasos) + Soli K 3000g (10 vasos) + FOLIAR 6-8PM: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',nota:'Foliar mochila motor. No sobre flores'},
+  {id:'APP7',dia:63,nombre:'APP 7 — Calcio',modo:'Fertirriego',productos:'Calcinit Bio 2500g — SOLO',nota:'NUNCA mezclar Calcinit'},
+  {id:'APP8',dia:66,nombre:'APP 8 — K medio',modo:'Fertirriego',productos:'Soli Plex 1800g (8 vasos) + Soli K 3500g (12 vasos)',nota:'Etapa 2 engorde'},
+  {id:'APP9',dia:69,nombre:'APP 9 — K medio',modo:'Fertirriego',productos:'Soli Plex 1800g (8 vasos) + Soli K 3500g (12 vasos)',nota:'Etapa 2 engorde'},
   {id:'APP10',dia:70,nombre:'APP 10 — Foliar',modo:'Foliar mochila motor',productos:'Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL / tanque 200L',nota:'6-8PM. No sobre flores. Sin chorreo'},
-  {id:'APP11',dia:72,nombre:'APP 11 — Calcio',modo:'Fertirriego',productos:'Calcinit Bio 3000g/tanque — SOLO',nota:'NUNCA mezclar Calcinit'},
-  {id:'APP12',dia:75,nombre:'APP 12 — K final',modo:'Fertirriego',productos:'Soli Plex 2000g (9v) + Soli K 4000g (14v) / tanque',nota:'Etapa 3 engorde'},
-  {id:'APP13',dia:78,nombre:'APP 13 — K ULTIMA + Foliar',modo:'Fertirriego + foliar',productos:'Soli Plex 2000g + Soli K 4000g + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',nota:'ULTIMA. Dia 81-85 solo agua. Foliar 6-8PM'},
+  {id:'APP11',dia:72,nombre:'APP 11 — Calcio',modo:'Fertirriego',productos:'Calcinit Bio 3000g — SOLO',nota:'NUNCA mezclar Calcinit'},
+  {id:'APP12',dia:75,nombre:'APP 12 — K final',modo:'Fertirriego',productos:'Soli Plex 2000g (9 vasos) + Soli K 4000g (14 vasos)',nota:'Etapa 3 engorde'},
+  {id:'APP13',dia:78,nombre:'APP 13 — K ULTIMA + Foliar',modo:'Fertirriego + foliar',productos:'Soli Plex 2000g (9 vasos) + Soli K 4000g (14 vasos) + FOLIAR 6-8PM: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',nota:'ULTIMA. Dia 81-85 solo agua'},
 ];
 
 const FITOPROGRAMA = [
@@ -396,19 +375,19 @@ const FITOPROGRAMA = [
 
 const CICLO = 85;
 const PRODUCTS = {
-  'APP1':'Alpha Acelerador 60g/poste (30g cada lado) + Bioabor BBO 100g/poste',
-  'APP2':'Soli Phos 2000g + Sulfato Mg 1200g + Humater 500mL — Tanque 200L',
+  'APP1':'Alpha 60g/poste (30g cada lado) + Bioabor 100g/poste',
+  'APP2':'Soli Phos 2000g (8-9 vasos) + Sulfato Mg 1200g (4 vasos) + Humater 500mL — Tanque 200L',
   'APP3':'Calcinit Bio 2000g — Tanque 200L — SOLO, nunca mezclar',
-  'APP4':'Alpha Acelerador 100g/poste (1 vasito grande) + Bioabor BBO 100g/poste',
-  'APP5':'Soli Plex 1600g (7v) + Soli K 3000g (10v) — Tanque 200L',
-  'APP6':'Soli Plex 1600g + Soli K 3000g + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',
+  'APP4':'Alpha 100g/poste (1 vasito grande) + Bioabor 100g/poste',
+  'APP5':'Soli Plex 1600g (7 vasos) + Soli K 3000g (10 vasos) — Tanque 200L',
+  'APP6':'Soli Plex 1600g (7v) + Soli K 3000g (10v) + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',
   'APP7':'Calcinit Bio 2500g — Tanque 200L — SOLO, nunca mezclar',
-  'APP8':'Soli Plex 1800g (8v) + Soli K 3500g (12v) — Tanque 200L',
-  'APP9':'Soli Plex 1800g (8v) + Soli K 3500g (12v) — Tanque 200L',
-  'APP10':'FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL / tanque 200L',
+  'APP8':'Soli Plex 1800g (8 vasos) + Soli K 3500g (12 vasos) — Tanque 200L',
+  'APP9':'Soli Plex 1800g (8 vasos) + Soli K 3500g (12 vasos) — Tanque 200L',
+  'APP10':'FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL / tanque 200L — 6-8PM',
   'APP11':'Calcinit Bio 3000g — Tanque 200L — SOLO, nunca mezclar',
-  'APP12':'Soli Plex 2000g (9v) + Soli K 4000g (14v) — Tanque 200L',
-  'APP13':'Soli Plex 2000g + Soli K 4000g + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',
+  'APP12':'Soli Plex 2000g (9 vasos) + Soli K 4000g (14 vasos) — Tanque 200L',
+  'APP13':'Soli Plex 2000g (9v) + Soli K 4000g (14v) + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',
   'FITO1':'Agrotin 50cc + Sparko 100g + Volathion 500g + Nativo 250cc / tanque 200L',
   'FITO2':'Agrotin 50cc + Fiprosol 250cc + Pilarfirm 150g + Saga 250cc / tanque 200L',
   'FITO3':'Agrotin 100cc + Confidor 100cc + Agronate 100g + Potencial 250cc / tanque 200L',
@@ -428,7 +407,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   window.addEventListener('online', updateOnlineStatus);
   window.addEventListener('offline', updateOnlineStatus);
   await cargar();
-  renderDash();
   renderLotes();
 });
 
@@ -501,11 +479,11 @@ async function syncQ() {
 
 // DASHBOARD
 function renderDash() {
-  document.getElementById('d-registros').textContent = window._regs.length;
+  var dReg = document.getElementById('d-registros'); if(dReg) dReg.textContent = window._regs.length;
   const kg = window._regs.filter(r=>r.tipo==='cosecha').reduce((s,r)=>s+(r.kg||0),0);
-  document.getElementById('d-cosecha').textContent = kg.toFixed(1)+' kg';
+  var dCos = document.getElementById('d-cosecha'); if(dCos) dCos.textContent = kg.toFixed(1)+' kg';
   const recent = window._regs.slice(0,6);
-  const c = document.getElementById('recentList');
+  const c = document.getElementById('recentList'); if(!c) return;
   if(!recent.length) { c.innerHTML='<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Sin registros aún.</div></div>'; }
   else { c.innerHTML = recent.map(r => {
     const cf = tipoConf(r.tipo);
@@ -541,7 +519,7 @@ function renderDashExtra() {
       });
     });
   });
-  const ae = document.getElementById('dash-alertas');
+  const ae = document.getElementById('dash-alertas'); if(!ae) return;
   ae.innerHTML = alertas.length ? '<div style="margin:0 18px 12px"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:17px;color:var(--r);padding:14px 0 8px;letter-spacing:.5px">⚠️ Alertas del Día</div>'+alertas.map(a=>'<div style="background:'+(a.urgente?'var(--rp)':'#fef9e7')+';border-radius:10px;padding:10px 14px;margin-bottom:7px;border-left:3px solid '+(a.urgente?'var(--r)':'var(--y)')+'"><div style="font-size:12px;font-weight:600;color:'+(a.urgente?'var(--r)':'var(--yd)')+'">'+a.lote+'</div><div style="font-size:13px;font-weight:600;margin-top:2px">'+a.app+'</div><div style="font-size:11px;color:var(--mid);margin-top:2px">'+(a.dd<0?'Hace '+Math.abs(a.dd)+'d sin registrar':a.dd===0?'HOY':'En '+a.dd+'d')+'</div></div>').join('')+'</div>' : '';
 
   const le = document.getElementById('dash-lotes-estado');
@@ -625,7 +603,7 @@ function buildPanel(lote) {
     } else if(marcado && !reg) {
       checkBtn = '<div class="app-check"><button class="ck-done" onclick="desmarcarApp(\''+marcado.id+'\')">Hecho</button></div>';
     }
-    return '<div class="app-row"><div class="app-dot '+dc+'"></div><div class="app-info"><div class="app-nombre">'+ap.nombre+'</div><div class="app-fecha">'+ap.modo+' | '+fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+'</div><div class="app-prod">'+ap.productos+'</div>'+(ap.nota?'<div style="font-size:10px;color:var(--lt);font-style:italic">'+ap.nota+'</div>':'')+'</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+(bt?'<span class="app-badge badge '+bc+'">'+bt+'</span>':'')+checkBtn+'</div></div>';
+    return '<div class="app-row"><div class="app-dot '+dc+'"></div><div class="app-info"><div class="app-nombre">'+ap.nombre+' <span style="color:var(--b);font-size:11px;font-weight:700">(Dia '+ap.dia+')</span></div><div class="app-fecha">'+ap.modo+' | '+fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+'</div><div class="app-prod">'+ap.productos+'</div>'+(ap.nota?'<div style="font-size:10px;color:var(--lt);font-style:italic">'+ap.nota+'</div>':'')+'</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+(bt?'<span class="app-badge badge '+bc+'">'+bt+'</span>':'')+checkBtn+'</div></div>';
   }).join('');
 
   // FITO PROGRAMA DEL CICLO
@@ -648,7 +626,7 @@ function buildPanel(lote) {
     } else if(marcado && !reg) {
       checkBtn = '<div class="app-check"><button class="ck-done" onclick="desmarcarApp(\''+marcado.id+'\')">Hecho</button></div>';
     }
-    return '<div class="app-row"><div class="app-dot '+dc+'"></div><div class="app-info"><div class="app-nombre">'+ft.nombre+'</div><div class="app-fecha">'+ft.modo+' | '+fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+' | PC '+ft.carencia+'d</div><div class="app-prod">'+ft.productos+'</div>'+(ft.nota?'<div style="font-size:10px;color:var(--lt);font-style:italic">'+ft.nota+'</div>':'')+'</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+(bt?'<span class="app-badge badge '+bc+'">'+bt+'</span>':'')+checkBtn+'</div></div>';
+    return '<div class="app-row"><div class="app-dot '+dc+'"></div><div class="app-info"><div class="app-nombre">'+ft.nombre+' <span style="color:var(--p);font-size:11px;font-weight:700">(Dia '+ft.dia+')</span></div><div class="app-fecha">'+ft.modo+' | '+fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+' | PC '+ft.carencia+'d</div><div class="app-prod">'+ft.productos+'</div>'+(ft.nota?'<div style="font-size:10px;color:var(--lt);font-style:italic">'+ft.nota+'</div>':'')+'</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+(bt?'<span class="app-badge badge '+bc+'">'+bt+'</span>':'')+checkBtn+'</div></div>';
   }).join('');
 
   // FLORACIONES
@@ -701,7 +679,29 @@ function buildPanel(lote) {
   let html = '<div style="padding:14px 0"><div class="ciclo-card">';
   html += '<div class="ciclo-head"><div class="ciclo-title">'+lote.nombre+' — Ciclo Activo</div><div class="ciclo-sub">'+lote.postes+' postes · Iniciado '+fmt(ult.fecha)+'</div><div class="ciclo-estado">📅 Día '+da+' de ~'+CICLO+'</div></div>';
   html += '<div class="progreso-wrap"><div class="progreso-label"><span>'+est+'</span><span style="font-weight:600;color:var(--g)">'+prog+'%</span></div><div class="progreso-bar"><div class="progreso-fill" style="width:'+prog+'%"></div></div><div class="progreso-dias"><span>Día 0</span><span>Día '+CICLO+'</span></div></div>';
-  html += '<div class="fechas-row"><div class="fecha-item"><div class="fecha-val">'+fmt(ult.fecha)+'</div><div class="fecha-lbl">💡 Luces encendidas</div></div><div class="fecha-item"><div class="fecha-val">'+(apagF?fmt(apagF):'~'+fmtOffset(ult.fecha,30))+'</div><div class="fecha-lbl">🌙 Luces apagadas</div></div>'+(kgC>0?'<div class="fecha-item"><div class="fecha-val">'+kgC.toFixed(1)+' kg</div><div class="fecha-lbl">🍎 Cosechado</div></div><div class="fecha-item"><div class="fecha-val">$'+valC.toFixed(0)+'</div><div class="fecha-lbl">💰 Ingresos</div></div>':'')+'</div>';
+  html += '<div class="fechas-row">';
+  html += '<div class="fecha-item"><div class="fecha-val">'+fmt(ult.fecha)+'</div><div class="fecha-lbl">💡 Encendido (Dia 0)</div><button style="margin-top:4px;font-size:10px;padding:3px 10px;border:1px solid var(--b);background:none;color:var(--b);border-radius:12px;cursor:pointer" onclick="editarFechaLuz(\''+ult.id+'\',\'encendido\',\''+ult.fecha+'\')">✏️ Cambiar</button></div>';
+  html += '<div class="fecha-item">';
+  if(apagF) {
+    html += '<div class="fecha-val">'+fmt(apagF)+'</div><div class="fecha-lbl">🌙 Apagado (Dia 30)</div><button style="margin-top:4px;font-size:10px;padding:3px 10px;border:1px solid var(--b);background:none;color:var(--b);border-radius:12px;cursor:pointer" onclick="editarFechaLuz(\''+apag[apag.length-1].id+'\',\'apagado\',\''+apagF+'\')">✏️ Cambiar</button>';
+  } else {
+    html += '<div class="fecha-val" style="color:var(--y)">⚡ Encendido</div><div class="fecha-lbl">Luces prendidas</div><button style="margin-top:4px;font-size:10px;padding:3px 10px;border:1px solid var(--r);background:var(--rp);color:var(--r);border-radius:12px;cursor:pointer;font-weight:600" onclick="apagarLuz(\''+lote.nombre+'\')">🌙 Apagar luces</button>';
+  }
+  html += '</div>';
+  if(kgC>0) {
+    html += '<div class="fecha-item"><div class="fecha-val">'+kgC.toFixed(1)+' kg</div><div class="fecha-lbl">🍎 Cosechado</div></div>';
+    html += '<div class="fecha-item"><div class="fecha-val">$'+valC.toFixed(0)+'</div><div class="fecha-lbl">💰 Ingresos</div></div>';
+  }
+  html += '</div>';
+  // Timeline markers
+  var florF = new Date(dI); florF.setDate(florF.getDate()+54);
+  var cosF = new Date(dI); cosF.setDate(cosF.getDate()+85);
+  html += '<div style="padding:8px 16px;border-top:1px solid var(--br);display:flex;justify-content:space-between;font-size:10px;color:var(--lt)">';
+  html += '<span>🔆 Dia 0<br>'+fmt(ult.fecha)+'</span>';
+  html += '<span style="text-align:center">🌙 Dia 30<br>'+(apagF?fmt(apagF):'~'+fmtOffset(ult.fecha,30))+'</span>';
+  html += '<span style="text-align:center">🌸 Dia 54<br>'+florF.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+'</span>';
+  html += '<span style="text-align:right">🍎 Dia 85<br>'+cosF.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+'</span>';
+  html += '</div>';
   html += '<div class="apps-lista"><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Fertilizacion del ciclo</div>'+appsHtml+'</div>';
   html += '<div class="apps-lista" style="border-top:1px solid var(--br)"><div style="font-size:11px;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Fitosanitario del ciclo</div>'+fitoHtml+'</div>';
   html += flHtml;
@@ -740,7 +740,7 @@ window.selectLote = function(id, btn) {
 };
 
 window.irLuces = function(nombre) {
-  showPage('form',document.querySelectorAll('nav button')[2]);
+  showPage('form',document.querySelectorAll('nav button')[1]);
   switchTab('labor',document.querySelectorAll('.ftab')[4]);
   setTimeout(()=>{
     const s=document.getElementById('l-lote');
@@ -935,7 +935,6 @@ window.showPage = function(id, btn) {
   if(id==='hist')renderHist();
   if(id==='cos')renderCos();
   if(id==='lotes')renderLotes();
-  if(id==='dash')renderDash();
   if(id==='flor')renderFlor();
 };
 
@@ -1061,6 +1060,58 @@ window.tgFito2 = async function(flId, campo, valor) {
     showToast(valor ? 'Hecho' : 'Desmarcado');
   } catch(e) {
     console.error('Error tgFito2:', e);
+    showToast('Error: ' + e.message, true);
+  }
+};
+
+// EDITAR FECHA DE LUZ
+window.editarFechaLuz = function(docId, tipo, fechaActual) {
+  var ov = document.createElement('div');
+  ov.className = 'modal-overlay';
+  ov.style.alignItems = 'flex-start';
+  ov.style.overflowY = 'auto';
+  ov.style.padding = '20px';
+  var titulo = tipo === 'encendido' ? 'Cambiar fecha de encendido' : 'Cambiar fecha de apagado';
+  ov.innerHTML = '<div style="background:var(--card);border-radius:var(--r14);width:100%;max-width:400px;margin:auto;overflow:hidden">' +
+    '<div style="background:var(--g);padding:14px 18px;color:#fff;display:flex;justify-content:space-between;align-items:center">' +
+    '<div style="font-family:Bebas Neue,sans-serif;font-size:18px">' + titulo + '</div>' +
+    '<button onclick="this.closest(\'.modal-overlay\').remove()" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">✕</button></div>' +
+    '<div style="padding:18px">' +
+    '<div class="field"><label>Nueva fecha</label><input type="date" id="edit-luz-fecha" value="' + fechaActual + '"></div>' +
+    '<button class="btn-p" onclick="guardarFechaLuz(\'' + docId + '\')">Guardar</button></div></div>';
+  ov.onclick = function(e) { if(e.target === ov) ov.remove(); };
+  document.body.appendChild(ov);
+};
+
+window.guardarFechaLuz = async function(docId) {
+  var nf = document.getElementById('edit-luz-fecha').value;
+  if(!nf) { showToast('Selecciona fecha', true); return; }
+  try {
+    await updateDoc(doc(db, 'registros', docId), {fecha: nf});
+    document.querySelector('.modal-overlay').remove();
+    await cargar();
+    renderLotes();
+    showToast('Fecha actualizada');
+  } catch(e) {
+    showToast('Error: ' + e.message, true);
+  }
+};
+
+window.apagarLuz = async function(loteNombre) {
+  var fecha = new Date().toISOString().split('T')[0];
+  try {
+    await addDoc(collection(db, 'registros'), {
+      tipo: 'labor',
+      tipoLabor: 'Apagado de luces',
+      lote: loteNombre,
+      fecha: fecha,
+      timestamp: serverTimestamp(),
+      detalle: 'Apagado de luces'
+    });
+    await cargar();
+    renderLotes();
+    showToast('Luces apagadas');
+  } catch(e) {
     showToast('Error: ' + e.message, true);
   }
 };
