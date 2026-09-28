@@ -385,11 +385,11 @@ const CONTADORES = [
 ];
 
 const FITOPROGRAMA = [
-  {id:'FITO1',diaOffset:-5,nombre:'FITO 1 \u2014 Pre-floraci\u00f3n',productos:'Moskation 1kg + Serenade 1L',nota:'5 d\u00edas ANTES de floraci\u00f3n. Carencia 0',carencia:0},
-  {id:'FITO2',diaOffset:4,nombre:'FITO 2 \u2014 Post 4 d\u00edas',productos:'Radiant 75ml + Topstar 200ml',nota:'Carencia 1d / 7d',carencia:7},
-  {id:'FITO3',diaOffset:15,nombre:'FITO 3 \u2014 Atardecer',productos:'Seat 400ml + Timorex Gold 530ml',nota:'Aplicar al atardecer. Carencia 0',carencia:0},
-  {id:'FITO4',diaOffset:21,nombre:'FITO 4 \u2014 Control',productos:'Tropa 125ml \u00f3 Quadris 60g (si presi\u00f3n)',nota:'Quadris y Topstar NUNCA mismo ciclo. Carencia 0',carencia:0},
-  {id:'FITO5',diaOffset:25,nombre:'FITO 5 \u2014 Solo si presi\u00f3n',productos:'Tropa 125ml',nota:'Solo si hay presi\u00f3n. Malathion NUNCA con fruta. Carencia 0',carencia:0},
+  {id:'FITO1',dia:49,nombre:'FITO 1 \u2014 Pre-floraci\u00f3n',productos:'Moskation 1kg + Serenade 1L',nota:'5d antes de floraci\u00f3n. Carencia 0'},
+  {id:'FITO2',dia:58,nombre:'FITO 2 \u2014 Post floraci\u00f3n',productos:'Radiant 75ml + Topstar 200ml',nota:'4d despu\u00e9s de floraci\u00f3n. Carencia 1d/7d'},
+  {id:'FITO3',dia:69,nombre:'FITO 3 \u2014 Atardecer',productos:'Seat 400ml + Timorex Gold 530ml',nota:'Aplicar al atardecer. Carencia 0'},
+  {id:'FITO4',dia:75,nombre:'FITO 4 \u2014 Control',productos:'Tropa 125ml \u00f3 Quadris 60g (si presi\u00f3n)',nota:'Quadris y Topstar NUNCA mismo ciclo. Carencia 0'},
+  {id:'FITO5',dia:79,nombre:'FITO 5 \u2014 Solo si presi\u00f3n',productos:'Tropa 125ml',nota:'Solo si hay presi\u00f3n. Malathion NUNCA con fruta. Carencia 0'},
 ];
 
 const CICLO = 85;
@@ -527,13 +527,13 @@ function renderDashExtra() {
       const dd = Math.floor((ft1-hoy)/86400000);
       const cos = regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1);
       if(!cos&&dd>=-3&&dd<=3) alertas.push({lote:lote.nombre,app:'🍎 Cosecha Ola '+(fi+1)+' — '+fl.numFlores+' flores',dd,urgente:dd<=0});
-      const fechaFlor = new Date(fl.fecha);
-      FITOPROGRAMA.forEach((ft,fIdx) => {
-        const fd = new Date(fechaFlor); fd.setDate(fd.getDate()+ft.diaOffset);
-        const ddf = Math.floor((fd-hoy)/86400000);
-        const campo = 'fito'+(fIdx+1)+'_hecho';
-        if(!fl[campo]&&ddf>=-1&&ddf<=2) alertas.push({lote:lote.nombre,app:'🐛 '+ft.nombre+' Ola '+(fi+1),dd:ddf,urgente:ddf<=0});
-      });
+    });
+    // Alertas FITO basadas en encendido (app_check)
+    FITOPROGRAMA.forEach(ft => {
+      const fd = new Date(dI); fd.setDate(fd.getDate()+ft.dia);
+      const ddf = Math.floor((fd-hoy)/86400000);
+      const marcado = regs.find(r=>r.tipo==='app_check'&&r.appId===ft.id&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI);
+      if(!marcado&&ddf>=-1&&ddf<=2) alertas.push({lote:lote.nombre,app:'🐛 '+ft.nombre,dd:ddf,urgente:ddf<=0});
     });
   });
   const ae = document.getElementById('dash-alertas'); if(!ae) return;
@@ -655,29 +655,7 @@ function buildPanel(lote) {
       flHtml += '<div class="flor-card">';
       flHtml += '<div class="flor-head"><div><div class="flor-titulo">Ola '+(idx+1)+' — '+fmt(fl.fecha)+'</div><div class="flor-flores">'+(fl.numFlores||0)+' flores</div></div><div style="text-align:right"><div class="flor-estado" style="color:'+col2+'">'+est2+'</div><div class="flor-fecha">'+(fl.cosechaTentativa1?fmt(fl.cosechaTentativa1):'—')+' — '+(fl.cosechaTentativa2?fmt(fl.cosechaTentativa2):'—')+'</div></div></div>';
       if(cosV) flHtml += '<div style="font-size:11px;color:#2d6a1f;margin-bottom:6px">🍎 '+cosV.kg+' kg cosechados</div>';
-
-      // FITO por floracion (5 apps)
-      flHtml += '<div class="fito-section"><div class="fito-titulo">🐛 Fitosanitario (ciclo 28d)</div>';
-      FITOPROGRAMA.forEach(function(ft, fi) {
-        var fitoDate = new Date(fechaFlor);
-        fitoDate.setDate(fitoDate.getDate() + ft.diaOffset);
-        var ddF = Math.floor((fitoDate - hoy) / 86400000);
-        var fsDate = fitoDate.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-        var campo = 'fito'+(fi+1)+'_hecho';
-        var hecho = fl[campo] === true;
-        var diaLabel = ft.diaOffset < 0 ? ft.diaOffset+'d' : '+'+ft.diaOffset+'d';
-
-        var btnHtml = '';
-        if(hecho) {
-          btnHtml = '<button class="btn-hecho" onclick="tgFito(\''+flId+'\',\''+campo+'\',false)">✅ Hecho</button>';
-        } else {
-          var cls = ddF <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
-          btnHtml = '<button class="'+cls+'" onclick="tgFito(\''+flId+'\',\''+campo+'\',true)">❌ Pendiente</button>';
-        }
-
-        flHtml += '<div class="fito-row"><div class="fito-label"><b>'+ft.nombre+'</b> '+fsDate+' <span style="color:#aaa;font-size:10px">('+diaLabel+')</span><br><span style="font-size:10px;color:var(--mid)">'+ft.productos+'</span></div>'+btnHtml+'</div>';
-      });
-      flHtml += '</div></div>';
+      flHtml += '</div>';
     });
   }
   flHtml += '</div>';
@@ -712,6 +690,62 @@ function buildPanel(lote) {
   html += '<div class="apps-lista"><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Pre-floración (individual)</div>'+preAppsHtml+'</div>';
   // Post-floracion counters
   html += '<div class="apps-lista" style="border-top:1px solid var(--br)"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Post-floración (contadores acumulativos)</div>'+counterHtml+'</div>';
+
+  // FITOSANITARIO (independiente, basado en encendido)
+  const fitoHtml = FITOPROGRAMA.map(function(ft) {
+    const fad = new Date(dI); fad.setDate(fad.getDate()+ft.dia);
+    const dd = Math.floor((fad-hoy)/86400000);
+    const marcado = regs.find(r=>r.tipo==='app_check'&&r.appId===ft.id&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI);
+    const hecho = !!marcado;
+    let dc,bt,bc;
+    if(hecho){dc='dot-hecho';bt='Hecho';bc='bg';}
+    else if(dd>=-2&&dd<=2){dc='dot-hoy';bt='HOY';bc='br2';}
+    else if(dd>2&&dd<=7){dc='dot-prox';bt='Esta semana';bc='by';}
+    else if(dd>0){dc='dot-fut';bt='En '+dd+'d';bc='';}
+    else{dc='dot-fut';bt='Sin registrar';bc='br2';}
+    var checkBtn = '';
+    if(!hecho) {
+      var urg = dd<=0 ? 'ck-urgent' : 'ck-pending';
+      checkBtn = '<div class="app-check"><button class="'+urg+'" onclick="marcarApp(\''+ft.id+'\',\''+lote.nombre+'\',\''+ult.fecha+'\')">Marcar hecho</button></div>';
+    } else {
+      checkBtn = '<div class="app-check"><button class="ck-done" onclick="desmarcarApp(\''+marcado.id+'\')">Hecho</button></div>';
+    }
+    return '<div class="app-row"><div class="app-dot '+dc+'"></div><div class="app-info"><div class="app-nombre">'+ft.nombre+' <span style="color:var(--b);font-size:11px;font-weight:700">(Día '+ft.dia+')</span></div><div class="app-fecha">Fitosanitario | '+fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+'</div><div class="app-prod">'+ft.productos+'</div>'+(ft.nota?'<div style="font-size:10px;color:var(--lt);font-style:italic">'+ft.nota+'</div>':'')+'</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+(bt?'<span class="app-badge badge '+bc+'">'+bt+'</span>':'')+checkBtn+'</div></div>';
+  }).join('');
+  html += '<div class="apps-lista" style="border-top:1px solid var(--br)"><div style="font-size:11px;font-weight:700;color:#7d3c98;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🐛 Fitosanitario (5 apps)</div>'+fitoHtml+'</div>';
+
+  // CRONOGRAMA COMPLETO
+  var cronItems = [];
+  PROGRAMA_PRE.forEach(function(ap){cronItems.push({dia:ap.dia,nombre:ap.nombre,tipo:'app'});});
+  // Contadores con sus días específicos
+  var kDias=[54,57,60,66,69,75,78]; kDias.forEach(function(d,i){cronItems.push({dia:d,nombre:'K Fertirriego #'+(i+1),tipo:'contador'});});
+  var caDias=[63,72]; caDias.forEach(function(d,i){cronItems.push({dia:d,nombre:'Calcio #'+(i+1),tipo:'contador'});});
+  var feDias=[60,70,78]; feDias.forEach(function(d,i){cronItems.push({dia:d,nombre:'Foliar Engorde #'+(i+1),tipo:'contador'});});
+  FITOPROGRAMA.forEach(function(ft){cronItems.push({dia:ft.dia,nombre:ft.nombre,tipo:'fito'});});
+  cronItems.push({dia:54,nombre:'🌸 Floración estimada',tipo:'hito'});
+  cronItems.push({dia:85,nombre:'🍎 Cosecha estimada',tipo:'hito'});
+  cronItems.sort(function(a,b){return a.dia-b.dia||(a.tipo==='hito'?-1:1);});
+  var cronHtml = '<div style="padding:13px 16px;border-top:1px solid var(--br)"><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">📋 Cronograma completo del ciclo</div>';
+  cronHtml += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">';
+  cronHtml += '<tr style="background:var(--bg);font-weight:700;font-size:10px;text-transform:uppercase;color:var(--mid)"><td style="padding:6px 8px;border-bottom:2px solid var(--br)">Día</td><td style="padding:6px 8px;border-bottom:2px solid var(--br)">Fecha</td><td style="padding:6px 8px;border-bottom:2px solid var(--br)">Aplicación</td></tr>';
+  cronItems.forEach(function(ci){
+    var fd = new Date(dI); fd.setDate(fd.getDate()+ci.dia);
+    var fechaStr = fd.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+    var ddCi = Math.floor((fd-hoy)/86400000);
+    var isToday = ddCi===0;
+    var isPast = ddCi<0;
+    var bgColor = isToday?'var(--gp)':ci.tipo==='hito'?'#fce4f3':'';
+    var txtColor = isPast?'var(--lt)':isToday?'var(--g)':ci.tipo==='fito'?'#7d3c98':ci.tipo==='contador'?'var(--g)':'var(--tx)';
+    var dayBadge = isToday?' ⬅️ HOY':'';
+    cronHtml += '<tr style="'+(bgColor?'background:'+bgColor+';':'')+'border-bottom:1px solid var(--br)">';
+    cronHtml += '<td style="padding:6px 8px;font-weight:700;color:'+txtColor+';white-space:nowrap">'+ci.dia+dayBadge+'</td>';
+    cronHtml += '<td style="padding:6px 8px;color:'+(isPast?'var(--lt)':'var(--mid)')+'">'+fechaStr+'</td>';
+    cronHtml += '<td style="padding:6px 8px;color:'+txtColor+';font-weight:'+(ci.tipo==='hito'?'700':'500')+'">'+ci.nombre+'</td>';
+    cronHtml += '</tr>';
+  });
+  cronHtml += '</table></div></div>';
+  html += cronHtml;
+
   // Floraciones
   html += flHtml;
   html += '<div style="padding:0 16px 14px"><button onclick="irLuces(\''+lote.nombre+'\')" class="btn-nuevo-ciclo">+ Iniciar nuevo ciclo</button></div>';
@@ -728,16 +762,6 @@ function buildPanel(lote) {
   html += '</div>';
   return html;
 }
-
-// TOGGLE FITO
-window.tgFito = async function(flId, campo, valor) {
-  var v = (valor === true || valor === 'true');
-  try {
-    await updateDoc(doc(db,'registros',flId), {[campo]: v});
-    await cargar(); renderLotes(); renderDash();
-    showToast(v ? '✅ Hecho' : '↩️ Desmarcado');
-  } catch(e) { showToast('❌ Error',true); }
-};
 
 // SELECT LOTE
 window.selectLote = function(id, btn) {
@@ -839,7 +863,7 @@ window.guardar = async function(tipo) {
   else if(tipo==='fitosan'){reg.tipoProblema=document.getElementById('ft-tipo').value;reg.plaga=document.getElementById('ft-plaga').value;reg.producto=document.getElementById('ft-producto').value;reg.dosis=document.getElementById('ft-dosis').value;reg.volumen=document.getElementById('ft-vol').value;reg.modo=document.getElementById('ft-modo').value;reg.carencia=document.getElementById('ft-carencia').value;reg.obs=document.getElementById('ft-obs').value;if(reg.tipoProblema&&reg.tipoProblema.startsWith('FITO')){reg.appPrograma=reg.tipoProblema;if(PRODUCTS[reg.tipoProblema])reg.producto=PRODUCTS[reg.tipoProblema];}reg.detalle=(reg.plaga||reg.tipoProblema||'')+(reg.producto?' · '+reg.producto:'');if(!reg.producto){showToast('⚠️ Completa el producto',true);resetBtn(btn);return;}}
   else if(tipo==='labor'){reg.tipoLabor=document.getElementById('l-tipo').value;reg.jornales=document.getElementById('l-jorn').value;reg.costo=document.getElementById('l-costo').value;reg.obs=document.getElementById('l-obs').value;reg.detalle=reg.tipoLabor;if(!reg.tipoLabor){showToast('⚠️ Selecciona el tipo',true);resetBtn(btn);return;}}
   else if(tipo==='cosecha'){reg.kg=parseFloat(document.getElementById('c-kg').value)||0;reg.precio=parseFloat(document.getElementById('c-precio').value)||0;reg.calidad=document.getElementById('c-cal').value;reg.destino=document.getElementById('c-dest').value;reg.obs=document.getElementById('c-obs').value;reg.detalle=reg.kg+' kg'+(reg.precio?' · $'+(reg.kg*reg.precio).toFixed(2):'');if(!reg.kg){showToast('⚠️ Completa los kg',true);resetBtn(btn);return;}}
-  else if(tipo==='flores'){reg.numFlores=parseInt(document.getElementById('fl-num').value)||0;reg.obs=document.getElementById('fl-obs').value;const fd=new Date(reg.fecha);const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);reg.cosechaTentativa1=ft1.toISOString().split('T')[0];reg.cosechaTentativa2=ft2.toISOString().split('T')[0];reg.fito1_hecho=false;reg.fito2_hecho=false;reg.fito3_hecho=false;reg.fito4_hecho=false;reg.fito5_hecho=false;reg.detalle=reg.numFlores+' flores → cosecha ~'+ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});if(!reg.numFlores){showToast('⚠️ Ingresa el número de flores',true);resetBtn(btn);return;}}
+  else if(tipo==='flores'){reg.numFlores=parseInt(document.getElementById('fl-num').value)||0;reg.obs=document.getElementById('fl-obs').value;const fd=new Date(reg.fecha);const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);reg.cosechaTentativa1=ft1.toISOString().split('T')[0];reg.cosechaTentativa2=ft2.toISOString().split('T')[0];reg.detalle=reg.numFlores+' flores → cosecha ~'+ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});if(!reg.numFlores){showToast('⚠️ Ingresa el número de flores',true);resetBtn(btn);return;}}
   if(fotoFile){showToast('📷 Subiendo foto...');reg.fotoURL=await subirFoto(fotoFile);}
   try {
     if(navigator.onLine){await addDoc(collection(db,'registros'),reg);}
@@ -1071,46 +1095,9 @@ function renderFlor() {
     if(cosechaEst) html += '<div style="font-size:12px">' + cosechaEst + '</div>';
     if(ct1str && ct2str) html += '<div class="flor-fecha">' + fmtF(ct1str) + ' -- ' + fmtF(ct2str) + '</div>';
     html += '</div></div>';
-
-    // 5 FITO apps per floracion
-    html += '<div class="fito-section"><div class="fito-titulo">🐛 Fitosanitario (ciclo 28d)</div>';
-    for(var fi = 0; fi < FITOPROGRAMA.length; fi++) {
-      var ft = FITOPROGRAMA[fi];
-      var fitoDate = new Date(fechaFlor);
-      fitoDate.setDate(fitoDate.getDate() + ft.diaOffset);
-      var ddF = Math.floor((fitoDate - hoy) / 86400000);
-      var fsDate = fitoDate.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-      var campo = 'fito'+(fi+1)+'_hecho';
-      var hecho = fl[campo] === true;
-      var diaLabel = ft.diaOffset < 0 ? ft.diaOffset+'d' : '+'+ft.diaOffset+'d';
-
-      var btnHtml = '';
-      if(hecho) {
-        btnHtml = '<button class="btn-hecho" onclick="tgFito2(\''+fl.id+'\',\''+campo+'\',false)">✅ Hecho</button>';
-      } else {
-        var cls = ddF <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
-        btnHtml = '<button class="'+cls+'" onclick="tgFito2(\''+fl.id+'\',\''+campo+'\',true)">❌ Pendiente</button>';
-      }
-
-      html += '<div class="fito-row"><div class="fito-label"><b>'+ft.nombre+'</b> '+fsDate+' <span style="color:#aaa;font-size:10px">('+diaLabel+')</span><br><span style="font-size:10px;color:var(--mid)">'+ft.productos+'</span>'+(ft.nota?'<br><span style="font-size:9px;color:#bbb;font-style:italic">'+ft.nota+'</span>':'')+'</div>'+btnHtml+'</div>';
-    }
-    html += '</div></div>';
   }
   c.innerHTML = html;
 }
-
-window.tgFito2 = async function(flId, campo, valor) {
-  try {
-    await updateDoc(doc(db, 'registros', flId), {[campo]: valor});
-    await cargar();
-    renderFlor();
-    renderDash();
-    showToast(valor ? 'Hecho' : 'Desmarcado');
-  } catch(e) {
-    console.error('Error tgFito2:', e);
-    showToast('Error: ' + e.message, true);
-  }
-};
 
 // EDITAR FECHA DE LUZ
 window.editarFechaLuz = function(docId, tipo, fechaActual) {
