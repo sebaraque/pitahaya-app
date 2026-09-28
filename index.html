@@ -986,6 +986,49 @@ window.desmarcarApp = async function(docId) {
   }
 };
 
+// CONTADORES ACUMULATIVOS
+window.marcarContador = async function(contadorId, loteNombre, cicloFecha, total) {
+  const regs = window._regs;
+  const dI = new Date(cicloFecha);
+  const count = regs.filter(r=>r.tipo==='app_check'&&r.appId===contadorId&&r.lote&&r.lote.includes(loteNombre)&&new Date(r.fecha)>=dI).length;
+  if(count >= total) { showToast('Ya completaste las '+total+' aplicaciones', true); return; }
+  try {
+    await addDoc(collection(db,'registros'), {
+      tipo: 'app_check',
+      appId: contadorId,
+      lote: loteNombre,
+      fecha: new Date().toISOString().split('T')[0],
+      cicloInicio: cicloFecha,
+      timestamp: serverTimestamp(),
+      detalle: contadorId + ' #' + (count+1)
+    });
+    await cargar();
+    renderLotes();
+    renderDash();
+    showToast('✅ ' + contadorId + ' — ' + (count+1) + '/' + total);
+  } catch(e) {
+    console.error('Error marcarContador:', e);
+    showToast('Error: ' + e.message, true);
+  }
+};
+
+window.desmarcarContador = async function(contadorId, loteNombre, cicloFecha) {
+  const regs = window._regs;
+  const dI = new Date(cicloFecha);
+  const checks = regs.filter(r=>r.tipo==='app_check'&&r.appId===contadorId&&r.lote&&r.lote.includes(loteNombre)&&new Date(r.fecha)>=dI).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));
+  if(!checks.length) { showToast('No hay registros para deshacer', true); return; }
+  try {
+    await deleteDoc(doc(db,'registros',checks[0].id));
+    await cargar();
+    renderLotes();
+    renderDash();
+    showToast('↩️ Deshecho último');
+  } catch(e) {
+    console.error('Error desmarcarContador:', e);
+    showToast('Error: ' + e.message, true);
+  }
+};
+
 // SECCION FLORACION
 function renderFlor() {
   var c = document.getElementById('florList');
