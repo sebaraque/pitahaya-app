@@ -119,6 +119,19 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
 .app-check .ck-done{background:#2d6a1f;color:#fff}
 .app-check .ck-pending{background:#fff;color:#555;border:1.5px solid #ddd}
 .app-check .ck-urgent{background:#fff;color:#c0392b;border:1.5px solid #c0392b}
+/* CONTADORES POST-FLORACION */
+.counter-card{background:var(--card);border-radius:var(--r14);padding:14px 16px;margin-bottom:10px;border-left:4px solid var(--g);box-shadow:var(--sh)}
+.counter-head{display:flex;justify-content:space-between;align-items:center}
+.counter-nombre{font-size:14px;font-weight:700}
+.counter-right{text-align:right}
+.counter-count{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--g);line-height:1}
+.counter-total{font-size:12px;color:var(--lt)}
+.counter-prod{font-size:11px;color:var(--mid);margin-top:6px;line-height:1.4}
+.counter-nota{font-size:10px;color:var(--lt);font-style:italic;margin-top:3px}
+.counter-btns{display:flex;gap:8px;margin-top:10px}
+.btn-cplus{background:var(--g);color:#fff;border:none;border-radius:20px;padding:8px 20px;font-size:14px;font-weight:700;cursor:pointer}
+.btn-cminus{background:var(--bg);color:var(--mid);border:1.5px solid var(--br);border-radius:20px;padding:7px 14px;font-size:11px;cursor:pointer}
+.counter-done{border-left-color:var(--g);background:var(--gp)}
 /* FORM */
 .fhead{background:var(--g);padding:18px 18px 16px;color:#fff}
 .fhead h2{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:.5px}
@@ -184,7 +197,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
     <div style="text-align:right">
       <div style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.65)" id="headerDate"></div>
       <div id="sync-status" style="font-size:10px;margin-top:3px;font-weight:600;color:rgba(255,255,255,0.85)">☁️ En la nube</div>
-      <div style="font-size:8px;color:rgba(255,255,255,0.35);margin-top:1px">v5.0</div>
+      <div style="font-size:8px;color:rgba(255,255,255,0.35);margin-top:1px">v6.0</div>
     </div>
   </div>
 </header>
@@ -214,7 +227,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
     <div class="field"><label>Fecha</label><input type="date" id="f-fecha"></div>
     <div class="field"><label>Lote</label><select id="f-lote" onchange="sugerirApp()"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 400 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
     <div id="app-sugerida"></div>
-    <div class="field"><label>Aplicación del programa</label><select id="f-app" onchange="autocompletar('f-app','f-productos')"><option value="">Seleccionar...</option><option value="APP2">APP 2 — P/K/Mg (Dia 30)</option><option value="APP3">APP 3 — Calcio (Dia 35)</option><option value="APP6">APP 6 — Foliar engorde (Dia 60)</option><option value="APP10">APP 10 — Foliar medio (Dia 70)</option><option value="APP13">APP 13 — Foliar final (Dia 78)</option><option value="otro">Foliar adicional</option></select></div>
+    <div class="field"><label>Aplicación del programa</label><select id="f-app" onchange="autocompletar('f-app','f-productos')"><option value="">Seleccionar...</option><option value="APP2">APP 2 — P/K/Mg (Dia 30)</option><option value="APP3">APP 3 — Calcio botón (Dia 35)</option><option value="APP4">APP 4 — Foliar botoneo (Dia 40)</option><option value="K_FERT">K Fertirriego</option><option value="CALCIO">Calcio Fertirriego</option><option value="FOLIAR_E">Foliar Engorde</option><option value="otro">Otro</option></select></div>
     <div class="field"><label>Producto</label><input type="text" id="fo-prod" placeholder="Ej: YaraVita Caltrac..."></div>
     <div class="frow"><div class="field"><label>Dosis (mL/L)</label><input type="text" id="fo-dosis" placeholder="2 mL/L"></div><div class="field"><label>Volumen (L)</label><input type="number" id="fo-vol" placeholder="200"></div></div>
     <div class="field"><label>Hora</label><input type="time" id="fo-hora"></div>
@@ -226,7 +239,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
   <div class="fbody" id="tab-edafico" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="ed-fecha"></div>
     <div class="field"><label>Lote</label><select id="ed-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 400 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
-    <div class="field"><label>Tipo</label><select id="ed-tipo" onchange="autocompletar('ed-tipo','ed-productos')"><option value="">Seleccionar...</option><option value="APP1">APP 1 — Arranque (Día 0)</option><option value="APP4">APP 4 — Refuerzo suelo (Dia 45)</option><option>Granular incorporado</option><option>Materia orgánica / compost</option><option>Corrector de pH</option><option>Cal agrícola / dolomita</option><option>Otro</option></select></div>
+    <div class="field"><label>Tipo</label><select id="ed-tipo" onchange="autocompletar('ed-tipo','ed-productos')"><option value="">Seleccionar...</option><option value="APP1">APP 1 — Arranque (Día 0)</option><option value="APP5">APP 5 — Refuerzo suelo (Dia 45)</option><option>Granular incorporado</option><option>Materia orgánica / compost</option><option>Corrector de pH</option><option>Cal agrícola / dolomita</option><option>Otro</option></select></div>
     <div class="field"><label>Productos</label><textarea id="ed-productos" placeholder="Ej: Alpha Acelerador 30g/poste + Bioabor 100g/poste"></textarea></div>
     <div class="frow"><div class="field"><label>Dosis/poste</label><input type="text" id="ed-dosis" placeholder="30g"></div><div class="field"><label>Total</label><input type="text" id="ed-total" placeholder="9 kg"></div></div>
     <div class="field"><label>Modo</label><select id="ed-modo"><option value="">Seleccionar...</option><option>Hueco 5-8cm a 15-20cm del tallo</option><option>Incorporado superficial</option><option>Banda al pie del poste</option><option>Drench correctivo</option><option>Otro</option></select></div>
@@ -238,7 +251,7 @@ nav button svg{width:20px;height:20px;stroke-width:1.8}
   <div class="fbody" id="tab-fitosan" style="display:none">
     <div class="field"><label>Fecha</label><input type="date" id="ft-fecha"></div>
     <div class="field"><label>Lote</label><select id="ft-lote"><option value="">Seleccionar...</option><option>Lote 1 — 300 postes</option><option>Lote 2 — 300 postes</option><option>Lote 3 — 400 postes</option><option>Lote 4 — 3,270 postes</option><option>Todos los lotes</option></select></div>
-    <div class="field"><label>Tipo de problema</label><select id="ft-tipo" onchange="autocompletar('ft-tipo','ft-producto')"><option value="">Seleccionar...</option><option>Insecto — masticador</option><option>Insecto — chupador</option><option>Ácaro</option><option>Hongo / enfermedad</option><option>Bacteria</option><option>Preventivo</option><option value="FITO1">FITO 1 — Preventivo (Día 45-50)</option><option value="FITO2">FITO 2 — Intermedio (Día 58)</option><option value="FITO3">FITO 3 — Final (Día 75)</option></select></div>
+    <div class="field"><label>Tipo de problema</label><select id="ft-tipo" onchange="autocompletar('ft-tipo','ft-producto')"><option value="">Seleccionar...</option><option>Insecto — masticador</option><option>Insecto — chupador</option><option>Ácaro</option><option>Hongo / enfermedad</option><option>Bacteria</option><option>Preventivo</option><option value="FITO1">FITO 1 — Pre-floración (-5d)</option><option value="FITO2">FITO 2 — Post 4d</option><option value="FITO3">FITO 3 — Atardecer (15d)</option><option value="FITO4">FITO 4 — Control (21d)</option><option value="FITO5">FITO 5 — Presión (25d)</option></select></div>
     <div class="field"><label>Plaga o enfermedad</label><input type="text" id="ft-plaga" placeholder="Ej: trips, cochinilla..."></div>
     <div class="field"><label>Producto</label><input type="text" id="ft-producto" placeholder="Ej: Engeo, Mancozeb..."></div>
     <div class="frow"><div class="field"><label>Dosis</label><input type="text" id="ft-dosis" placeholder="1cc/L"></div><div class="field"><label>Volumen (L)</label><input type="number" id="ft-vol" placeholder="20"></div></div>
@@ -351,48 +364,50 @@ const LOTES = [
   {id:'lote4',nombre:'Lote 4',postes:3270,tipo:'nuevo'},
 ];
 
-const PROGRAMA = [
-  {id:'APP1',dia:0,nombre:'APP 1 — Arranque',modo:'Suelo',productos:'Alpha 60g/poste (30g cada lado) + Bioabor 100g/poste',nota:'Prende luces'},
-  {id:'APP2',dia:30,nombre:'APP 2 — P/K/Mg',modo:'Drench 2L/poste',productos:'Soli Phos 2000g (8-9 vasos) + Sulfato Mg 1200g (4 vasos) + Humater 500mL',nota:'Apaga luces. 1 tanque = 300 postes'},
-  {id:'APP3',dia:35,nombre:'APP 3 — Calcio boton',modo:'Fertirriego',productos:'Calcinit Bio 2000g — SOLO',nota:'NUNCA mezclar. 5min agua > fertiriego > 5min agua'},
-  {id:'APP4',dia:45,nombre:'APP 4 — Refuerzo suelo',modo:'Suelo',productos:'Alpha 100g/poste (1 vasito grande) + Bioabor 100g/poste',nota:'Pre-floracion. Dia 54 floracion'},
-  {id:'APP5',dia:57,nombre:'APP 5 — K arranque',modo:'Fertirriego',productos:'Soli Plex 1600g (7 vasos) + Soli K 3000g (10 vasos)',nota:'Etapa 1 engorde'},
-  {id:'APP6',dia:60,nombre:'APP 6 — K + Foliar',modo:'Fertirriego + foliar',productos:'Soli Plex 1600g (7 vasos) + Soli K 3000g (10 vasos) + FOLIAR 6-8PM: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',nota:'Foliar mochila motor. No sobre flores'},
-  {id:'APP7',dia:63,nombre:'APP 7 — Calcio',modo:'Fertirriego',productos:'Calcinit Bio 2500g — SOLO',nota:'NUNCA mezclar Calcinit'},
-  {id:'APP8',dia:66,nombre:'APP 8 — K medio',modo:'Fertirriego',productos:'Soli Plex 1800g (8 vasos) + Soli K 3500g (12 vasos)',nota:'Etapa 2 engorde'},
-  {id:'APP9',dia:69,nombre:'APP 9 — K medio',modo:'Fertirriego',productos:'Soli Plex 1800g (8 vasos) + Soli K 3500g (12 vasos)',nota:'Etapa 2 engorde'},
-  {id:'APP10',dia:70,nombre:'APP 10 — Foliar',modo:'Foliar mochila motor',productos:'Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL / tanque 200L',nota:'6-8PM. No sobre flores. Sin chorreo'},
-  {id:'APP11',dia:72,nombre:'APP 11 — Calcio',modo:'Fertirriego',productos:'Calcinit Bio 3000g — SOLO',nota:'NUNCA mezclar Calcinit'},
-  {id:'APP12',dia:75,nombre:'APP 12 — K final',modo:'Fertirriego',productos:'Soli Plex 2000g (9 vasos) + Soli K 4000g (14 vasos)',nota:'Etapa 3 engorde'},
-  {id:'APP13',dia:78,nombre:'APP 13 — K ULTIMA + Foliar',modo:'Fertirriego + foliar',productos:'Soli Plex 2000g (9 vasos) + Soli K 4000g (14 vasos) + FOLIAR 6-8PM: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',nota:'ULTIMA. Dia 81-85 solo agua'},
+const PROGRAMA_PRE = [
+  {id:'APP1',dia:0,nombre:'APP 1 \u2014 Arranque',modo:'Suelo',productos:'Alpha 60g/poste (30g cada lado) + Bioabor 100g/poste',vasos:'',nota:'Prende luces'},
+  {id:'APP2',dia:30,nombre:'APP 2 \u2014 P/K/Mg',modo:'Drench 2L/poste',productos:'Soli Phos 2000g (8-9v) + Sulfato Mg 1200g (4v) + Humater 500mL',vasos:'8-9v Soli Phos, 4v Sulfato Mg',nota:'Apaga luces. 1 tanque = 300 postes'},
+  {id:'APP3',dia:35,nombre:'APP 3 \u2014 Calcio bot\u00f3n',modo:'Fertirriego',productos:'Calcinit Bio 2000g \u2014 SOLO',vasos:'',nota:'NUNCA mezclar. 5min agua > fertirriego > 5min agua'},
+  {id:'APP4',dia:40,nombre:'APP 4 \u2014 Foliar botoneo',modo:'Foliar 6-9AM',productos:'Florstim Gold 1L + Poker-B 200-400mL + Fijafix 50-100mL',vasos:'',nota:'Anti-aborto. NO repetir Boro. Tanque 200L'},
+  {id:'APP5',dia:45,nombre:'APP 5 \u2014 Refuerzo suelo',modo:'Suelo',productos:'Alpha 100g/poste (1 vasito grande) + Bioabor 100g/poste',vasos:'1 vasito grande',nota:'Pre-floraci\u00f3n. D\u00eda 54 floraci\u00f3n'},
+];
+
+const CONTADORES = [
+  {id:'K_FERT',nombre:'K Fertirriego',total:7,modo:'Fertirriego',
+   productos:'Soli Plex (1600\u21921800\u21922000g) + Soli K (3000\u21923500\u21924000g)',
+   detalle:'D\u00edas 54,57,60,66,69,75,78 \u2014 escalando dosis',nota:'Tanque 200L'},
+  {id:'CALCIO',nombre:'Calcio Fertirriego',total:2,modo:'Fertirriego',
+   productos:'Calcinit Bio (2500\u21923000g) \u2014 SOLO',
+   detalle:'D\u00edas 63, 72. NUNCA mezclar',nota:'5min agua > fertirriego > 5min agua'},
+  {id:'FOLIAR_E',nombre:'Foliar Engorde',total:3,modo:'Foliar 6-8PM',
+   productos:'Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL + Fijafix 50mL',
+   detalle:'D\u00edas 60, 70, 78. No sobre flores',nota:'Mochila motor. Sin chorreo. Tanque 200L'},
 ];
 
 const FITOPROGRAMA = [
-  {id:'FITO1',dia:47,nombre:'FITO 1 — Preventivo',modo:'Foliar tanque 200L',productos:'Agrotin 50cc + Sparko 100g + Volathion 500g + Nativo 250cc',nota:'PC 35 dias',carencia:35},
-  {id:'FITO2',dia:58,nombre:'FITO 2 — Intermedio',modo:'Foliar tanque 200L',productos:'Agrotin 50cc + Fiprosol 250cc + Pilarfirm 150g + Saga 250cc',nota:'PC 15 dias',carencia:15},
-  {id:'FITO3',dia:75,nombre:'FITO 3 — Final',modo:'Foliar tanque 200L',productos:'Agrotin 100cc + Confidor 100cc + Agronate 100g + Potencial 250cc',nota:'PC 10 dias',carencia:10},
+  {id:'FITO1',diaOffset:-5,nombre:'FITO 1 \u2014 Pre-floraci\u00f3n',productos:'Moskation 1kg + Serenade 1L',nota:'5 d\u00edas ANTES de floraci\u00f3n. Carencia 0',carencia:0},
+  {id:'FITO2',diaOffset:4,nombre:'FITO 2 \u2014 Post 4 d\u00edas',productos:'Radiant 75ml + Topstar 200ml',nota:'Carencia 1d / 7d',carencia:7},
+  {id:'FITO3',diaOffset:15,nombre:'FITO 3 \u2014 Atardecer',productos:'Seat 400ml + Timorex Gold 530ml',nota:'Aplicar al atardecer. Carencia 0',carencia:0},
+  {id:'FITO4',diaOffset:21,nombre:'FITO 4 \u2014 Control',productos:'Tropa 125ml \u00f3 Quadris 60g (si presi\u00f3n)',nota:'Quadris y Topstar NUNCA mismo ciclo. Carencia 0',carencia:0},
+  {id:'FITO5',diaOffset:25,nombre:'FITO 5 \u2014 Solo si presi\u00f3n',productos:'Tropa 125ml',nota:'Solo si hay presi\u00f3n. Malathion NUNCA con fruta. Carencia 0',carencia:0},
 ];
 
 const CICLO = 85;
 const PRODUCTS = {
-  'APP1':'Alpha 60g/poste (30g cada lado) + Bioabor 100g/poste',
-  'APP2':'Soli Phos 2000g (8-9 vasos) + Sulfato Mg 1200g (4 vasos) + Humater 500mL — Tanque 200L',
-  'APP3':'Calcinit Bio 2000g — Tanque 200L — SOLO, nunca mezclar',
-  'APP4':'Alpha 100g/poste (1 vasito grande) + Bioabor 100g/poste',
-  'APP5':'Soli Plex 1600g (7 vasos) + Soli K 3000g (10 vasos) — Tanque 200L',
-  'APP6':'Soli Plex 1600g (7v) + Soli K 3000g (10v) + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',
-  'APP7':'Calcinit Bio 2500g — Tanque 200L — SOLO, nunca mezclar',
-  'APP8':'Soli Plex 1800g (8 vasos) + Soli K 3500g (12 vasos) — Tanque 200L',
-  'APP9':'Soli Plex 1800g (8 vasos) + Soli K 3500g (12 vasos) — Tanque 200L',
-  'APP10':'FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL / tanque 200L — 6-8PM',
-  'APP11':'Calcinit Bio 3000g — Tanque 200L — SOLO, nunca mezclar',
-  'APP12':'Soli Plex 2000g (9 vasos) + Soli K 4000g (14 vasos) — Tanque 200L',
-  'APP13':'Soli Plex 2000g (9v) + Soli K 4000g (14v) + FOLIAR: Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL',
-  'FITO1':'Agrotin 50cc + Sparko 100g + Volathion 500g + Nativo 250cc / tanque 200L',
-  'FITO2':'Agrotin 50cc + Fiprosol 250cc + Pilarfirm 150g + Saga 250cc / tanque 200L',
-  'FITO3':'Agrotin 100cc + Confidor 100cc + Agronate 100g + Potencial 250cc / tanque 200L',
+  'APP1':'Alpha 60g/poste + Bioabor 100g/poste',
+  'APP2':'Soli Phos 2000g (8-9v) + Sulfato Mg 1200g (4v) + Humater 500mL \u2014 Tanque 200L',
+  'APP3':'Calcinit Bio 2000g \u2014 SOLO, nunca mezclar',
+  'APP4':'Florstim Gold 1L + Poker-B 200-400mL + Fijafix 50-100mL \u2014 Tanque 200L',
+  'APP5':'Alpha 100g/poste (1 vasito grande) + Bioabor 100g/poste',
+  'K_FERT':'Soli Plex + Soli K \u2014 Fertirriego',
+  'CALCIO':'Calcinit Bio \u2014 SOLO \u2014 Fertirriego',
+  'FOLIAR_E':'Plex Engrose 400mL + Seaweed 180g + Poker-B 200mL + Fijafix 50mL',
+  'FITO1':'Moskation 1kg + Serenade 1L',
+  'FITO2':'Radiant 75ml + Topstar 200ml',
+  'FITO3':'Seat 400ml + Timorex Gold 530ml',
+  'FITO4':'Tropa 125ml \u00f3 Quadris 60g',
+  'FITO5':'Tropa 125ml',
 };
-
 
 window._regs = [];
 window._filtro = 'todos';
@@ -426,6 +441,8 @@ async function cargar() {
         if(typeof data.fito1_hecho === 'undefined') data.fito1_hecho = false;
         if(typeof data.fito2_hecho === 'undefined') data.fito2_hecho = false;
         if(typeof data.fito3_hecho === 'undefined') data.fito3_hecho = false;
+        if(typeof data.fito4_hecho === 'undefined') data.fito4_hecho = false;
+        if(typeof data.fito5_hecho === 'undefined') data.fito5_hecho = false;
       }
       return data;
     });
@@ -499,7 +516,7 @@ function renderDashExtra() {
     const enc = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
     if(!enc) return;
     const dI = new Date(enc.fecha);
-    PROGRAMA.forEach(ap => {
+    PROGRAMA_PRE.forEach(ap => {
       const fad = new Date(dI); fad.setDate(fad.getDate()+ap.dia);
       const dd = Math.floor((fad-hoy)/86400000);
       const reg = regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&((r.appPrograma&&r.appPrograma.includes(ap.id))||(r.tipoAplicacion&&r.tipoAplicacion.includes(ap.id)))&&new Date(r.fecha)>=dI);
@@ -511,11 +528,11 @@ function renderDashExtra() {
       const cos = regs.find(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1);
       if(!cos&&dd>=-3&&dd<=3) alertas.push({lote:lote.nombre,app:'🍎 Cosecha Ola '+(fi+1)+' — '+fl.numFlores+' flores',dd,urgente:dd<=0});
       const fechaFlor = new Date(fl.fecha);
-      [[4,'Aplic.1'],[7,'Aplic.2'],[15,'Aplic.3']].forEach(([d,n]) => {
-        const fd = new Date(fechaFlor); fd.setDate(fd.getDate()+d);
+      FITOPROGRAMA.forEach((ft,fIdx) => {
+        const fd = new Date(fechaFlor); fd.setDate(fd.getDate()+ft.diaOffset);
         const ddf = Math.floor((fd-hoy)/86400000);
-        const campo = n==='Aplic.1'?'fito1_hecho':n==='Aplic.2'?'fito2_hecho':'fito3_hecho';
-        if(!fl[campo]&&ddf>=-1&&ddf<=2) alertas.push({lote:lote.nombre,app:'🐛 '+n+' Ola '+(fi+1),dd:ddf,urgente:ddf<=0});
+        const campo = 'fito'+(fIdx+1)+'_hecho';
+        if(!fl[campo]&&ddf>=-1&&ddf<=2) alertas.push({lote:lote.nombre,app:'🐛 '+ft.nombre+' Ola '+(fi+1),dd:ddf,urgente:ddf<=0});
       });
     });
   });
@@ -529,7 +546,7 @@ function renderDashExtra() {
     const enc = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0];
     if(!enc){lh+='<div style="background:var(--card);border-radius:10px;padding:10px 14px;margin-bottom:7px;box-shadow:var(--sh);display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600">'+lote.nombre+'</span><span class="badge by">Sin ciclo</span></div>';return;}
     const dI=new Date(enc.fecha);const da=Math.floor((hoy-dI)/86400000);
-    const ap=PROGRAMA.find(a=>{const fad=new Date(dI);fad.setDate(fad.getDate()+a.dia);const dd=Math.floor((fad-hoy)/86400000);const reg=regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&((r.appPrograma&&r.appPrograma.includes(a.id))||(r.tipoAplicacion&&r.tipoAplicacion.includes(a.id)))&&new Date(r.fecha)>=dI);return!reg&&dd>=-3;});
+    const ap=PROGRAMA_PRE.find(a=>{const fad=new Date(dI);fad.setDate(fad.getDate()+a.dia);const dd=Math.floor((fad-hoy)/86400000);const reg=regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&((r.appPrograma&&r.appPrograma.includes(a.id))||(r.tipoAplicacion&&r.tipoAplicacion.includes(a.id)))&&new Date(r.fecha)>=dI);return!reg&&dd>=-3;});
     const dd2=ap?Math.floor((new Date(dI.getTime()+(ap.dia*86400000))-hoy)/86400000):null;
     const al=ap?(dd2<=0?ap.id+' HOY ⚠️':dd2<=3?ap.id+' en '+dd2+'d ⚡':ap.id+' en '+dd2+'d'):'Ciclo completo ✅';
     const ac=dd2<=0?'var(--r)':dd2<=3?'var(--yd)':'var(--mid)';
@@ -568,25 +585,24 @@ function buildPanel(lote) {
   if(lote.tipo==='nuevo') return '<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">'+lote.nombre+'</div><div class="ciclo-sub">'+lote.postes+' postes — vegetativo</div><div class="ciclo-estado">🌱 Etapa vegetativa</div></div><div style="padding:14px 16px;font-size:13px;color:var(--mid)">Plantas jóvenes en desarrollo.</div></div></div>';
   const encList = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(lote.nombre)).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
   if(!encList.length) return '<div style="padding:14px 0"><div class="ciclo-card"><div class="ciclo-head"><div class="ciclo-title">'+lote.nombre+'</div><div class="ciclo-sub">'+lote.postes+' postes productivos</div><div class="ciclo-estado">⏳ Sin ciclo activo</div></div><div style="padding:16px"><p style="font-size:13px;color:var(--mid);margin-bottom:12px">Registra el encendido de luces para activar el cronograma.</p><button onclick="irLuces(\''+lote.nombre+'\')" class="btn-p">+ Registrar encendido de luces</button></div></div></div>';
-  
+
   const ult = encList[encList.length-1];
   const dI = new Date(ult.fecha); const da = Math.floor((hoy-dI)/86400000);
   const prog = Math.min(100,Math.round((da/CICLO)*100));
-  const apActual = PROGRAMA.filter(a=>a.dia<=da).slice(-1)[0];
-  const apProx = PROGRAMA.find(a=>a.dia>da);
+  const apActual = PROGRAMA_PRE.filter(a=>a.dia<=da).slice(-1)[0];
+  const apProx = PROGRAMA_PRE.find(a=>a.dia>da);
   let est = apActual?apActual.nombre:'Inicio';
   if(apProx) est += ' → '+apProx.nombre+' en '+(apProx.dia-da)+'d';
+  else if(da>=45) est = 'Post-floración (contadores)';
   const apag = regs.filter(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Apagado')&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI);
   const apagF = apag.length?apag[apag.length-1].fecha:null;
   const cos = regs.filter(r=>r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI);
   const kgC = cos.reduce((s,r)=>s+(r.kg||0),0); const valC = cos.reduce((s,r)=>s+((r.kg||0)*(r.precio||0)),0);
 
-  // APPS
-  const appsHtml = PROGRAMA.map(ap => {
+  // PRE-FLORACION APPS (individual)
+  const preAppsHtml = PROGRAMA_PRE.map(ap => {
     const fad = new Date(dI); fad.setDate(fad.getDate()+ap.dia);
     const dd = Math.floor((fad-hoy)/86400000);
-    const modos = {'Suelo granular':'edafico','Drench 2L/poste':'drench','Foliar 0.30L/poste':'foliar','Foliar al fruto':'foliar'};
-    const tipoReg = modos[ap.modo] || 'drench';
     const reg = regs.find(r=>(r.tipo==='drench'||r.tipo==='foliar'||r.tipo==='edafico')&&r.lote&&r.lote.includes(lote.nombre)&&((r.appPrograma&&r.appPrograma.includes(ap.id))||(r.tipoAplicacion&&r.tipoAplicacion.includes(ap.id)))&&new Date(r.fecha)>=dI);
     const marcado = regs.find(r=>r.tipo==='app_check'&&r.appId===ap.id&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI);
     const hecho = reg || marcado;
@@ -603,33 +619,24 @@ function buildPanel(lote) {
     } else if(marcado && !reg) {
       checkBtn = '<div class="app-check"><button class="ck-done" onclick="desmarcarApp(\''+marcado.id+'\')">Hecho</button></div>';
     }
-    return '<div class="app-row"><div class="app-dot '+dc+'"></div><div class="app-info"><div class="app-nombre">'+ap.nombre+' <span style="color:var(--b);font-size:11px;font-weight:700">(Dia '+ap.dia+')</span></div><div class="app-fecha">'+ap.modo+' | '+fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+'</div><div class="app-prod">'+ap.productos+'</div>'+(ap.nota?'<div style="font-size:10px;color:var(--lt);font-style:italic">'+ap.nota+'</div>':'')+'</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+(bt?'<span class="app-badge badge '+bc+'">'+bt+'</span>':'')+checkBtn+'</div></div>';
+    return '<div class="app-row"><div class="app-dot '+dc+'"></div><div class="app-info"><div class="app-nombre">'+ap.nombre+' <span style="color:var(--b);font-size:11px;font-weight:700">(Dia '+ap.dia+')</span></div><div class="app-fecha">'+ap.modo+' | '+fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+(ap.vasos?' | '+ap.vasos:'')+'</div><div class="app-prod">'+ap.productos+'</div>'+(ap.nota?'<div style="font-size:10px;color:var(--lt);font-style:italic">'+ap.nota+'</div>':'')+'</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+(bt?'<span class="app-badge badge '+bc+'">'+bt+'</span>':'')+checkBtn+'</div></div>';
   }).join('');
 
-  // FITO PROGRAMA DEL CICLO
-  const fitoHtml = FITOPROGRAMA.map(ft => {
-    const fad = new Date(dI); fad.setDate(fad.getDate()+ft.dia);
-    const dd = Math.floor((fad-hoy)/86400000);
-    const reg = regs.find(r=>r.tipo==='fitosan'&&r.lote&&r.lote.includes(lote.nombre)&&((r.tipoProblema&&r.tipoProblema.includes(ft.id))||(r.appPrograma&&r.appPrograma===ft.id))&&new Date(r.fecha)>=dI);
-    const marcado = regs.find(r=>r.tipo==='app_check'&&r.appId===ft.id&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI);
-    const hecho = reg || marcado;
-    let dc,bt,bc;
-    if(hecho){dc='dot-hecho';bt='Hecho';bc='bg';}
-    else if(dd>=-2&&dd<=2){dc='dot-hoy';bt='HOY';bc='br2';}
-    else if(dd>2&&dd<=7){dc='dot-prox';bt='Esta semana';bc='by';}
-    else if(dd>0){dc='dot-fut';bt='En '+dd+'d';bc='';}
-    else{dc='dot-fut';bt='Sin registrar';bc='br2';}
-    var checkBtn = '';
-    if(!hecho) {
-      var urg = dd<=0 ? 'ck-urgent' : 'ck-pending';
-      checkBtn = '<div class="app-check"><button class="'+urg+'" onclick="marcarApp(\''+ft.id+'\',\''+lote.nombre+'\',\''+ult.fecha+'\')">Marcar hecho</button></div>';
-    } else if(marcado && !reg) {
-      checkBtn = '<div class="app-check"><button class="ck-done" onclick="desmarcarApp(\''+marcado.id+'\')">Hecho</button></div>';
+  // POST-FLORACION COUNTERS
+  const counterHtml = CONTADORES.map(ct => {
+    const count = regs.filter(r=>r.tipo==='app_check'&&r.appId===ct.id&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI).length;
+    const done = count >= ct.total;
+    var btns = '';
+    if(!done) {
+      btns = '<button class="btn-cplus" onclick="marcarContador(\''+ct.id+'\',\''+lote.nombre+'\',\''+ult.fecha+'\','+ct.total+')">+1</button>';
     }
-    return '<div class="app-row"><div class="app-dot '+dc+'"></div><div class="app-info"><div class="app-nombre">'+ft.nombre+' <span style="color:var(--p);font-size:11px;font-weight:700">(Dia '+ft.dia+')</span></div><div class="app-fecha">'+ft.modo+' | '+fad.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+' | PC '+ft.carencia+'d</div><div class="app-prod">'+ft.productos+'</div>'+(ft.nota?'<div style="font-size:10px;color:var(--lt);font-style:italic">'+ft.nota+'</div>':'')+'</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+(bt?'<span class="app-badge badge '+bc+'">'+bt+'</span>':'')+checkBtn+'</div></div>';
+    if(count > 0) {
+      btns += '<button class="btn-cminus" onclick="desmarcarContador(\''+ct.id+'\',\''+lote.nombre+'\',\''+ult.fecha+'\')">Deshacer último</button>';
+    }
+    return '<div class="counter-card'+(done?' counter-done':'')+'"><div class="counter-head"><div><div class="counter-nombre">'+(done?'✅ ':'')+ct.nombre+'</div><div style="font-size:11px;color:var(--lt)">'+ct.modo+'</div></div><div class="counter-right"><div class="counter-count">'+count+'<span class="counter-total">/'+ct.total+'</span></div></div></div><div class="counter-prod">'+ct.productos+'</div><div class="counter-nota">'+ct.detalle+(ct.nota?' — '+ct.nota:'')+'</div>'+(btns?'<div class="counter-btns">'+btns+'</div>':'')+'</div>';
   }).join('');
 
-  // FLORACIONES
+  // FLORACIONES del ciclo
   const flores = regs.filter(r=>r.tipo==='flores'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=dI).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
   let flHtml = '<div style="padding:13px 16px;border-top:1px solid var(--br)"><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🌸 Floraciones del ciclo</div>';
   if(!flores.length) {
@@ -640,37 +647,36 @@ function buildPanel(lote) {
       var ft1 = fl.cosechaTentativa1 ? new Date(fl.cosechaTentativa1) : new Date(fechaFlor.getTime()+25*86400000);
       var ft2 = fl.cosechaTentativa2 ? new Date(fl.cosechaTentativa2) : new Date(fechaFlor.getTime()+30*86400000);
       var df = Math.floor((ft1-hoy)/86400000);
-      var fito1 = new Date(fechaFlor); fito1.setDate(fito1.getDate()+4);
-      var fito2 = new Date(fito1);     fito2.setDate(fito2.getDate()+3);
-      var fito3 = new Date(fechaFlor); fito3.setDate(fito3.getDate()+15);
-      var f1 = fl.fito1_hecho === true;
-      var f2 = fl.fito2_hecho === true;
-      var f3 = fl.fito3_hecho === true;
       var cosV = regs.find(function(r){return r.tipo==='cosecha'&&r.lote&&r.lote.includes(lote.nombre)&&new Date(r.fecha)>=ft1&&new Date(r.fecha)<=new Date(ft2.getTime()+5*86400000);});
       var est2 = cosV?'✅ Cosechada':df<0?'🍎 En cosecha':df<=5?df+'d para cosechar':df+'d para cosechar';
       var col2 = cosV?'#2d6a1f':df<0?'#c0392b':df<=5?'#c49a0a':'#999';
       var flId = fl.id;
-      var dd1=Math.floor((fito1-hoy)/86400000), dd2=Math.floor((fito2-hoy)/86400000), dd3=Math.floor((fito3-hoy)/86400000);
-      var fs1=fito1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-      var fs2=fito2.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-      var fs3=fito3.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-
-      var mkBtn = function(hecho,num,dd) {
-        var cls = hecho?'btn-hecho':dd<=0?'btn-pendiente-urgente':'btn-pendiente';
-        var txt = hecho?'✅ Hecho':'❌ Pendiente';
-        var campo = 'fito'+num+'_hecho';
-        var val = hecho?'false':'true';
-        return '<button class="'+cls+'" onclick="tgFito(\''+flId+'\',\''+campo+'\','+val+')">'+txt+'</button>';
-      };
 
       flHtml += '<div class="flor-card">';
       flHtml += '<div class="flor-head"><div><div class="flor-titulo">Ola '+(idx+1)+' — '+fmt(fl.fecha)+'</div><div class="flor-flores">'+(fl.numFlores||0)+' flores</div></div><div style="text-align:right"><div class="flor-estado" style="color:'+col2+'">'+est2+'</div><div class="flor-fecha">'+(fl.cosechaTentativa1?fmt(fl.cosechaTentativa1):'—')+' — '+(fl.cosechaTentativa2?fmt(fl.cosechaTentativa2):'—')+'</div></div></div>';
       if(cosV) flHtml += '<div style="font-size:11px;color:#2d6a1f;margin-bottom:6px">🍎 '+cosV.kg+' kg cosechados</div>';
-      flHtml += '<div class="fito-section">';
-      flHtml += '<div class="fito-titulo">🐛 Fitosanitario</div>';
-      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 1</b> '+fs1+' <span style="color:#aaa;font-size:10px">(día 4)</span></div>'+mkBtn(f1,1,dd1)+'</div>';
-      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 2</b> '+fs2+' <span style="color:#aaa;font-size:10px">(día 7)</span></div>'+mkBtn(f2,2,dd2)+'</div>';
-      flHtml += '<div class="fito-row"><div class="fito-label"><b>Aplic. 3</b> '+fs3+' <span style="color:#aaa;font-size:10px">(día 15)</span></div>'+mkBtn(f3,3,dd3)+'</div>';
+
+      // FITO por floracion (5 apps)
+      flHtml += '<div class="fito-section"><div class="fito-titulo">🐛 Fitosanitario (ciclo 28d)</div>';
+      FITOPROGRAMA.forEach(function(ft, fi) {
+        var fitoDate = new Date(fechaFlor);
+        fitoDate.setDate(fitoDate.getDate() + ft.diaOffset);
+        var ddF = Math.floor((fitoDate - hoy) / 86400000);
+        var fsDate = fitoDate.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+        var campo = 'fito'+(fi+1)+'_hecho';
+        var hecho = fl[campo] === true;
+        var diaLabel = ft.diaOffset < 0 ? ft.diaOffset+'d' : '+'+ft.diaOffset+'d';
+
+        var btnHtml = '';
+        if(hecho) {
+          btnHtml = '<button class="btn-hecho" onclick="tgFito(\''+flId+'\',\''+campo+'\',false)">✅ Hecho</button>';
+        } else {
+          var cls = ddF <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
+          btnHtml = '<button class="'+cls+'" onclick="tgFito(\''+flId+'\',\''+campo+'\',true)">❌ Pendiente</button>';
+        }
+
+        flHtml += '<div class="fito-row"><div class="fito-label"><b>'+ft.nombre+'</b> '+fsDate+' <span style="color:#aaa;font-size:10px">('+diaLabel+')</span><br><span style="font-size:10px;color:var(--mid)">'+ft.productos+'</span></div>'+btnHtml+'</div>';
+      });
       flHtml += '</div></div>';
     });
   }
@@ -702,8 +708,11 @@ function buildPanel(lote) {
   html += '<span style="text-align:center">🌸 Dia 54<br>'+florF.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+'</span>';
   html += '<span style="text-align:right">🍎 Dia 85<br>'+cosF.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+'</span>';
   html += '</div>';
-  html += '<div class="apps-lista"><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Fertilizacion del ciclo</div>'+appsHtml+'</div>';
-  html += '<div class="apps-lista" style="border-top:1px solid var(--br)"><div style="font-size:11px;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Fitosanitario del ciclo</div>'+fitoHtml+'</div>';
+  // Pre-floracion apps
+  html += '<div class="apps-lista"><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Pre-floración (individual)</div>'+preAppsHtml+'</div>';
+  // Post-floracion counters
+  html += '<div class="apps-lista" style="border-top:1px solid var(--br)"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Post-floración (contadores acumulativos)</div>'+counterHtml+'</div>';
+  // Floraciones
   html += flHtml;
   html += '<div style="padding:0 16px 14px"><button onclick="irLuces(\''+lote.nombre+'\')" class="btn-nuevo-ciclo">+ Iniciar nuevo ciclo</button></div>';
   html += '</div>';
@@ -765,7 +774,7 @@ window.sugerirApp = function() {
   const lr = window._regs.find(r=>r.tipo==='labor'&&r.tipoLabor&&r.tipoLabor.includes('Encendido')&&r.lote&&r.lote.includes(ln));
   if(!lr){c.innerHTML='';return;}
   const da = Math.floor((new Date()-new Date(lr.fecha))/86400000);
-  const prox = PROGRAMA.filter(a=>a.dia>=da-3).slice(0,2);
+  const prox = PROGRAMA_PRE.filter(a=>a.dia>=da-3).slice(0,2);
   if(!prox.length){c.innerHTML='';return;}
   const INC={'APP3':'APP 2','APP5':'APP 6','APP6':'APP 5'};
   c.innerHTML='<div class="app-preview"><h4>📅 '+ln+' — Día '+da+' del ciclo</h4>'+prox.map(a=>'<p><strong>'+a.nombre+'</strong><br>'+a.productos+'</p>').join('')+(prox[0]&&INC[prox[0].id]?'<div class="incomp-warn">⚠️ NO mezclar con: '+INC[prox[0].id]+'</div>':'')+'</div>';
@@ -830,7 +839,7 @@ window.guardar = async function(tipo) {
   else if(tipo==='fitosan'){reg.tipoProblema=document.getElementById('ft-tipo').value;reg.plaga=document.getElementById('ft-plaga').value;reg.producto=document.getElementById('ft-producto').value;reg.dosis=document.getElementById('ft-dosis').value;reg.volumen=document.getElementById('ft-vol').value;reg.modo=document.getElementById('ft-modo').value;reg.carencia=document.getElementById('ft-carencia').value;reg.obs=document.getElementById('ft-obs').value;if(reg.tipoProblema&&reg.tipoProblema.startsWith('FITO')){reg.appPrograma=reg.tipoProblema;if(PRODUCTS[reg.tipoProblema])reg.producto=PRODUCTS[reg.tipoProblema];}reg.detalle=(reg.plaga||reg.tipoProblema||'')+(reg.producto?' · '+reg.producto:'');if(!reg.producto){showToast('⚠️ Completa el producto',true);resetBtn(btn);return;}}
   else if(tipo==='labor'){reg.tipoLabor=document.getElementById('l-tipo').value;reg.jornales=document.getElementById('l-jorn').value;reg.costo=document.getElementById('l-costo').value;reg.obs=document.getElementById('l-obs').value;reg.detalle=reg.tipoLabor;if(!reg.tipoLabor){showToast('⚠️ Selecciona el tipo',true);resetBtn(btn);return;}}
   else if(tipo==='cosecha'){reg.kg=parseFloat(document.getElementById('c-kg').value)||0;reg.precio=parseFloat(document.getElementById('c-precio').value)||0;reg.calidad=document.getElementById('c-cal').value;reg.destino=document.getElementById('c-dest').value;reg.obs=document.getElementById('c-obs').value;reg.detalle=reg.kg+' kg'+(reg.precio?' · $'+(reg.kg*reg.precio).toFixed(2):'');if(!reg.kg){showToast('⚠️ Completa los kg',true);resetBtn(btn);return;}}
-  else if(tipo==='flores'){reg.numFlores=parseInt(document.getElementById('fl-num').value)||0;reg.obs=document.getElementById('fl-obs').value;const fd=new Date(reg.fecha);const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);reg.cosechaTentativa1=ft1.toISOString().split('T')[0];reg.cosechaTentativa2=ft2.toISOString().split('T')[0];reg.fito1_hecho=false;reg.fito2_hecho=false;reg.fito3_hecho=false;reg.detalle=reg.numFlores+' flores → cosecha ~'+ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});if(!reg.numFlores){showToast('⚠️ Ingresa el número de flores',true);resetBtn(btn);return;}}
+  else if(tipo==='flores'){reg.numFlores=parseInt(document.getElementById('fl-num').value)||0;reg.obs=document.getElementById('fl-obs').value;const fd=new Date(reg.fecha);const ft1=new Date(fd);ft1.setDate(ft1.getDate()+25);const ft2=new Date(fd);ft2.setDate(ft2.getDate()+30);reg.cosechaTentativa1=ft1.toISOString().split('T')[0];reg.cosechaTentativa2=ft2.toISOString().split('T')[0];reg.fito1_hecho=false;reg.fito2_hecho=false;reg.fito3_hecho=false;reg.fito4_hecho=false;reg.fito5_hecho=false;reg.detalle=reg.numFlores+' flores → cosecha ~'+ft1.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});if(!reg.numFlores){showToast('⚠️ Ingresa el número de flores',true);resetBtn(btn);return;}}
   if(fotoFile){showToast('📷 Subiendo foto...');reg.fotoURL=await subirFoto(fotoFile);}
   try {
     if(navigator.onLine){await addDoc(collection(db,'registros'),reg);}
@@ -998,18 +1007,7 @@ function renderFlor() {
     var nFlores = fl.numFlores || 0;
     var ct1str = (typeof fl.cosechaTentativa1 === 'string') ? fl.cosechaTentativa1 : '';
     var ct2str = (typeof fl.cosechaTentativa2 === 'string') ? fl.cosechaTentativa2 : '';
-    var fito1date = new Date(fechaFlor); fito1date.setDate(fito1date.getDate() + 4);
-    var fito2date = new Date(fechaFlor); fito2date.setDate(fito2date.getDate() + 7);
-    var fito3date = new Date(fechaFlor); fito3date.setDate(fito3date.getDate() + 15);
-    var f1 = fl.fito1_hecho === true;
-    var f2 = fl.fito2_hecho === true;
-    var f3 = fl.fito3_hecho === true;
-    var dd1 = Math.floor((fito1date - hoy) / 86400000);
-    var dd2 = Math.floor((fito2date - hoy) / 86400000);
-    var dd3 = Math.floor((fito3date - hoy) / 86400000);
-    var fs1 = fito1date.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-    var fs2 = fito2date.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
-    var fs3 = fito3date.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+
     var fmtF = function(f) {
       if(!f) return '---';
       var p = f.split('-');
@@ -1024,28 +1022,35 @@ function renderFlor() {
       else cosechaEst = '<span style="color:#999">'+dfCos+'d para cosechar</span>';
     }
     html += '<div class="flor-card"><div class="flor-head"><div>';
-    html += '<div class="flor-titulo">' + loteNom.split('\u2014')[0].trim() + ' -- ' + fmtF(fechaStr) + '</div>';
+    html += '<div class="flor-titulo">' + loteNom.split('—')[0].trim() + ' -- ' + fmtF(fechaStr) + '</div>';
     html += '<div class="flor-flores">' + nFlores + ' flores</div>';
     html += '</div><div style="text-align:right">';
     if(cosechaEst) html += '<div style="font-size:12px">' + cosechaEst + '</div>';
     if(ct1str && ct2str) html += '<div class="flor-fecha">' + fmtF(ct1str) + ' -- ' + fmtF(ct2str) + '</div>';
     html += '</div></div>';
-    html += '<div class="fito-section"><div class="fito-titulo">Fitosanitario</div>';
-    // Aplic 1
-    html += '<div class="fito-row"><div class="fito-label"><b>Aplic. 1</b> -- ' + fs1 + ' <span style="color:#aaa;font-size:10px">(dia 4)</span></div>';
-    if(f1) html += '<button class="btn-hecho" onclick="tgFito2(\''+fl.id+'\',\'fito1_hecho\',false)">Hecho</button>';
-    else html += '<button class="'+(dd1<=0?'btn-pendiente-urgente':'btn-pendiente')+'" onclick="tgFito2(\''+fl.id+'\',\'fito1_hecho\',true)">Pendiente</button>';
-    html += '</div>';
-    // Aplic 2
-    html += '<div class="fito-row"><div class="fito-label"><b>Aplic. 2</b> -- ' + fs2 + ' <span style="color:#aaa;font-size:10px">(dia 7)</span></div>';
-    if(f2) html += '<button class="btn-hecho" onclick="tgFito2(\''+fl.id+'\',\'fito2_hecho\',false)">Hecho</button>';
-    else html += '<button class="'+(dd2<=0?'btn-pendiente-urgente':'btn-pendiente')+'" onclick="tgFito2(\''+fl.id+'\',\'fito2_hecho\',true)">Pendiente</button>';
-    html += '</div>';
-    // Aplic 3
-    html += '<div class="fito-row"><div class="fito-label"><b>Aplic. 3</b> -- ' + fs3 + ' <span style="color:#aaa;font-size:10px">(dia 15)</span></div>';
-    if(f3) html += '<button class="btn-hecho" onclick="tgFito2(\''+fl.id+'\',\'fito3_hecho\',false)">Hecho</button>';
-    else html += '<button class="'+(dd3<=0?'btn-pendiente-urgente':'btn-pendiente')+'" onclick="tgFito2(\''+fl.id+'\',\'fito3_hecho\',true)">Pendiente</button>';
-    html += '</div>';
+
+    // 5 FITO apps per floracion
+    html += '<div class="fito-section"><div class="fito-titulo">🐛 Fitosanitario (ciclo 28d)</div>';
+    for(var fi = 0; fi < FITOPROGRAMA.length; fi++) {
+      var ft = FITOPROGRAMA[fi];
+      var fitoDate = new Date(fechaFlor);
+      fitoDate.setDate(fitoDate.getDate() + ft.diaOffset);
+      var ddF = Math.floor((fitoDate - hoy) / 86400000);
+      var fsDate = fitoDate.toLocaleDateString('es-EC',{day:'2-digit',month:'short'});
+      var campo = 'fito'+(fi+1)+'_hecho';
+      var hecho = fl[campo] === true;
+      var diaLabel = ft.diaOffset < 0 ? ft.diaOffset+'d' : '+'+ft.diaOffset+'d';
+
+      var btnHtml = '';
+      if(hecho) {
+        btnHtml = '<button class="btn-hecho" onclick="tgFito2(\''+fl.id+'\',\''+campo+'\',false)">✅ Hecho</button>';
+      } else {
+        var cls = ddF <= 0 ? 'btn-pendiente-urgente' : 'btn-pendiente';
+        btnHtml = '<button class="'+cls+'" onclick="tgFito2(\''+fl.id+'\',\''+campo+'\',true)">❌ Pendiente</button>';
+      }
+
+      html += '<div class="fito-row"><div class="fito-label"><b>'+ft.nombre+'</b> '+fsDate+' <span style="color:#aaa;font-size:10px">('+diaLabel+')</span><br><span style="font-size:10px;color:var(--mid)">'+ft.productos+'</span>'+(ft.nota?'<br><span style="font-size:9px;color:#bbb;font-style:italic">'+ft.nota+'</span>':'')+'</div>'+btnHtml+'</div>';
+    }
     html += '</div></div>';
   }
   c.innerHTML = html;
